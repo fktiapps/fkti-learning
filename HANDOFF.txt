@@ -1,0 +1,52 @@
+★ FKTI LEARNING · 深い関係学び — HANDOFF (for a new Claude) ★
+================================================================
+WHAT THIS IS
+A separate project (split off from the "Deeply Connected Dining" app on 2026-06-26) for
+bite-sized Japanese-learning web apps. FKTI = Fukai Kankei (深い関係, "deeply connected"),
+Greg's parent brand (fkti.org). Standalone, offline-first, single-file apps.
+
+Directory: C:\Users\FKTI Work\Downloads\fkti-learning
+- index.html ........ FKTI Learning landing/hub (links to the modules)
+- kana.html ......... ★ Kana Trainer (the built module)
+- data/kana_assets.json ......... map: romaji → mnemonic image path (per script)
+- data/_kana_mnem_manifest.json . raw Wikimedia pull (urls + licenses) for re-fetching
+- img/kana/mnem/{hira,kata}/ .... mnemonic images
+
+STANDING RULES (inherited from the dining project)
+- Greg DEPLOYS himself — never run a deploy.
+- No paid/extra-usage tokens when unattended; included quota only; no retry-loop crons.
+- I never handle credentials/secrets; Greg authenticates.
+
+KANA TRAINER (kana.html) — STATE
+Navigable single-file app: Home menu → sections, with back-nav.
+ ✅ Intro — hiragana vs katakana + how the kana system works + how to use.
+ ✅ Learn — SRS flashcards: introduces 5 at a time by gojūon row; self-grade into 4 buckets
+    (Know it / Kinda / Don't really / No clue); a row unlocks the next when every kana in it is
+    "consistently Know it" (lvl 3 + streak≥2); mixes in-order frontier drilling (~35%) with
+    weighted-random across all learned kana; localStorage progress per script; 🔊 Web-Speech TTS.
+ ✅ Write — finger-tracing over a faint guide char on a canvas (clear / hide-guide / next).
+ ✅ Sounds & Extras — teaching + tap-to-check practicelets: dakuten ゛/handakuten ゜(voiced + bilabial p),
+    yōon combos (small ゃゅょ), long vowels (おう/ー), small っ (sokuon double consonant).
+ ✅ Mnemonic IMAGE shown on the flashcard flip when available.
+ 46 hiragana + 46 katakana, each with an original TEXT mnemonic.
+
+ASSETS / LICENSING (verified via Wikimedia Commons API)
+- Hiragana mnemonic images: CC0 (public domain) — 46 bundled in img/kana/mnem/hira/.
+- Katakana mnemonic images: CC BY-SA 3.0 — MUST ATTRIBUTE. Only ~1 bundled so far; Wikimedia
+  rate-limited the rapid pull. TODO: re-fetch throttled (sleep ~300ms, retry) from the manifest
+  (data/_kana_mnem_manifest.json has each kata url) into img/kana/mnem/kata/<romaji>.jpg.
+- Did NOT bundle proprietary mnemonic art (Tofugu/Dr.Moku). Stroke-order: use KanjiVG (codepoint→SVG
+  stroke paths, CC BY-SA) animated via CSS/Vivus — NOT yet built. Commons "stroke order" categories
+  were sparse/mis-named.
+
+TODO (priority order)
+1. Re-fetch the 46 katakana CC-BY-SA mnemonic images (throttled), drop into img/kana/mnem/kata/,
+   they auto-appear on kata flips (kana_assets.json already keyed by romaji; regenerate it after).
+2. ✏️ Stroke-order module via KanjiVG (per-kana SVG, animate the strokes). It's a "soon" tile.
+3. 📝 Words/Vocabulary module — Greg will SUPPLY the word lists; reuse the flashcard+trace+SRS engine.
+4. Add a kana.webmanifest + service worker for installable/offline (optional).
+
+DEPLOY (Greg does it) — this is its OWN site, separate from the dining app.
+Options: a new Cloudflare Pages project pointed at this dir (or a GitHub repo + Pages Git-integration,
+mirroring the dining app's MOBILE_OPS playbook). Until then, open the files locally to preview.
+This dir is its own git repo (initial commit made).

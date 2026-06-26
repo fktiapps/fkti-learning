@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="theme-color" content="#9c3b2e"/>
+<title>FKTI かな — Kana Trainer</title>
+<style>
+ :root{--ink:#2b2218;--cream:#fbf7ef;--paper:#fff;--line:#e3d9c6;--accent:#9c3b2e;--sakura:#d56a7a;--muted:#8a7f6c;
+  --know:#2e7d32;--kinda:#6a9a2e;--dont:#c79100;--clue:#b3402e}
+ *{box-sizing:border-box}
+ body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;-webkit-tap-highlight-color:transparent}
+ header{background:var(--accent);color:#fff;padding:11px 14px;box-shadow:0 2px 8px rgba(0,0,0,.15);position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px}
+ header #back{background:rgba(255,255,255,.18);border:none;color:#fff;font-size:16px;font-weight:800;border-radius:9px;padding:5px 11px;cursor:pointer;visibility:hidden}
+ header h1{margin:0;font-size:16px;font-weight:800;letter-spacing:.3px;flex:1}
+ main{max-width:560px;margin:0 auto;padding:14px}
+ .scr{display:none}.scr.on{display:block}
+ /* home */
+ .tile{display:flex;align-items:center;gap:14px;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:16px;margin:10px 0;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.05);transition:transform .08s}
+ .tile:active{transform:scale(.985)}
+ .tile .ic{font-size:30px;width:42px;text-align:center}
+ .tile h2{margin:0;font-size:16px}.tile p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+ .tile.soon{opacity:.55}.tile.soon .tag{margin-left:auto;font-size:10px;background:#eee;color:#888;border-radius:6px;padding:2px 7px;font-weight:700}
+ .lead{font-size:13px;color:var(--muted);text-align:center;margin:2px 0 12px}
+ /* shared */
+ .seg{display:flex;background:#fff;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin:0 auto 10px;max-width:300px}
+ .seg button{flex:1;border:none;background:none;padding:9px;font-weight:700;font-size:13.5px;color:var(--muted);cursor:pointer}
+ .seg button.on{background:var(--accent);color:#fff}
+ .bar{height:7px;background:#ece4d4;border-radius:5px;overflow:hidden;margin:2px 0 4px}.bar>i{display:block;height:100%;background:var(--sakura);transition:width .3s}
+ .meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px}
+ .card{background:var(--paper);border:1px solid var(--line);border-radius:18px;min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.06);user-select:none}
+ .kana{font-size:118px;line-height:1;font-weight:600}.flip-hint{font-size:12px;color:var(--muted);margin-top:16px}
+ .romaji{font-size:38px;font-weight:800;color:var(--accent)}.mnem{font-size:14px;margin-top:10px;max-width:380px;line-height:1.5}
+ .mnem-img{max-width:160px;max-height:130px;margin-top:12px;border-radius:10px;border:1px solid var(--line)}
+ .speak{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 16px;font-size:14px;font-weight:700;cursor:pointer}
+ .rate{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+ .rate button{border:none;border-radius:12px;padding:14px 8px;font-weight:800;font-size:14px;color:#fff;cursor:pointer}
+ .r-know{background:var(--know)}.r-kinda{background:var(--kinda)}.r-dont{background:var(--dont)}.r-clue{background:var(--clue)}
+ .prompt{background:#fff;border:2px solid var(--sakura);border-radius:14px;padding:16px;text-align:center;margin-top:14px}
+ .prompt button{background:var(--sakura);color:#fff;border:none;border-radius:10px;padding:11px 18px;font-weight:800;cursor:pointer;margin-top:10px}
+ .ghost{background:none;border:1px solid var(--line);color:var(--muted);border-radius:10px;padding:8px 12px;font-size:12px;font-weight:600;cursor:pointer}
+ .foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+ .hidden{display:none!important}
+ /* write */
+ .trace-wrap{position:relative;width:300px;max-width:86vw;aspect-ratio:1/1;margin:6px auto;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;touch-action:none;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+ .guide-char{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:210px;color:rgba(43,34,24,.13);user-select:none;pointer-events:none}
+ #traceCanvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+ /* prose + sounds */
+ .prose{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;margin:10px 0}
+ .prose h3{margin:0 0 6px;color:var(--accent)}.prose p{margin:6px 0;font-size:14px}
+ .big-ex{font-size:26px;font-weight:700;text-align:center;margin:8px 0}
+ .q{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;margin:10px 0}
+ .q .qt{font-weight:700;margin-bottom:10px}
+ .opt{display:block;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;margin:6px 0;font-size:16px;cursor:pointer}
+ .opt.ok{background:#e7f3e8;border-color:var(--know);font-weight:700}.opt.no{background:#fbe9e6;border-color:var(--clue)}
+</style>
+</head>
+<body>
+<header><button id="back">‹</button><h1 id="title">FKTI かな</h1></header>
+<main>
+ <!-- HOME -->
+ <section class="scr on" id="home">
+  <p class="lead">Learn to read &amp; write Japanese kana — five minutes at a time.</p>
+  <div class="tile" data-go="intro"><div class="ic">📖</div><div><h2>Intro</h2><p>What hiragana &amp; katakana are, and how the system works.</p></div></div>
+  <div class="tile" data-go="study"><div class="ic">🎴</div><div><h2>Learn &amp; Write</h2><p>Flashcards (grade yourself) + finger-tracing practice.</p></div></div>
+  <div class="tile" data-go="sounds"><div class="ic">🔊</div><div><h2>Sounds &amp; Extras</h2><p>Voiced marks, combos, long vowels, small っ — with practice.</p></div></div>
+  <div class="tile soon"><div class="ic">✏️</div><div><h2>Stroke order</h2><p>Watch each character drawn.</p></div><span class="tag">soon</span></div>
+  <div class="tile soon"><div class="ic">📝</div><div><h2>Words</h2><p>Build up to real vocabulary.</p></div><span class="tag">soon</span></div>
+ </section>
+
+ <!-- INTRO -->
+ <section class="scr" id="intro">
+  <div class="prose"><h3>What is kana?</h3><p>Japanese has two phonetic alphabets — <b>hiragana</b> and <b>katakana</b> — plus kanji. Each kana is <b>one syllable</b> (a “mora”). There are <b>46 basic kana</b> in each set: 5 vowels (あ a, い i, う u, え e, お o) and consonant rows (k, s, t, n, h, m, y, r, w) ending with ん (n).</p></div>
+  <div class="prose"><h3>ひらがな Hiragana</h3><p>Rounded, flowing shapes. Used for native Japanese words, grammar (the glue between words), and anything not written in kanji. <b>Start here</b> — it’s the foundation.</p><div class="big-ex">あ い う え お</div></div>
+  <div class="prose"><h3>カタカナ Katakana</h3><p>Sharper, angular shapes for the <b>same 46 sounds</b>. Used for foreign/loan words, names, onomatopoeia, and emphasis. You’ll see it everywhere on menus: コーラ (cola), メニュー (menu), アレルギー (allergy).</p><div class="big-ex">ア イ ウ エ オ</div></div>
+  <div class="prose"><h3>How to use this</h3><p><b>Learn</b> shows 5 at a time and lets you grade yourself; a row unlocks the next once you know it. <b>Write</b> lets you trace. <b>Sounds &amp; Extras</b> covers the little marks that change kana. Five minutes a day adds up fast.</p>
+   <button class="prompt" style="border:none;background:var(--sakura);color:#fff;width:100%;margin-top:6px" data-go="study">Start learning →</button></div>
+ </section>
+
+ <!-- STUDY (Learn + Write) -->
+ <section class="scr" id="study">
+  <div class="seg" id="scriptSeg"><button data-script="hira" class="on">ひらがな Hiragana</button><button data-script="kata">カタカナ Katakana</button></div>
+  <div class="seg" id="modeSeg" style="max-width:260px"><button data-mode="recognize" class="on">👁 Recognize</button><button data-mode="write">✍️ Write it</button></div>
+  <div class="meta"><span id="rowLabel"></span><span id="poolLabel"></span></div>
+  <div class="bar"><i id="rowBar" style="width:0%"></i></div>
+  <div class="card" id="card"></div>
+  <div id="rateRow" class="rate hidden">
+   <button class="r-know" data-rate="know">Know it</button><button class="r-kinda" data-rate="kinda">Kinda know it</button>
+   <button class="r-dont" data-rate="dont">Don't really</button><button class="r-clue" data-rate="clue">No clue</button>
+  </div>
+  <div id="prompt" class="prompt hidden"></div>
+  <div id="writeView" class="hidden">
+   <div style="text-align:center;font-size:15px;font-weight:700;margin-bottom:6px" id="writePrompt"></div>
+   <div class="trace-wrap" id="traceWrap"><div class="guide-char" id="guideChar"></div><canvas id="traceCanvas"></canvas></div>
+   <div class="rate" style="grid-template-columns:1fr 1fr 1fr;margin-top:12px">
+    <button class="ghost" id="traceClear">Clear</button><button class="ghost" id="traceGuide">Hide guide</button><button class="r-kinda" id="traceNext" style="color:#fff">Next →</button>
+   </div>
+   <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:8px">Trace the faint character with your finger. Hide the guide to test yourself.</p>
+  </div>
+  <div class="foot"><button class="ghost" id="resetBtn">↻ Reset this script</button><span style="font-size:11px;color:var(--muted)" id="doneTag"></span></div>
+ </section>
+
+ <!-- SOUNDS & EXTRAS -->
+ <section class="scr" id="sounds"></section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+// ===== navigation =====
+const TITLES={home:'FKTI かな',intro:'Intro',study:'Learn & Write',sounds:'Sounds & Extras'};
+function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('title').textContent=TITLES[id]||'FKTI かな';$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='study'){cur=null;flipped=false;render();}if(id==='sounds')renderSounds();}
+$('back').onclick=()=>go('home');
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+
+// ===== kana data =====
+const DATA={
+ hira:[
+  {name:'Vowels',cells:[{k:'あ',r:'a',m:'An “A” with a flourish — “ah”.'},{k:'い',r:'i',m:'Two reeds standing — “ee”.'},{k:'う',r:'u',m:'A big nose going “oo”.'},{k:'え',r:'e',m:'An exotic, energetic bird — “eh”.'},{k:'お',r:'o',m:'Like あ with a tail — “oh!”.'}]},
+  {name:'K か',cells:[{k:'か',r:'ka',m:'A katana slicing down.'},{k:'き',r:'ki',m:'It’s a “key”.'},{k:'く',r:'ku',m:'A cuckoo’s open beak.'},{k:'け',r:'ke',m:'A keg on its side.'},{k:'こ',r:'ko',m:'Two short cords — “co”.'}]},
+  {name:'S さ',cells:[{k:'さ',r:'sa',m:'Like き but “sah”.'},{k:'し',r:'shi',m:'A smiling hook — “she”.'},{k:'す',r:'su',m:'A swirl/screw — “soo”.'},{k:'せ',r:'se',m:'A mouth mid-“say”.'},{k:'そ',r:'so',m:'A zig-zag thread — “so”.'}]},
+  {name:'T た',cells:[{k:'た',r:'ta',m:'A little table of strokes — “ta”.'},{k:'ち',r:'chi',m:'A cheery cheerleader — “chee”.'},{k:'つ',r:'tsu',m:'A wave / tsunami — “tsu”.'},{k:'て',r:'te',m:'A hand — te means “hand”!'},{k:'と',r:'to',m:'A toe with a nail.'}]},
+  {name:'N な',cells:[{k:'な',r:'na',m:'A nail with a knot.'},{k:'に',r:'ni',m:'Sounds like “knee”.'},{k:'ぬ',r:'nu',m:'Twirly noodles — “noo”.'},{k:'ね',r:'ne',m:'A cat’s curly tail (neko).'},{k:'の',r:'no',m:'A big swirl — the “no” sign.'}]},
+  {name:'H は',cells:[{k:'は',r:'ha',m:'Laughing strokes — “ha”.'},{k:'ひ',r:'hi',m:'A wide smile — “hee”.'},{k:'ふ',r:'fu',m:'Mt Fuji’s slopes — “fu”.'},{k:'へ',r:'he',m:'A flat arrow — “heh”.'},{k:'ほ',r:'ho',m:'は plus a hat — “ho”.'}]},
+  {name:'M ま',cells:[{k:'ま',r:'ma',m:'Like は; ties in a “ma-ma” bow.'},{k:'み',r:'mi',m:'Looks like 21 — “mi”.'},{k:'む',r:'mu',m:'A cow going “moo”.'},{k:'め',r:'me',m:'An eye — me means “eye”.'},{k:'も',r:'mo',m:'A fishhook catching “mo-re”.'}]},
+  {name:'Y や',cells:[{k:'や',r:'ya',m:'A yak with horns.'},{k:'ゆ',r:'yu',m:'A fish / U-boat — “yu”.'},{k:'よ',r:'yo',m:'“Yo!” — a hook on a pole.'}]},
+  {name:'R ら',cells:[{k:'ら',r:'ra',m:'A rabbit mid-hop.'},{k:'り',r:'ri',m:'Two reeds — “ree”.'},{k:'る',r:'ru',m:'A loop at the end — “roo”.'},{k:'れ',r:'re',m:'ね/わ family — “reh”.'},{k:'ろ',r:'ro',m:'る without the loop — “ro”.'}]},
+  {name:'W わ・ん',cells:[{k:'わ',r:'wa',m:'ね/れ family — “wah”.'},{k:'を',r:'wo',m:'Object marker — said “o”.'},{k:'ん',r:'n',m:'A single soft “n”.'}]},
+ ],
+ kata:[
+  {name:'Vowels',cells:[{k:'ア',r:'a',m:'An “A” corner — “ah”.'},{k:'イ',r:'i',m:'Two strokes leaning — “ee”.'},{k:'ウ',r:'u',m:'A roof — “oo”.'},{k:'エ',r:'e',m:'An “E” beam.'},{k:'オ',r:'o',m:'A check + leg — “oh”.'}]},
+  {name:'K カ',cells:[{k:'カ',r:'ka',m:'A katana (like か).'},{k:'キ',r:'ki',m:'A “key” (like き).'},{k:'ク',r:'ku',m:'A cuckoo beak.'},{k:'ケ',r:'ke',m:'A keg.'},{k:'コ',r:'ko',m:'A corner — “co”.'}]},
+  {name:'S サ',cells:[{k:'サ',r:'sa',m:'“sah” — カ with a bar.'},{k:'シ',r:'shi',m:'Strokes smiling up — “she” (vs ツ!).'},{k:'ス',r:'su',m:'A swing — “soo”.'},{k:'セ',r:'se',m:'A mouth — “say”.'},{k:'ソ',r:'so',m:'Strokes diving down — “so” (vs ン!).'}]},
+  {name:'T タ',cells:[{k:'タ',r:'ta',m:'“ta” — ク with a slash.'},{k:'チ',r:'chi',m:'A cheer — “chee”.'},{k:'ツ',r:'tsu',m:'Strokes falling — “tsu” (vs シ!).'},{k:'テ',r:'te',m:'A hand on a table.'},{k:'ト',r:'to',m:'A totem pole — “to”.'}]},
+  {name:'N ナ',cells:[{k:'ナ',r:'na',m:'A nail — “na”.'},{k:'ニ',r:'ni',m:'Two lines — “knee”.'},{k:'ヌ',r:'nu',m:'Noodles crossed — “noo”.'},{k:'ネ',r:'ne',m:'A maze for a cat — “neh”.'},{k:'ノ',r:'no',m:'One slash — “no”.'}]},
+  {name:'H ハ',cells:[{k:'ハ',r:'ha',m:'Two strokes laughing — “ha”.'},{k:'ヒ',r:'hi',m:'A heel — “hee”.'},{k:'フ',r:'fu',m:'One Fuji slope — “fu”.'},{k:'ヘ',r:'he',m:'Same as hiragana へ — “heh”.'},{k:'ホ',r:'ho',m:'A cross with sparks — “ho”.'}]},
+  {name:'M マ',cells:[{k:'マ',r:'ma',m:'A check + tail — “ma”.'},{k:'ミ',r:'mi',m:'Three lines — “mi” (=3).'},{k:'ム',r:'mu',m:'A cow’s “moo”.'},{k:'メ',r:'me',m:'An “X” / crossed eyes — “me”.'},{k:'モ',r:'mo',m:'A hook + bars — “mo”.'}]},
+  {name:'Y ヤ',cells:[{k:'ヤ',r:'ya',m:'A yak — “ya”.'},{k:'ユ',r:'yu',m:'A “U” tray — “yu”.'},{k:'ヨ',r:'yo',m:'An E-comb — “yo!”.'}]},
+  {name:'R ラ',cells:[{k:'ラ',r:'ra',m:'A roof + bar — “ra”.'},{k:'リ',r:'ri',m:'Two strokes (like り) — “ree”.'},{k:'ル',r:'ru',m:'Loop legs — “roo”.'},{k:'レ',r:'re',m:'An “L” hook — “reh”.'},{k:'ロ',r:'ro',m:'A box — “ro”.'}]},
+  {name:'W ワ・ン',cells:[{k:'ワ',r:'wa',m:'An open box — “wah”.'},{k:'ヲ',r:'wo',m:'Rare object marker — “o”.'},{k:'ン',r:'n',m:'Two strokes rising — “n” (vs ソ!).'}]},
+ ],
+};
+let ASSETS=null;
+fetch('data/kana_assets.json').then(r=>r.json()).then(j=>{ASSETS=j;}).catch(()=>{});
+
+// ===== SRS engine =====
+const RATE_VAL={know:3,kinda:2,dont:1,clue:0};
+let script='hira', cur=null, flipped=false, lastKey=null, seqPtr=0;
+function store(){return JSON.parse(localStorage.getItem('fkti_kana')||'{}');}
+function save(s){localStorage.setItem('fkti_kana',JSON.stringify(s));}
+function prog(){const s=store();s[script]=s[script]||{rows:1,cards:{}};return s[script];}
+function setProg(p){const s=store();s[script]=p;save(s);}
+function rows(){return DATA[script];}
+function activeCells(){const p=prog();return rows().slice(0,p.rows).flatMap(r=>r.cells);}
+function frontier(){const p=prog();return rows()[p.rows-1];}
+function cardState(k){const p=prog();return p.cards[k]||{lvl:0,streak:0,seen:0};}
+function mastered(k){const c=cardState(k);return c.lvl===3&&c.streak>=2;}
+function frontierDone(){return frontier().cells.every(c=>mastered(c.k));}
+function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=0.8;const v=(speechSynthesis.getVoices()||[]).find(x=>(x.lang||'').toLowerCase().startsWith('ja'));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(_){}}
+function pick(){
+ const pool=activeCells(),fr=frontier().cells;
+ if(Math.random()<0.35&&!frontierDone()){const c=fr[seqPtr%fr.length];seqPtr++;if(c.k!==lastKey||fr.length===1)return c;}
+ const w=[];for(const c of pool){const st=cardState(c.k);const n=1+(3-st.lvl)*2+(st.streak<2?1:0)+(st.seen===0?3:0);for(let i=0;i<n;i++)w.push(c);}
+ let c,t=0;do{c=w[Math.floor(Math.random()*w.length)];t++;}while(pool.length>1&&c.k===lastKey&&t<8);return c;
+}
+function render(){
+ if(mode==='write'){renderWrite();return;}
+ $('writeView').classList.add('hidden');$('card').classList.remove('hidden');
+ $('rowLabel').textContent='Row: '+frontier().name;
+ const fr=frontier().cells,done=fr.filter(c=>mastered(c.k)).length;
+ $('rowBar').style.width=Math.round(done/fr.length*100)+'%';
+ $('poolLabel').textContent=activeCells().length+' kana in play';
+ const tot=rows().length,p=prog();
+ $('doneTag').textContent=(p.rows>=tot&&frontierDone())?'All '+activeCells().length+' learned! 🎉':'Row '+p.rows+' / '+tot;
+ if(frontierDone()&&p.rows<tot){
+  $('prompt').classList.remove('hidden');$('rateRow').classList.add('hidden');$('card').classList.add('hidden');
+  const next=rows()[p.rows];
+  $('prompt').innerHTML='🎉 You’ve got the <b>'+frontier().name+'</b> row!<br>Add the <b>'+next.name+'</b> row?<br><button id="addRow">Add '+next.name+' →</button> <button class="ghost" id="keepGoing" style="margin-top:10px">Keep reviewing</button>';
+  $('addRow').onclick=()=>{const pp=prog();pp.rows++;setProg(pp);seqPtr=0;$('prompt').classList.add('hidden');$('card').classList.remove('hidden');next_();};
+  $('keepGoing').onclick=()=>{$('prompt').classList.add('hidden');$('card').classList.remove('hidden');next_();};
+  return;
+ }
+ $('prompt').classList.add('hidden');showCard();
+}
+function showCard(){
+ if(!cur)cur=pick();
+ if(!flipped){$('card').innerHTML='<div class="kana">'+cur.k+'</div><div class="flip-hint">tap to flip</div>';$('rateRow').classList.add('hidden');}
+ else{
+  const img=ASSETS&&ASSETS.mnem&&ASSETS.mnem[script]&&ASSETS.mnem[script][cur.r];
+  $('card').innerHTML='<div class="romaji">'+cur.r+'</div><div class="mnem">'+cur.m+'</div>'+(img?'<img class="mnem-img" src="'+img+'" alt="mnemonic"/>':'')+'<button class="speak" id="speakBtn">🔊 hear it</button>';
+  $('speakBtn').onclick=e=>{e.stopPropagation();speak(cur.k);};$('rateRow').classList.remove('hidden');
+ }
+}
+function next_(){cur=pick();flipped=false;showCard();}
+function rate(b){const p=prog();const c=p.cards[cur.k]||{lvl:0,streak:0,seen:0};c.lvl=RATE_VAL[b];c.streak=(b==='know')?c.streak+1:0;c.seen++;p.cards[cur.k]=c;setProg(p);lastKey=cur.k;cur=null;flipped=false;render();}
+$('card').onclick=()=>{if($('prompt').classList.contains('hidden')){flipped=!flipped;showCard();}};
+document.querySelectorAll('[data-rate]').forEach(b=>b.onclick=()=>rate(b.dataset.rate));
+document.querySelectorAll('#scriptSeg button').forEach(b=>b.onclick=()=>{script=b.dataset.script;document.querySelectorAll('#scriptSeg button').forEach(x=>x.classList.toggle('on',x===b));cur=null;flipped=false;seqPtr=0;lastKey=null;render();});
+$('resetBtn').onclick=()=>{if(confirm('Reset progress for '+(script==='hira'?'Hiragana':'Katakana')+'?')){const s=store();delete s[script];save(s);cur=null;flipped=false;seqPtr=0;render();}};
+
+// ===== write (tracing) =====
+let mode='recognize',wIdx=0,guideOn=true,tctx=null,drawing=false;
+function renderWrite(){
+ $('card').classList.add('hidden');$('rateRow').classList.add('hidden');$('prompt').classList.add('hidden');$('writeView').classList.remove('hidden');
+ const pool=activeCells();if(!pool.length)return;wIdx=((wIdx%pool.length)+pool.length)%pool.length;const c=pool[wIdx];
+ $('writePrompt').textContent='Write:  “'+c.r+'”';$('guideChar').textContent=c.k;$('guideChar').style.display=guideOn?'flex':'none';
+ $('rowLabel').textContent='Writing · '+frontier().name;$('poolLabel').textContent=pool.length+' kana to practice';$('doneTag').textContent=(wIdx+1)+' / '+pool.length;setupCanvas();
+}
+function setupCanvas(){const cv=$('traceCanvas');const r=cv.getBoundingClientRect();if(!r.width)return;cv.width=r.width;cv.height=r.height;tctx=cv.getContext('2d');tctx.lineWidth=11;tctx.lineCap='round';tctx.lineJoin='round';tctx.strokeStyle='#9c3b2e';}
+function clearTrace(){const cv=$('traceCanvas');if(tctx)tctx.clearRect(0,0,cv.width,cv.height);}
+function tpos(e){const cv=$('traceCanvas');const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
+(function(){const cv=$('traceCanvas');
+ cv.addEventListener('pointerdown',e=>{e.preventDefault();if(!tctx)setupCanvas();drawing=true;const p=tpos(e);tctx.beginPath();tctx.moveTo(p.x,p.y);try{cv.setPointerCapture(e.pointerId);}catch(_){}});
+ cv.addEventListener('pointermove',e=>{if(!drawing)return;e.preventDefault();const p=tpos(e);tctx.lineTo(p.x,p.y);tctx.stroke();});
+ cv.addEventListener('pointerup',()=>drawing=false);cv.addEventListener('pointercancel',()=>drawing=false);
+})();
+document.querySelectorAll('#modeSeg button').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;document.querySelectorAll('#modeSeg button').forEach(x=>x.classList.toggle('on',x===b));wIdx=0;cur=null;flipped=false;render();});
+$('traceClear').onclick=clearTrace;
+$('traceGuide').onclick=()=>{guideOn=!guideOn;$('guideChar').style.display=guideOn?'flex':'none';$('traceGuide').textContent=guideOn?'Hide guide':'Show guide';};
+$('traceNext').onclick=()=>{wIdx++;renderWrite();};
+window.addEventListener('resize',()=>{if(mode==='write')setupCanvas();});
+
+// ===== Sounds & Extras (teaching + practicelets) =====
+const SOUNDS=[
+ {t:'Voiced sounds — dakuten ゛ & handakuten ゜',b:'Two strokes ゛ make a sound <b>voiced</b>: か ka→が ga, さ sa→ざ za, た ta→だ da, は ha→ば ba. The h-row also takes ゜ to become <b>p</b> (a <i>bilabial</i> pop with both lips): は ha→ぱ pa.',ex:'か→が　さ→ざ　は→ば→ぱ',
+  qz:[{q:'Voiced form of か (ka)?',o:[['が ga',1],['ぱ pa',0],['な na',0],['は ha',0]]},{q:'は + ゜ becomes…',o:[['ぱ pa',1],['ば ba',0],['だ da',0]]},{q:'Voiced form of し (shi)?',o:[['じ ji',1],['ち chi',0],['ぴ pi',0]]}]},
+ {t:'Combination sounds — yōon (small ゃ ゅ ょ)',b:'A <b>small</b> や ゆ よ after an i-row kana blends into one syllable: き+ゃ→きゃ kya, し+ゅ→しゅ shu, ち+ょ→ちょ cho. Full-size や = a separate beat (きや = ki-ya).',ex:'きゃ　しゅ　ちょ',
+  qz:[{q:'Which is “sha”?',o:[['しゃ',1],['きゃ',0],['ちゃ',0]]},{q:'ちょ is pronounced…',o:[['cho (one beat)',1],['chiyo (two beats)',0]]},{q:'き + small ゅ =',o:[['きゅ kyu',1],['きゆ ki-yu',0]]}]},
+ {t:'Long vowels',b:'Holding a vowel longer changes the word. おばさん = aunt, <b>おばあさん</b> = grandmother (extra あ). Long “o” is usually written おう (がっこう gakkō). Katakana marks length with a bar ー: コーヒー kōhī.',ex:'おばさん ≠ おばあさん',
+  qz:[{q:'Which means GRANDMOTHER?',o:[['おばあさん',1],['おばさん',0]]},{q:'コーヒー — the ー means…',o:[['hold the vowel (kōhī)',1],['a new syllable',0]]}]},
+ {t:'Small っ — the double consonant (sokuon)',b:'A <b>small</b> つ (っ) doubles the next consonant — a tiny pause. きて kite (come) vs <b>きって</b> kitte (stamp); がっこう gakkō. In katakana it’s a small ッ.',ex:'きて ≠ きって',
+  qz:[{q:'Which has the double consonant?',o:[['きって kitte',1],['きて kite',0]]},{q:'The small っ makes…',o:[['a pause + doubled consonant',1],['a “tsu” sound',0]]}]},
+];
+function renderSounds(){
+ $('sounds').innerHTML=SOUNDS.map((s,i)=>`<div class="prose"><h3>${s.t}</h3><p>${s.b}</p><div class="big-ex">${s.ex}</div></div>`+
+  s.qz.map((q,j)=>`<div class="q" data-qid="${i}-${j}"><div class="qt">✏️ ${q.q}</div>${q.o.map((o,k)=>`<button class="opt" data-c="${o[1]}">${o[0]}</button>`).join('')}</div>`).join('')).join('');
+ $('sounds').querySelectorAll('.q').forEach(qd=>{qd.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(qd.dataset.done)return;qd.dataset.done=1;qd.querySelectorAll('.opt').forEach(x=>{if(x.dataset.c==='1')x.classList.add('ok');});if(b.dataset.c!=='1')b.classList.add('no');});});
+}
+
+// boot
+if(window.speechSynthesis)speechSynthesis.onvoiceschanged=()=>{};
+go('home');
+</script>
+</body>
+</html>
