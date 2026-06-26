@@ -63,6 +63,7 @@
  .opt{display:block;width:100%;text-align:left;background:var(--paper2);border:1px solid #e3d9c6;border-radius:10px;padding:12px;margin:6px 0;font-size:16px;cursor:pointer;color:var(--text)}
  .opt.ok{background:#e7f3e8;border-color:var(--know);font-weight:700}.opt.no{background:#fbe9e6;border-color:var(--clue)}
  .chgrid{display:flex;flex-direction:column;gap:6px;align-items:center}
+ .chgrid-v{display:grid;gap:6px;justify-content:center}
  .chrow{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
  .chcell{width:52px;height:52px;border:none;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;padding:0}
  .chcell .chk{font-size:22px;font-weight:700;line-height:1}.chcell .chr{font-size:9px;opacity:.85;margin-top:1px}
@@ -375,15 +376,24 @@ document.querySelectorAll('#stkScriptSeg button').forEach(b=>b.onclick=()=>{stkS
 
 // ===== 📊 gojūon chart + custom decks =====
 function lvlInfo(k){const c=cardState(k);if(!c.seen)return{bg:'#2A3358',t:'#8A90AC'};return[{bg:'#C4452E',t:'#fff'},{bg:'#D9772A',t:'#fff'},{bg:'#C9A227',t:'#1B2233'},{bg:'#2E7D32',t:'#fff'}][c.lvl];}
+function chCell(c){const inf=lvlInfo(c.k);const d=document.createElement('button');d.className='chcell';d.style.background=inf.bg;d.style.color=inf.t;d.innerHTML='<span class="chk">'+c.k+'</span><span class="chr">'+c.r+'</span>';d.onclick=()=>speak(c.k);return d;}
+function vowelRow(r){if(r==='n')return 5;const m=r.match(/[aiueo]/g);return {a:0,i:1,u:2,e:3,o:4}[m?m[m.length-1]:'a'];}
+function chWide(){return window.matchMedia('(orientation: landscape) , (min-width: 680px)').matches;}
 function renderChart(){
- const grid=$('chGrid');grid.innerHTML='';
- DATA[script].forEach(row=>{const rd=document.createElement('div');rd.className='chrow';
-  row.cells.forEach(c=>{const inf=lvlInfo(c.k);const d=document.createElement('button');d.className='chcell';d.style.background=inf.bg;d.style.color=inf.t;d.innerHTML='<span class="chk">'+c.k+'</span><span class="chr">'+c.r+'</span>';d.onclick=()=>speak(c.k);rd.appendChild(d);});
-  grid.appendChild(rd);});
- const cells=DATA[script].flatMap(r=>r.cells),cnt={3:0,2:0,1:0,0:0,u:0};
+ const grid=$('chGrid'),groups=DATA[script];grid.innerHTML='';
+ if(chWide()){ // traditional gojūon: vowels down the rightmost column, columns read right→left
+  grid.className='chgrid-v';grid.style.gridTemplateColumns='repeat('+groups.length+',auto)';
+  groups.forEach((g,gi)=>{const col=groups.length-gi;g.cells.forEach(c=>{const d=chCell(c);d.style.gridColumn=col;d.style.gridRow=vowelRow(c.r)+1;grid.appendChild(d);});});
+ }else{ // portrait: rows by consonant, left→right
+  grid.className='chgrid';grid.style.gridTemplateColumns='';
+  groups.forEach(g=>{const rd=document.createElement('div');rd.className='chrow';g.cells.forEach(c=>rd.appendChild(chCell(c)));grid.appendChild(rd);});
+ }
+ const cells=groups.flatMap(r=>r.cells),cnt={3:0,2:0,1:0,0:0,u:0};
  cells.forEach(c=>{const s=cardState(c.k);if(!s.seen)cnt.u++;else cnt[s.lvl]++;});
  $('chStats').textContent=cnt[3]+' known · '+cnt[2]+' kinda · '+cnt[1]+' shaky · '+(cnt[0]+cnt.u)+' to learn · tap a cell to hear it';
 }
+window.addEventListener('resize',()=>{if($('chart').classList.contains('on'))renderChart();});
+window.addEventListener('orientationchange',()=>{if($('chart').classList.contains('on'))setTimeout(renderChart,180);});
 let deckKey=null,deckQ=[],deckP=0,deckCur=null,deckFlip=false;
 const DECKNAME={boost:'💪 Confidence boost',little:'🙂 Little challenge',challenge:'😤 Challenge me',hurt:'🔥 Make it hurt'};
 function bandPool(key){
