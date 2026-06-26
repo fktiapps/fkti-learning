@@ -1,0 +1,9 @@
+{
+  "name": "fkti-learning",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FKTI Learning · 深い関係学び — bite-sized Japanese-learning web apps",
+  "scripts": {
+    "deploy": "wrangler pages deploy ."
+  }
+}
