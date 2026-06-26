@@ -32,16 +32,13 @@ Navigable single-file app: Home menu → sections, with back-nav.
 
 ASSETS / LICENSING (verified via Wikimedia Commons API)
 - Hiragana mnemonic images: CC0 (public domain) — 46 bundled in img/kana/mnem/hira/.
-- Katakana mnemonic images: CC BY-SA 3.0 — MUST ATTRIBUTE. Only ~1 bundled so far; Wikimedia
-  rate-limited the rapid pull. TODO: re-fetch throttled (sleep ~300ms, retry) from the manifest
-  (data/_kana_mnem_manifest.json has each kata url) into img/kana/mnem/kata/<romaji>.jpg.
+- Katakana mnemonic images: CC BY-SA 3.0 — all 46 bundled in img/kana/mnem/kata/ (throttled fetch, attributed in kana_assets.json + index footer).
 - Did NOT bundle proprietary mnemonic art (Tofugu/Dr.Moku). Stroke-order: use KanjiVG (codepoint→SVG
   stroke paths, CC BY-SA) animated via CSS/Vivus — NOT yet built. Commons "stroke order" categories
   were sparse/mis-named.
 
 TODO (priority order)
-1. Re-fetch the 46 katakana CC-BY-SA mnemonic images (throttled), drop into img/kana/mnem/kata/,
-   they auto-appear on kata flips (kana_assets.json already keyed by romaji; regenerate it after).
+1. (DONE) Katakana CC-BY-SA mnemonic images bundled; kata flips show art.
 2. ✏️ Stroke-order module via KanjiVG (per-kana SVG, animate the strokes). It's a "soon" tile.
 3. 📝 Words/Vocabulary module — Greg will SUPPLY the word lists; reuse the flashcard+trace+SRS engine.
 4. Add a kana.webmanifest + service worker for installable/offline (optional).
