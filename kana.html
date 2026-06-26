@@ -52,6 +52,8 @@
  .trace-wrap{position:relative;width:300px;max-width:86vw;aspect-ratio:1/1;margin:6px auto;background:var(--paper2);border:1px solid #e3d9c6;border-radius:16px;overflow:hidden;touch-action:none;box-shadow:0 8px 22px rgba(0,0,0,.28)}
  .guide-char{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:210px;color:rgba(27,34,51,.13);user-select:none;pointer-events:none}
  #traceCanvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+ #stkSvg{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+ #stkCanvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;z-index:2}
  .prose{background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:14px;padding:16px;margin:10px 0}
  .prose h3{margin:0 0 6px;color:var(--ver)}.prose p{margin:6px 0;font-size:14px}
  .big-ex{font-size:26px;font-weight:700;text-align:center;margin:8px 0;color:var(--text)}
@@ -73,7 +75,7 @@
   <div class="tile" data-go="intro"><div class="ic">📖</div><div><h2>Intro</h2><p>What hiragana &amp; katakana are, and how the system works.</p></div></div>
   <div class="tile" data-go="study"><div class="ic">🎴</div><div><h2>Learn &amp; Write</h2><p>Flashcards (grade yourself) + finger-tracing practice.</p></div></div>
   <div class="tile" data-go="sounds"><div class="ic">🔊</div><div><h2>Sounds &amp; Extras</h2><p>Voiced marks, combos, long vowels, small っ — with practice.</p></div></div>
-  <div class="tile soon"><div class="ic">✏️</div><div><h2>Stroke order</h2><p>Watch each character drawn, with direction.</p></div><span class="tag">soon</span></div>
+  <div class="tile" data-go="stroke"><div class="ic">✏️</div><div><h2>Stroke order</h2><p>Watch each character drawn, then practice — we check order &amp; direction.</p></div></div>
   <div class="tile soon"><div class="ic">📝</div><div><h2>Words</h2><p>Build up to real vocabulary.</p></div><span class="tag">soon</span></div>
  </section>
 
@@ -108,10 +110,25 @@
  </section>
 
  <section class="scr" id="sounds"></section>
+
+ <section class="scr" id="stroke">
+  <div class="seg" id="stkScriptSeg"><button data-script="hira" class="on">ひらがな Hiragana</button><button data-script="kata">カタカナ Katakana</button></div>
+  <div class="meta"><span id="stkRomaji" style="font-weight:700;color:var(--ver);font-size:15px"></span><span id="stkCount"></span></div>
+  <div class="trace-wrap"><div class="guide-char" id="stkGuide"></div><svg id="stkSvg" viewBox="0 0 109 109" preserveAspectRatio="xMidYMid meet"></svg><canvas id="stkCanvas"></canvas></div>
+  <div class="rate" style="grid-template-columns:1fr 1fr 1fr 1fr;margin-top:12px">
+   <button class="ghost" id="stkPrev">‹ Prev</button>
+   <button class="ghost" id="stkWatch">▶ Watch</button>
+   <button class="ghost" id="stkClear">Clear</button>
+   <button class="r-kinda" id="stkCheck" style="color:#fff">Check ✓</button>
+  </div>
+  <div style="text-align:center;margin-top:8px"><button class="ghost" id="stkNext">Next character →</button></div>
+  <div id="stkFeedback" style="margin-top:10px"></div>
+  <p style="font-size:12px;color:var(--muted2);text-align:center;margin-top:8px">Tap <b>▶ Watch</b> to see the strokes drawn in order, then draw them yourself and <b>Check</b> — we grade order &amp; direction (the difference between シ and ツ!).</p>
+ </section>
 </main>
 <script>
 const $=id=>document.getElementById(id);
-function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='study'){cur=null;flipped=false;render();}if(id==='sounds')renderSounds();}
+function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='study'){cur=null;flipped=false;render();}if(id==='sounds')renderSounds();if(id==='stroke')renderStroke();}
 $('back').onclick=()=>go('home');
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
 
@@ -176,8 +193,8 @@ function render(){
  if(p.phase==='random'&&frontierDone()&&p.rows<tot){
   $('prompt').classList.remove('hidden');$('rateRow').classList.add('hidden');$('card').classList.add('hidden');
   const next=rows()[p.rows];
-  $('prompt').innerHTML='🎉 You’ve got the <b>'+frontier().name+'</b> row!<br>Add the <b>'+next.name+'</b> row?<br><button id="addRow">Add '+next.name+' →</button> <button class="ghost" id="keepGoing" style="margin-top:10px">Keep reviewing</button>';
-  $('addRow').onclick=()=>{const pp=prog();pp.rows++;pp.phase='forward';pp.pk=[];setProg(pp);seqPtr=0;$('prompt').classList.add('hidden');$('card').classList.remove('hidden');next_();};
+  $('prompt').innerHTML='🎉 You’ve got the <b>'+frontier().name+'</b> row! Pass a quick quiz to unlock <b>'+next.name+'</b>.<br><button id="startQuiz">🎯 Unlock quiz →</button> <button class="ghost" id="keepGoing" style="margin-top:10px">Keep reviewing</button>';
+  $('startQuiz').onclick=buildGate;
   $('keepGoing').onclick=()=>{$('prompt').classList.add('hidden');$('card').classList.remove('hidden');next_();};
   return;
  }
@@ -247,6 +264,85 @@ function renderSounds(){
   s.qz.map(q=>`<div class="q"><div class="qt">✏️ ${q.q}</div>${q.o.map(o=>`<button class="opt" data-c="${o[1]}">${o[0]}</button>`).join('')}</div>`).join('')).join('');
  $('sounds').querySelectorAll('.q').forEach(qd=>{qd.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(qd.dataset.done)return;qd.dataset.done=1;qd.querySelectorAll('.opt').forEach(x=>{if(x.dataset.c==='1')x.classList.add('ok');});if(b.dataset.c!=='1')b.classList.add('no');});});
 }
+// ===== quiz gate (unlock next row) =====
+function shuf(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+let gate=null;
+function buildGate(){
+ const fr=shuf(frontier().cells.slice());
+ const pool=[...new Set(DATA[script].flatMap(r=>r.cells).map(c=>c.r))];
+ const qs=fr.map(c=>{const opts=[c.r];while(opts.length<4){const r=pool[Math.floor(Math.random()*pool.length)];if(!opts.includes(r))opts.push(r);}return{k:c.k,r:c.r,opts:shuf(opts)};});
+ gate={qs,i:0,wrong:0};renderGate();
+}
+function renderGate(){
+ const g=gate;
+ if(g.i>=g.qs.length){
+  if(g.wrong===0){$('prompt').innerHTML='🎯 <b>Quiz passed!</b><br><button id="addRow">Add the next row →</button>';$('addRow').onclick=addRow;}
+  else{$('prompt').innerHTML='So close — '+g.wrong+' missed. Review a little more, then try again.<br><button class="ghost" id="gquit" style="margin-top:8px">Keep reviewing</button>';$('gquit').onclick=()=>{gate=null;$('prompt').classList.add('hidden');$('card').classList.remove('hidden');next_();};}
+  return;
+ }
+ const q=g.qs[g.i];
+ $('prompt').innerHTML='<div style="font-size:12px;color:var(--muted)">Unlock quiz · '+(g.i+1)+' / '+g.qs.length+'</div><div style="font-size:60px;font-weight:700;margin:6px 0;color:var(--text)">'+q.k+'</div>'+q.opts.map(o=>'<button class="opt" data-r="'+o+'">'+o+'</button>').join('');
+ $('prompt').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(b.dataset.done)return;const ok=b.dataset.r===q.r;$('prompt').querySelectorAll('.opt').forEach(x=>{x.dataset.done=1;if(x.dataset.r===q.r)x.classList.add('ok');});if(!ok){b.classList.add('no');g.wrong++;}setTimeout(()=>{g.i++;renderGate();},520);});
+}
+function addRow(){const pp=prog();pp.rows++;pp.phase='forward';pp.pk=[];setProg(pp);seqPtr=0;gate=null;$('prompt').classList.add('hidden');$('card').classList.remove('hidden');next_();}
+
+// ===== ✏️ stroke order (KanjiVG: watch + order/direction detection) =====
+const SVGNS='http://www.w3.org/2000/svg';
+const measSvg=document.createElementNS(SVGNS,'svg');measSvg.setAttribute('viewBox','0 0 109 109');measSvg.setAttribute('width','109');measSvg.setAttribute('height','109');measSvg.style.cssText='position:absolute;left:-9999px;top:0';document.body.appendChild(measSvg);
+const measPath=document.createElementNS(SVGNS,'path');measSvg.appendChild(measPath);
+let stkScript='hira',stkIdx=0,stkStrokes=null,stkUser=[],stkDraw=false,sctx=null;const strokeCache={};
+function allKana(s){return DATA[s].flatMap(r=>r.cells);}
+function cpHex(c){return c.codePointAt(0).toString(16).padStart(5,'0');}
+async function loadStrokes(kana){
+ if(strokeCache[kana])return strokeCache[kana];
+ const t=await (await fetch('kanjivg/'+cpHex(kana)+'.svg')).text();
+ const doc=new DOMParser().parseFromString(t,'image/svg+xml');
+ const paths=[...doc.querySelectorAll('path')].filter(p=>p.getAttribute('d'));
+ const out=paths.map(p=>{const d=p.getAttribute('d');measPath.setAttribute('d',d);let L=1;try{L=measPath.getTotalLength()||1;}catch(_){}const N=Math.max(6,Math.round(L/4)),pts=[];for(let i=0;i<=N;i++){let q;try{q=measPath.getPointAtLength(L*i/N);}catch(_){q={x:0,y:0};}pts.push({x:q.x/109,y:q.y/109});}return{d,pts,L};});
+ strokeCache[kana]=out;return out;
+}
+function setupStk(){const cv=$('stkCanvas'),r=cv.getBoundingClientRect();if(!r.width)return;cv.width=r.width;cv.height=r.height;sctx=cv.getContext('2d');sctx.lineWidth=10;sctx.lineCap='round';sctx.lineJoin='round';sctx.strokeStyle='#E2553B';}
+function clearStk(){const cv=$('stkCanvas');if(sctx)sctx.clearRect(0,0,cv.width,cv.height);stkUser=[];}
+function renderStroke(){
+ const cells=allKana(stkScript);stkIdx=((stkIdx%cells.length)+cells.length)%cells.length;const c=cells[stkIdx];
+ $('stkRomaji').textContent='“'+c.r+'”';$('stkGuide').textContent=c.k;$('stkSvg').innerHTML='';$('stkFeedback').innerHTML='';
+ setupStk();clearStk();stkStrokes=null;
+ loadStrokes(c.k).then(s=>{stkStrokes=s;$('stkCount').textContent=s.length+' stroke'+(s.length>1?'s':'');}).catch(()=>{$('stkCount').textContent='';});
+}
+function watchStrokes(){
+ if(!stkStrokes)return;const svg=$('stkSvg');svg.innerHTML='';
+ const ps=stkStrokes.map(s=>{const p=document.createElementNS(SVGNS,'path');p.setAttribute('d',s.d);p.setAttribute('fill','none');p.setAttribute('stroke','#E2553B');p.setAttribute('stroke-width','6');p.setAttribute('stroke-linecap','round');p.setAttribute('stroke-linejoin','round');svg.appendChild(p);return p;});
+ let t=150;ps.forEach(p=>{let L=8;try{L=p.getTotalLength();}catch(_){}p.style.strokeDasharray=L;p.style.strokeDashoffset=L;setTimeout(()=>{p.style.transition='stroke-dashoffset .6s linear';p.style.strokeDashoffset=0;},t);t+=740;});
+}
+function checkStrokes(){
+ if(!stkStrokes)return;
+ const cv=$('stkCanvas'),sz=cv.width||300,fb=[];let allOk=true;
+ for(let i=0;i<stkStrokes.length;i++){
+  const c=stkStrokes[i],u=stkUser[i];
+  if(!u||u.length<1){fb.push('Stroke '+(i+1)+': ✗ missing');allOk=false;continue;}
+  const us={x:u[0].x/sz,y:u[0].y/sz},ue={x:u[u.length-1].x/sz,y:u[u.length-1].y/sz},cs=c.pts[0],ce=c.pts[c.pts.length-1];
+  const sd=Math.hypot(us.x-cs.x,us.y-cs.y);
+  const udx=ue.x-us.x,udy=ue.y-us.y,cdx=ce.x-cs.x,cdy=ce.y-cs.y,um=Math.hypot(udx,udy)||1e-6,cm=Math.hypot(cdx,cdy)||1e-6;
+  const dot=(udx*cdx+udy*cdy)/(um*cm),tiny=cm<0.06,startOk=sd<0.26,dirOk=tiny||dot>0.4;
+  if(startOk&&dirOk)fb.push('Stroke '+(i+1)+': ✓');
+  else{allOk=false;fb.push('Stroke '+(i+1)+': ✗ '+(!startOk?'wrong starting point':'wrong direction'));}
+ }
+ if(stkUser.length!==stkStrokes.length){allOk=false;fb.push('You drew '+stkUser.length+'; expected '+stkStrokes.length+' stroke(s).');}
+ $('stkFeedback').innerHTML='<div style="font-weight:800;color:'+(allOk?'#2E7D32':'#C4452E')+';margin-bottom:4px">'+(allOk?'✓ Correct order & direction!':'Not quite — tap ▶ Watch, then retry.')+'</div>'+fb.map(x=>'<div style="font-size:13px;color:var(--text)">'+x+'</div>').join('');
+}
+function spos(e){const cv=$('stkCanvas'),r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
+(function(){const cv=$('stkCanvas');
+ cv.addEventListener('pointerdown',e=>{e.preventDefault();if(!sctx)setupStk();stkDraw=true;const p=spos(e);stkUser.push([p]);sctx.beginPath();sctx.moveTo(p.x,p.y);try{cv.setPointerCapture(e.pointerId);}catch(_){}});
+ cv.addEventListener('pointermove',e=>{if(!stkDraw)return;e.preventDefault();const p=spos(e);stkUser[stkUser.length-1].push(p);sctx.lineTo(p.x,p.y);sctx.stroke();});
+ cv.addEventListener('pointerup',()=>stkDraw=false);cv.addEventListener('pointercancel',()=>stkDraw=false);
+})();
+$('stkPrev').onclick=()=>{stkIdx--;renderStroke();};
+$('stkNext').onclick=()=>{stkIdx++;renderStroke();};
+$('stkWatch').onclick=watchStrokes;
+$('stkClear').onclick=()=>{clearStk();$('stkSvg').innerHTML='';$('stkFeedback').innerHTML='';};
+$('stkCheck').onclick=checkStrokes;
+document.querySelectorAll('#stkScriptSeg button').forEach(b=>b.onclick=()=>{stkScript=b.dataset.script;document.querySelectorAll('#stkScriptSeg button').forEach(x=>x.classList.toggle('on',x===b));stkIdx=0;renderStroke();});
+
 if(window.speechSynthesis)speechSynthesis.onvoiceschanged=()=>{};
 go('home');
 </script>
