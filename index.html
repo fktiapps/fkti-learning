@@ -3,32 +3,37 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-<meta name="theme-color" content="#9c3b2e"/>
-<title>FKTI Learning · 深い関係学び</title>
+<meta name="theme-color" content="#13182B"/>
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png"/>
+<title>深い関係学び · Deeply Connected Learning</title>
 <style>
- :root{--ink:#2b2218;--cream:#fbf7ef;--paper:#fff;--line:#e3d9c6;--accent:#9c3b2e;--sakura:#d56a7a;--muted:#8a7f6c}
+ :root{--ink:#13182B;--ink2:#1E2540;--line:#313a5e;--paper:#F7F4EC;--text:#1B2233;--muted:#7A819A;--muted2:#9AA0B6;--ver:#E2553B;
+  --display:"Hiragino Mincho ProN","Yu Mincho",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic","Segoe UI",Roboto,Helvetica,Arial,sans-serif}
  *{box-sizing:border-box}
- body{margin:0;background:var(--cream);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;-webkit-tap-highlight-color:transparent}
- header{background:var(--accent);color:#fff;padding:18px 16px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
- header h1{margin:0;font-size:20px;font-weight:800}
- header .jp{font-size:13px;opacity:.9;margin-top:2px}
+ body{margin:0;background:var(--ink);color:#EDEFF8;font:16px/1.55 var(--sans);-webkit-tap-highlight-color:transparent}
+ header{padding:calc(env(safe-area-inset-top) + 16px) 16px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+ .brand-badge{width:38px;height:38px;border-radius:9px;object-fit:cover;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);flex:0 0 auto}
+ h1{margin:0;font-family:var(--display);font-size:20px;font-weight:600;line-height:1.1}
+ h1 b{color:var(--ver)}
+ .jp{font-size:10px;color:var(--muted2);letter-spacing:3px;margin-top:2px}
  main{max-width:560px;margin:0 auto;padding:16px}
- .lead{font-size:13.5px;color:var(--muted);text-align:center;margin:4px 0 14px}
- a.tile{display:flex;align-items:center;gap:14px;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px;margin:10px 0;text-decoration:none;color:var(--ink);box-shadow:0 4px 12px rgba(0,0,0,.05)}
- a.tile .ic{font-size:32px;width:46px;text-align:center}
+ .lead{font-size:13.5px;color:var(--muted2);text-align:center;margin:4px 0 14px}
+ a.tile{display:flex;align-items:center;gap:14px;background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:16px;padding:18px;margin:10px 0;text-decoration:none;box-shadow:0 8px 22px rgba(0,0,0,.28)}
+ a.tile .ic{font-size:30px;width:50px;text-align:center;font-family:var(--display);color:var(--ver)}
  .tile h2{margin:0;font-size:17px}.tile p{margin:3px 0 0;font-size:13px;color:var(--muted)}
- .tile.soon{opacity:.55}.tile.soon .tag{margin-left:auto;font-size:10px;background:#eee;color:#888;border-radius:6px;padding:2px 7px;font-weight:700}
- footer{text-align:center;font-size:11px;color:var(--muted);margin-top:18px;padding:0 12px}
+ .tile.soon{opacity:.5}.tile.soon .tag{margin-left:auto;font-size:10px;background:#e7e1d3;color:#998f78;border-radius:6px;padding:2px 7px;font-weight:700}
+ footer{text-align:center;font-size:11px;color:var(--muted2);margin-top:18px;padding:0 12px;line-height:1.6}
 </style>
 </head>
 <body>
-<header><h1>FKTI Learning</h1><div class="jp">深い関係学び · learn Japanese, deeply connected</div></header>
+<header><img class="brand-badge" src="icons/icon-192.png" alt="FKTI logo"/><div><h1>Deeply Connected <b>Learning</b></h1><div class="jp">深い関係学び</div></div></header>
 <main>
  <p class="lead">Bite-sized tools to learn Japanese — five minutes at a time.</p>
- <a class="tile" href="kana.html"><div class="ic">かな</div><div><h2>Kana Trainer</h2><p>Hiragana &amp; katakana — flashcards, finger-tracing, sounds &amp; extras.</p></div></a>
+ <a class="tile" href="kana.html"><div class="ic">か</div><div><h2>Kana Trainer</h2><p>Hiragana &amp; katakana — flashcards, finger-tracing, sounds &amp; extras.</p></div></a>
  <div class="tile soon"><div class="ic">語</div><div><h2>Vocabulary</h2><p>Build up to real words and phrases.</p></div><span class="tag">soon</span></div>
  <div class="tile soon"><div class="ic">漢</div><div><h2>Kanji</h2><p>Essential characters, in time.</p></div><span class="tag">soon</span></div>
 </main>
-<footer>深い関係 · Fukai Kankei — Deeply Connected. Mnemonic art: Wikimedia Commons (CC0 / CC BY-SA 3.0).</footer>
+<footer>深い関係 · Fukai Kankei — Deeply Connected.<br>Mnemonic art: Wikimedia Commons (CC0 / CC BY-SA 3.0).</footer>
 </body>
 </html>
