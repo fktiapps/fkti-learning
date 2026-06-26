@@ -40,6 +40,7 @@
  .kana{font-size:118px;line-height:1;font-weight:600;color:var(--text)}.flip-hint{font-size:12px;color:var(--muted);margin-top:16px}
  .romaji{font-size:38px;font-weight:800;color:var(--ver)}.mnem{font-size:14px;margin-top:10px;max-width:380px;line-height:1.5;color:var(--text)}
  .mnem-img{max-width:170px;max-height:140px;margin-top:12px;border-radius:10px;border:1px solid #e3d9c6}
+ .card-btns{margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
  .speak{background:var(--paper2);border:1px solid #e3d9c6;color:var(--text);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer}
  .rate{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
  .rate button{border:none;border-radius:12px;padding:14px 8px;font-weight:800;font-size:14px;color:#fff;cursor:pointer}
@@ -193,6 +194,8 @@ let ASSETS=null;fetch('data/kana_assets.json').then(r=>r.json()).then(j=>ASSETS=
 
 const RATE_VAL={know:3,kinda:2,dont:1,clue:0};
 let script='hira',cur=null,flipped=false,lastKey=null,seqPtr=0;
+let soundOn=localStorage.getItem('fkti_sound')!=='0';
+function setSound(v){soundOn=v;localStorage.setItem('fkti_sound',v?'1':'0');}
 function store(){return JSON.parse(localStorage.getItem('fkti_kana')||'{}');}
 function save(s){localStorage.setItem('fkti_kana',JSON.stringify(s));}
 function prog(){const s=store();const p=s[script]=s[script]||{rows:1,phase:'forward',pk:[],cards:{}};if(!p.phase)p.phase='forward';if(!p.pk)p.pk=[];return p;}
@@ -236,11 +239,12 @@ function showCard(){
  if(!flipped){$('card').innerHTML='<div class="kana">'+cur.k+'</div><div class="flip-hint">tap to flip</div>';$('rateRow').classList.add('hidden');}
  else{
   const img=ASSETS&&ASSETS.mnem&&ASSETS.mnem[script]&&ASSETS.mnem[script][cur.r];
-  $('card').innerHTML='<div class="romaji">'+cur.r+'</div><div class="mnem">'+cur.m+'</div>'+
-   '<div style="margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="speak" id="speakBtn">🔊 hear</button>'+(img?'<button class="speak" id="picBtn">🖼 picture</button>':'')+'</div>'+
-   (img?'<img class="mnem-img hidden" id="mnemImg" src="'+img+'" alt="mnemonic"/>':'');
-  $('speakBtn').onclick=e=>{e.stopPropagation();speak(cur.k);};
-  const pb=$('picBtn');if(pb)pb.onclick=e=>{e.stopPropagation();$('mnemImg').classList.toggle('hidden');};
+  $('card').innerHTML='<div class="romaji">'+cur.r+'</div>'+
+   '<div class="card-btns"><button class="speak" id="soundBtn">'+(soundOn?'🔊 Sound on':'🔇 Muted')+'</button><button class="speak" id="picBtn">🖼 mnemonic</button></div>'+
+   '<div id="mnemBlock" class="hidden">'+(img?'<img class="mnem-img" src="'+img+'" alt="mnemonic"/>':'')+'<div class="mnem">'+cur.m+'</div></div>';
+  $('soundBtn').onclick=e=>{e.stopPropagation();setSound(!soundOn);e.currentTarget.textContent=soundOn?'🔊 Sound on':'🔇 Muted';if(soundOn)speak(cur.k);};
+  $('picBtn').onclick=e=>{e.stopPropagation();const m=$('mnemBlock');m.classList.toggle('hidden');e.currentTarget.textContent=m.classList.contains('hidden')?'🖼 mnemonic':'🖼 hide';};
+  if(soundOn)speak(cur.k);
   $('rateRow').classList.remove('hidden');
  }
 }
@@ -413,7 +417,16 @@ function deckShow(){
  $('deckDone').classList.add('hidden');$('deckCard').classList.remove('hidden');
  if(!deckCur)deckCur=deckQ[deckP];$('deckProg').textContent=(deckP+1)+' / '+deckQ.length;
  if(!deckFlip){$('deckCard').innerHTML='<div class="kana">'+deckCur.k+'</div><div class="flip-hint">tap to flip</div>';$('deckRate').classList.add('hidden');}
- else{$('deckCard').innerHTML='<div class="romaji">'+deckCur.r+'</div><div class="mnem">'+deckCur.m+'</div><div style="margin-top:12px"><button class="speak" id="dspk">🔊 hear</button></div>';$('dspk').onclick=e=>{e.stopPropagation();speak(deckCur.k);};$('deckRate').classList.remove('hidden');}
+ else{
+  const img=ASSETS&&ASSETS.mnem&&ASSETS.mnem[script]&&ASSETS.mnem[script][deckCur.r];
+  $('deckCard').innerHTML='<div class="romaji">'+deckCur.r+'</div>'+
+   '<div class="card-btns"><button class="speak" id="dsound">'+(soundOn?'🔊 Sound on':'🔇 Muted')+'</button><button class="speak" id="dpic">🖼 mnemonic</button></div>'+
+   '<div id="dmnem" class="hidden">'+(img?'<img class="mnem-img" src="'+img+'" alt="mnemonic"/>':'')+'<div class="mnem">'+deckCur.m+'</div></div>';
+  $('dsound').onclick=e=>{e.stopPropagation();setSound(!soundOn);e.currentTarget.textContent=soundOn?'🔊 Sound on':'🔇 Muted';if(soundOn)speak(deckCur.k);};
+  $('dpic').onclick=e=>{e.stopPropagation();const m=$('dmnem');m.classList.toggle('hidden');e.currentTarget.textContent=m.classList.contains('hidden')?'🖼 mnemonic':'🖼 hide';};
+  if(soundOn)speak(deckCur.k);
+  $('deckRate').classList.remove('hidden');
+ }
 }
 function deckRate(b){const p=prog(),c=p.cards[deckCur.k]||{lvl:0,streak:0,seen:0};c.lvl=RATE_VAL[b];c.streak=(b==='know')?c.streak+1:0;c.seen++;p.cards[deckCur.k]=c;setProg(p);deckP++;deckCur=null;deckFlip=false;deckShow();}
 $('deckCard').onclick=()=>{if(deckP<deckQ.length){deckFlip=!deckFlip;deckShow();}};
