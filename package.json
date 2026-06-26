@@ -4,6 +4,6 @@
   "private": true,
   "description": "FKTI Learning · 深い関係学び — bite-sized Japanese-learning web apps",
   "scripts": {
-    "deploy": "wrangler pages deploy ."
+    "deploy": "npx wrangler pages deploy ."
   }
 }
