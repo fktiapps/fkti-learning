@@ -61,6 +61,14 @@
  .q .qt{font-weight:700;margin-bottom:10px}
  .opt{display:block;width:100%;text-align:left;background:var(--paper2);border:1px solid #e3d9c6;border-radius:10px;padding:12px;margin:6px 0;font-size:16px;cursor:pointer;color:var(--text)}
  .opt.ok{background:#e7f3e8;border-color:var(--know);font-weight:700}.opt.no{background:#fbe9e6;border-color:var(--clue)}
+ .chgrid{display:flex;flex-direction:column;gap:6px;align-items:center}
+ .chrow{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+ .chcell{width:52px;height:52px;border:none;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;padding:0}
+ .chcell .chk{font-size:22px;font-weight:700;line-height:1}.chcell .chr{font-size:9px;opacity:.85;margin-top:1px}
+ .chlegend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;font-size:11px;color:var(--muted2);margin:6px 0}
+ .chlegend span{display:flex;align-items:center;gap:4px}.chlegend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+ .deckbtn{display:flex;justify-content:space-between;align-items:center;width:100%;background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:12px;padding:14px;margin:7px 0;font-size:15px;font-weight:700;cursor:pointer}
+ .deckbtn span{font-size:11px;font-weight:400;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -75,6 +83,7 @@
   <div class="tile" data-go="intro"><div class="ic">📖</div><div><h2>Intro</h2><p>What hiragana &amp; katakana are, and how the system works.</p></div></div>
   <div class="tile" data-go="study"><div class="ic">🎴</div><div><h2>Learn &amp; Write</h2><p>Flashcards (grade yourself) + finger-tracing practice.</p></div></div>
   <div class="tile" data-go="sounds"><div class="ic">🔊</div><div><h2>Sounds &amp; Extras</h2><p>Voiced marks, combos, long vowels, small っ — with practice.</p></div></div>
+  <div class="tile" data-go="chart"><div class="ic">📊</div><div><h2>Progress &amp; decks</h2><p>Your gojūon chart, color-coded — plus custom decks by confidence.</p></div></div>
   <div class="tile" data-go="stroke"><div class="ic">✏️</div><div><h2>Stroke order</h2><p>Watch each character drawn, then practice — we check order &amp; direction.</p></div></div>
   <div class="tile soon"><div class="ic">📝</div><div><h2>Words</h2><p>Build up to real vocabulary.</p></div><span class="tag">soon</span></div>
  </section>
@@ -125,10 +134,30 @@
   <div id="stkFeedback" style="margin-top:10px"></div>
   <p style="font-size:12px;color:var(--muted2);text-align:center;margin-top:8px">Tap <b>▶ Watch</b> to see the strokes drawn in order, then draw them yourself and <b>Check</b> — we grade order &amp; direction (the difference between シ and ツ!).</p>
  </section>
+
+ <section class="scr" id="chart">
+  <div class="seg" id="chScriptSeg"><button data-script="hira" class="on">ひらがな Hiragana</button><button data-script="kata">カタカナ Katakana</button></div>
+  <div id="chGrid" class="chgrid"></div>
+  <div id="chStats" style="text-align:center;font-size:12px;color:var(--muted2);margin:8px 0"></div>
+  <div class="chlegend"><span><i style="background:#2E7D32"></i>Know it</span><span><i style="background:#C9A227"></i>Kinda</span><span><i style="background:#D9772A"></i>Don't really</span><span><i style="background:#C4452E"></i>No clue</span><span><i style="background:#2A3358"></i>Not started</span></div>
+  <h3 style="color:#EDEFF8;font-size:15px;margin:16px 0 6px">Custom decks</h3>
+  <button class="deckbtn" data-deck="boost">💪 I need a confidence boost <span>only “Know it”</span></button>
+  <button class="deckbtn" data-deck="little">🙂 Give me a little challenge <span>+ “Kinda”</span></button>
+  <button class="deckbtn" data-deck="challenge">😤 Challenge me <span>+ “Don’t really”</span></button>
+  <button class="deckbtn" data-deck="hurt">🔥 Make it hurt <span>everything, incl. “No clue”</span></button>
+ </section>
+
+ <section class="scr" id="deck">
+  <div class="meta"><span id="deckName" style="font-weight:700;color:var(--ver)"></span><span id="deckProg"></span></div>
+  <div class="card" id="deckCard"></div>
+  <div id="deckRate" class="rate hidden"><button class="r-know" data-drate="know">Know it</button><button class="r-kinda" data-drate="kinda">Kinda know it</button><button class="r-dont" data-drate="dont">Don't really</button><button class="r-clue" data-drate="clue">No clue</button></div>
+  <div id="deckDone" class="prompt hidden"></div>
+  <div class="foot"><button class="ghost" id="deckExit">← Back to chart</button></div>
+ </section>
 </main>
 <script>
 const $=id=>document.getElementById(id);
-function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='study'){cur=null;flipped=false;render();}if(id==='sounds')renderSounds();if(id==='stroke')renderStroke();}
+function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='study'){cur=null;flipped=false;render();}if(id==='sounds')renderSounds();if(id==='stroke')renderStroke();if(id==='chart')renderChart();}
 $('back').onclick=()=>go('home');
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
 
@@ -342,6 +371,45 @@ $('stkWatch').onclick=watchStrokes;
 $('stkClear').onclick=()=>{clearStk();$('stkSvg').innerHTML='';$('stkFeedback').innerHTML='';};
 $('stkCheck').onclick=checkStrokes;
 document.querySelectorAll('#stkScriptSeg button').forEach(b=>b.onclick=()=>{stkScript=b.dataset.script;document.querySelectorAll('#stkScriptSeg button').forEach(x=>x.classList.toggle('on',x===b));stkIdx=0;renderStroke();});
+
+// ===== 📊 gojūon chart + custom decks =====
+function lvlInfo(k){const c=cardState(k);if(!c.seen)return{bg:'#2A3358',t:'#8A90AC'};return[{bg:'#C4452E',t:'#fff'},{bg:'#D9772A',t:'#fff'},{bg:'#C9A227',t:'#1B2233'},{bg:'#2E7D32',t:'#fff'}][c.lvl];}
+function renderChart(){
+ const grid=$('chGrid');grid.innerHTML='';
+ DATA[script].forEach(row=>{const rd=document.createElement('div');rd.className='chrow';
+  row.cells.forEach(c=>{const inf=lvlInfo(c.k);const d=document.createElement('button');d.className='chcell';d.style.background=inf.bg;d.style.color=inf.t;d.innerHTML='<span class="chk">'+c.k+'</span><span class="chr">'+c.r+'</span>';d.onclick=()=>speak(c.k);rd.appendChild(d);});
+  grid.appendChild(rd);});
+ const cells=DATA[script].flatMap(r=>r.cells),cnt={3:0,2:0,1:0,0:0,u:0};
+ cells.forEach(c=>{const s=cardState(c.k);if(!s.seen)cnt.u++;else cnt[s.lvl]++;});
+ $('chStats').textContent=cnt[3]+' known · '+cnt[2]+' kinda · '+cnt[1]+' shaky · '+(cnt[0]+cnt.u)+' to learn · tap a cell to hear it';
+}
+let deckKey=null,deckQ=[],deckP=0,deckCur=null,deckFlip=false;
+const DECKNAME={boost:'💪 Confidence boost',little:'🙂 Little challenge',challenge:'😤 Challenge me',hurt:'🔥 Make it hurt'};
+function bandPool(key){
+ const cells=DATA[script].flatMap(r=>r.cells),L=k=>{const c=cardState(k);return c.seen?c.lvl:-1;};
+ if(key==='boost')return cells.filter(c=>L(c.k)===3);
+ if(key==='little')return cells.filter(c=>L(c.k)>=2);
+ if(key==='challenge')return cells.filter(c=>L(c.k)>=1);
+ return cells.slice();
+}
+function startDeck(key){
+ const pool=bandPool(key);
+ if(!pool.length){$('chStats').textContent='No cards in “'+DECKNAME[key]+'” yet — learn a little first!';return;}
+ deckKey=key;deckQ=shuf(pool.slice());deckP=0;deckCur=null;deckFlip=false;$('deckName').textContent=DECKNAME[key];$('deckDone').classList.add('hidden');go('deck');deckShow();
+}
+function deckShow(){
+ if(deckP>=deckQ.length){$('deckCard').classList.add('hidden');$('deckRate').classList.add('hidden');$('deckDone').classList.remove('hidden');$('deckDone').innerHTML='✓ Deck complete — '+deckQ.length+' cards.<br><button id="deckAgain">Go again</button> <button class="ghost" id="deckBack2" style="margin-top:8px">Back to chart</button>';$('deckAgain').onclick=()=>startDeck(deckKey);$('deckBack2').onclick=()=>go('chart');return;}
+ $('deckDone').classList.add('hidden');$('deckCard').classList.remove('hidden');
+ if(!deckCur)deckCur=deckQ[deckP];$('deckProg').textContent=(deckP+1)+' / '+deckQ.length;
+ if(!deckFlip){$('deckCard').innerHTML='<div class="kana">'+deckCur.k+'</div><div class="flip-hint">tap to flip</div>';$('deckRate').classList.add('hidden');}
+ else{$('deckCard').innerHTML='<div class="romaji">'+deckCur.r+'</div><div class="mnem">'+deckCur.m+'</div><div style="margin-top:12px"><button class="speak" id="dspk">🔊 hear</button></div>';$('dspk').onclick=e=>{e.stopPropagation();speak(deckCur.k);};$('deckRate').classList.remove('hidden');}
+}
+function deckRate(b){const p=prog(),c=p.cards[deckCur.k]||{lvl:0,streak:0,seen:0};c.lvl=RATE_VAL[b];c.streak=(b==='know')?c.streak+1:0;c.seen++;p.cards[deckCur.k]=c;setProg(p);deckP++;deckCur=null;deckFlip=false;deckShow();}
+$('deckCard').onclick=()=>{if(deckP<deckQ.length){deckFlip=!deckFlip;deckShow();}};
+document.querySelectorAll('[data-drate]').forEach(b=>b.onclick=()=>deckRate(b.dataset.drate));
+$('deckExit').onclick=()=>go('chart');
+document.querySelectorAll('[data-deck]').forEach(b=>b.onclick=()=>startDeck(b.dataset.deck));
+document.querySelectorAll('#chScriptSeg button').forEach(b=>b.onclick=()=>{script=b.dataset.script;document.querySelectorAll('#chScriptSeg button').forEach(x=>x.classList.toggle('on',x===b));renderChart();});
 
 if(window.speechSynthesis)speechSynthesis.onvoiceschanged=()=>{};
 go('home');
