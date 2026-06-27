@@ -1,121 +1,82 @@
 ★ FKTI LEARNING · 深い関係学び — HANDOFF (for a new Claude) ★
 ================================================================
-Last updated: 2026-06-26. Status: LIVE in beta, in classroom use.
+Last updated 2026-06-27. Status: LIVE, in classroom beta.
 
 WHAT THIS IS
-A standalone project (split off from the "Deeply Connected Dining" app on 2026-06-26) for
-bite-sized Japanese-learning web apps. FKTI = Fukai Kankei (深い関係, "deeply connected"),
-Greg's parent brand (fkti.org). Brand for this app: "Deeply Connected Learning · 深い関係学び".
-Single-file, offline-first, no build step. Greg is an experienced Japanese teacher; this is
-replacing his workbooks and is being used by his class (shared as "beta but usable").
+Standalone Japanese-learning web apps by FKTI (Fukai Kankei, 深い関係 "deeply connected"; fkti.org).
+Brand: "Deeply Connected Learning · 深い関係学び". Single-file, offline-first, no build step.
+Greg is a Japanese teacher; the kana trainer is replacing his workbooks and is in use by his class.
+Sibling project: the Deeply Connected DINING app at C:\Users\FKTI Work\Downloads\dcd (separate repo —
+its own HANDOFF.txt). Don't conflate the two.
 
-LIVE
-- Production: https://fkti-learning.pages.dev  (Cloudflare Pages, direct-upload project)
-- Kana app:   https://fkti-learning.pages.dev/kana.html
+LIVE: https://fkti-learning.pages.dev  (kana app at /kana.html)
+DEPLOY — GREG DEPLOYS HIMSELF:  cd "C:/Users/FKTI Work/Downloads/fkti-learning" && npm run deploy
+  (npm script = npx wrangler pages deploy .; his Cloudflare account; static, no KV/Functions/secrets.)
+  NOTE: kana.html has NO service worker — changes go live on deploy + a normal refresh.
 
-DEPLOY — GREG DEPLOYS HIMSELF (never run it for him). He runs:
-  cd "C:/Users/FKTI Work/Downloads/fkti-learning" && npm run deploy
-  (npm script = `npx wrangler pages deploy .`; wrangler.toml names the project; uses Greg's
-   own authenticated Cloudflare account — same one as fkti-dining-app. No KV/Functions/secrets.)
+STANDING RULES: Greg deploys himself; no paid/unattended tokens; never handle his credentials;
+  bundle only open-licensed assets with attribution.
 
-STANDING RULES (inherited; do not violate)
-- Greg DEPLOYS himself. Never run a deploy.
-- No paid/extra-usage tokens when unattended; included quota only; no retry-loop crons.
-- I never handle credentials/secrets; Greg authenticates everything.
-- Do NOT bundle proprietary/copyrighted assets. Only open licenses, with attribution.
+DIRECTORY (own git repo)
+- index.html ........ landing hub (Deeply-Connected dark theme + logo).
+- kana.html ......... ★ the Kana Trainer (all HTML/CSS/JS in one file, ~430 lines).
+- icons/ ............ logo (icon-192 etc.), copied from the dining app — same brand badge.
+- data/kana_assets.json ... {mnem:{hira:{romaji:path},kata:{...}}, credit:{...}} — mnemonic image map.
+- img/kana/mnem/{hira,kata}/ ... mnemonic images (hira CC0, kata CC BY-SA 3.0). Quality is mediocre.
+- kanjivg/<codepoint>.svg ... 92 KanjiVG stroke files (CC BY-SA 3.0) for stroke-order.
 
-DIRECTORY  (C:\Users\FKTI Work\Downloads\fkti-learning — its OWN git repo)
-- index.html ............ landing hub (links to modules), Deeply-Connected dark theme + logo
-- kana.html ............. ★ THE app. Single file: all HTML/CSS/JS. ~430 lines.
-- icons/ ................ icon-192/512, favicon, apple-touch (copied from the dining app — same logo)
-- data/kana_assets.json . map: {mnem:{hira:{romaji:path},kata:{...}}, credit:{...}}
-- data/_kana_mnem_manifest.json . raw Wikimedia pull (urls+licenses) for re-fetching mnem images
-- img/kana/mnem/{hira,kata}/ .... mnemonic images (hira CC0, kata CC BY-SA 3.0)
-- kanjivg/<codepoint>.svg ........ 92 KanjiVG stroke files (all 46 hira + 46 kata), CC BY-SA 3.0
-- package.json, wrangler.toml, README.md
+THEME: dining palette — --ink #13182B navy shell, --paper #F7F4EC cream cards, --ver #E2553B accent,
+  Mincho display font. Header: logo + "Deeply Connected Learning" + 深い関係学び.
 
-THEME / BRANDING (matches the dining app exactly)
-- Palette: --ink #13182B (navy shell), --paper #F7F4EC (cream cards), --ver #E2553B (coral accent),
-  --display Mincho serif, --sans system. Dark shell + cream cards.
-- Header: logo badge (icons/icon-192.png) + "Deeply Connected Learning" (Learning in --ver) + 深い関係学び.
-
-KANA TRAINER (kana.html) — CURRENT STATE  (Home menu → sections, ‹ back nav; one screen visible)
- ✅ 📖 Intro — what hiragana/katakana are, how the kana system works, how to use the app.
+KANA TRAINER — CURRENT STATE (Home menu → sections, ‹ back nav; one screen visible)
+ ✅ 📖 Intro — what hiragana/katakana are, how kana works, how to use the app.
  ✅ 🎴 Learn & Write —
-     • RECOGNIZE: flashcard; tap to flip. ORDER ALGORITHM per row of 5: phase 'forward' (A→O,
-       cycles the row in order) until all 5 graded "Know it" → phase 'reverse' (O→A) until all 5
-       "Know it" again → phase 'random' (weighted random across ALL introduced kana). Header shows
-       the phase ("in order →/reverse ←/shuffled 🔀"). Self-grade 4 buckets (Know it/Kinda/Don't
-       really/No clue). On flip: SOUND AUTO-PLAYS (ja-JP TTS), mutable via 🔊/🔇 button (persisted
-       localStorage 'fkti_sound'); mnemonic TEXT+IMAGE hidden until 🖼 mnemonic tapped.
-     • QUIZ GATE: finishing a row (phase random + all mastered) requires a 5-question multiple-
-       choice quiz (kana→romaji) — must be perfect to unlock the next row (buildGate/renderGate/addRow).
-     • WRITE: finger-tracing over a faint guide char on canvas (Clear / Hide-guide / Next).
- ✅ 🔊 Sounds & Extras — teaching + tap-to-check practicelets: dakuten ゛/handakuten ゜(voiced +
-     bilabial p), yōon combos (small ゃゅょ), long vowels (おう/ー), small っ (sokuon).
- ✅ ✏️ Stroke order — KanjiVG. ▶ Watch animates strokes in order/direction (slow ~2.2s/stroke).
-     Draw it yourself → Check grades each stroke for START POINT + DIRECTION + COUNT (catches シ vs ツ).
-     Detection: parse SVG <path> per stroke, sample via getPointAtLength on an offscreen measure-svg,
-     normalize to 0-1, compare user stroke start-dist (<0.26) + direction dot (>0.4). Prev/Next, per script.
- ✅ 📊 Progress & decks —
-     • GOJŪON CHART: every kana colored by mastery: green=Know it, yellow=Kinda, orange=Don't really,
-       red=No clue, grey=Not started (lvlInfo). Tap a cell to hear it. RESPONSIVE: portrait = rows by
-       consonant; LANDSCAPE/DESKTOP (matchMedia orientation:landscape | min-width:680) = traditional
-       vertical gojūon (vowels あいうえお down the RIGHTMOST column, consonant columns read right→left;
-       placed by vowelRow()/grid). Re-renders on resize/orientationchange.
-     • CUSTOM DECKS by confidence band (bandPool): 💪 Confidence boost (lvl3 only), 🙂 Little challenge
-       (≥lvl2), 😤 Challenge me (≥lvl1), 🔥 Make it hurt (everything incl. unseen). Deck grades feed
-       back into the chart colors.
- 46 hiragana + 46 katakana, each with k(kana)/r(romaji)/m(text mnemonic) in DATA{hira:[rows],kata:[rows]}.
+    • RECOGNIZE flashcards. ORDER ALGORITHM per row of 5: phase forward (A→O, in order) until all 5
+      graded "Know it" → phase reverse (O→A) until all 5 "Know it" → phase random (weighted across all
+      introduced). Header shows phase. localStorage 'fkti_kana' per script {rows,phase,pk,cards:{lvl,streak,seen}}.
+    • On flip: SOUND AUTO-PLAYS (ja-JP TTS); 🔊/🔇 mute toggle persisted ('fkti_sound'). Mnemonic
+      TEXT+IMAGE hidden until 🖼 mnemonic tapped (images are weak, so they're opt-in).
+    • QUIZ GATE: unlocking the next row requires a 5-question multiple-choice quiz (kana→romaji),
+      perfect score to pass (buildGate/renderGate/addRow).
+    • WRITE: finger-tracing over a faint guide char on canvas (Clear / Hide-guide / Next).
+ ✅ ✏️ Stroke order — KanjiVG. ▶ Watch animates strokes in order/direction (~2.2s/stroke, slow).
+    Draw it → Check grades each stroke for START POINT + DIRECTION + COUNT (catches シ vs ツ).
+    Detection: parse SVG <path> per stroke, sample via getPointAtLength on an offscreen measure-svg,
+    normalize to 0-1, compare start-dist (<0.26) + direction dot (>0.4). Prev/Next, per script.
+ ✅ 🔊 Sounds & Extras — teaching + tap-to-check practicelets: dakuten ゛/handakuten ゜(voiced+bilabial p),
+    yōon combos (small ゃゅょ), long vowels (おう/ー), small っ (sokuon).
+ ✅ 📊 Progress & decks — GOJŪON CHART color-coded by mastery (green=Know it, yellow=Kinda, orange=Don't
+    really, red=No clue, grey=Not started); tap a cell to hear it. RESPONSIVE: portrait = rows by
+    consonant; LANDSCAPE/DESKTOP (matchMedia orientation:landscape | min-width:680) = TRADITIONAL vertical
+    gojūon (vowels あいうえお down the rightmost column, consonant columns right→left; placed by vowelRow()),
+    re-renders on resize/orientationchange. Drives 4 CUSTOM DECKS by confidence band (bandPool):
+    💪 boost (lvl3), 🙂 little (≥lvl2), 😤 challenge (≥lvl1), 🔥 hurt (everything); deck grades feed the chart.
+ 46 hiragana + 46 katakana, each with k/r/m (kana/romaji/text-mnemonic) in DATA{hira:[rows],kata:[rows]}.
 
-PERSISTENCE (localStorage)
-- 'fkti_kana' = {hira:{rows,phase,pk,cards:{kana:{lvl,streak,seen}}}, kata:{...}}. mastered = lvl3 & streak≥2.
-- 'fkti_sound' = '1'/'0' (mute toggle).
+DEV: edit kana.html directly; validate JS (new Function on each <script>) before committing; commit
+  (author FKTI/gjswork@yahoo.com); GREG deploys. Known gotcha (fixed): the .rate button{color:#fff}
+  rule needs a .rate .ghost{color:var(--muted)} override or ghost buttons go white-on-white.
 
-ASSETS / LICENSING (verified via Wikimedia + KanjiVG)
-- Hiragana mnemonic images: CC0 — 46 in img/kana/mnem/hira/.
-- Katakana mnemonic images: CC BY-SA 3.0 — 46 in img/kana/mnem/kata/ (attributed in index footer + kana_assets.json).
-- KanjiVG stroke SVGs: CC BY-SA 3.0 (Ulrich Apel / KanjiVG). 92 in kanjivg/. ATTRIBUTE if surfaced prominently.
-- NEVER bundle proprietary mnemonic art (Tofugu/Dr.Moku).
+ASSETS/LICENSING: hira mnemonic images CC0; kata CC BY-SA 3.0; KanjiVG CC BY-SA 3.0 (Ulrich Apel).
+  Mnemonic IMAGES are mediocre ("terrible" per Greg) → hidden behind 🖼, text mnemonics lead. A search
+  for better CC/MIT sets (MaruKana etc.) found nothing usable; the good ones are proprietary. IDEA on
+  the table (Greg curious): generate an ORIGINAL FKTI-owned consistent SVG mnemonic set (hook drawn into
+  each character's shape) — sidesteps licensing. Not started (image-gen = token cost).
 
-KNOWN FEEDBACK / QUALITY NOTES
-- Mnemonic IMAGES are mediocre (Greg: "terrible") — that's why they're hidden behind 🖼 and the
-  TEXT mnemonics lead. A search for better CC/MIT sets (MaruKana, GitHub "hiragana mnemonics") found
-  nothing usable (unrelated repos or NO license). Good ones are all proprietary.
-- Greg is curious what an ORIGINAL set would look like — idea on the table: generate a consistent,
-  FKTI-owned SVG mnemonic set (one art style, the hook drawn INTO each character's shape + a caption).
-  Sidesteps licensing entirely. A fun future project; not started.
+ROADMAP / TODO
+1. 📝 WORDS / VOCABULARY module — Greg will SUPPLY word lists (likely from class material). Reuse the
+   flashcard + SRS + tracing + chart engine for words. Cheap once lists are provided. Tile shows "soon".
+2. ★ GOOGLE CLASSROOM integration — Greg's long-term direction (he leans toward full integration).
+   • Route A (cheap, no Google setup): Greg exports/shares materials → convert structured vocab/phrases
+     to decks; surface prose as readable material. Doubles as the Words module.
+   • Route B (heavy, what he eventually wants): in-app Google sign-in (Google Identity Services OAuth) +
+     Classroom REST API (courses/coursework/announcements readonly) + Drive API for attached Docs/Slides.
+     REQUIRES Greg's admin steps: Google Cloud project, OAuth client, consent screen, ENABLE APIs, and
+     GOOGLE APP-VERIFICATION for read scopes. Materials mostly embed/link, not auto-flashcard. Student
+     sign-in pulls personal data (privacy/FERPA flag). Scope with Greg before building.
+3. Original FKTI mnemonic art set (see above).
+4. PWA: add manifest + service worker for installable/offline (good for classroom devices).
+5. Polish from class feedback (watch nav, order progression, stroke detection).
 
-DEV WORKFLOW
-- Edit kana.html directly. Validate JS before committing:
-    node -e 'const h=require("fs").readFileSync("kana.html","utf8");const b=[...h.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>m[1]);let bad=0;b.forEach(c=>{try{new Function(c)}catch(e){bad++;console.log(e.message)}});console.log(bad?"FAIL":"OK")'
-- Commit with git (author FKTI / gjswork@yahoo.com). Then GREG deploys + verifies on phone.
-- It's a single file — beware: the .rate button{color:#fff} rule needs .rate .ghost{color:var(--muted)}
-  override or ghost buttons go white-on-white (was a bug). Watch-animation speed lives in watchStrokes.
-
-ROADMAP / TODO  (Greg leaning toward #2 long-term; he'll start a NEW Claude to "really build out the app")
-1. 📝 WORDS / VOCABULARY MODULE — Greg supplies word lists (likely from his class material). Reuse the
-   flashcard + SRS + tracing + chart engine for words. This is the next-most-wanted feature. Quick win
-   if he pastes/exports lists (see #2 Route A).
-2. ★ GOOGLE CLASSROOM INTEGRATION — Greg's stated long-term direction.
-   • Route A (easy, no Google setup): Greg exports/shares Classroom materials (paste, or Docs/Slides as
-     text/PDF, or drop files in repo) → convert structured vocab/phrases into decks; surface prose as
-     readable material. Recommended first step; doubles as the Words module.
-   • Route B (full, heavy — what Greg wants eventually): in-app Google sign-in (Google Identity Services
-     OAuth) + Classroom REST API (classroom.courses.readonly, coursework.me.readonly, announcements.readonly)
-     + Drive API for attached Docs/Slides. REQUIRES (Greg's admin steps): a Google Cloud project, OAuth
-     client ID, consent screen, ENABLE Classroom+Drive APIs, and GOOGLE APP-VERIFICATION for the read
-     scopes (unverified = test-users-only + warning screens). Materials are mostly Docs/Slides → embed/link,
-     not auto-flashcard. Student sign-in pulls personal data (privacy/FERPA-style considerations — flag to Greg).
-     Big project; scope it with Greg before building. He has NOT provided Google Cloud access (and won't
-     hand credentials — the app itself does the OAuth client-side; Greg sets up the Cloud project).
-3. Original FKTI-owned mnemonic art set (see QUALITY NOTES).
-4. PWA: add manifest + service worker for installable/offline (nice for classroom devices).
-5. Possible: stroke "Watch" inside Write mode; per-deck stats; export/share progress.
-
-CONTEXT POINTERS
-- Sibling project: the Deeply Connected DINING app at C:\Users\FKTI Work\Downloads\dcd (separate repo,
-  fkti-dining-app.pages.dev). Greg will decide next steps on THAT app when he returns (open items there:
-  Himeji + Toba Okage sweeps; set MISTRAL_API_KEY on the dining Cloudflare project to enable the menu/
-  ingredient camera readers). Don't conflate the two repos.
-- Auto-memory index for this work: ~/.claude/.../memory/MEMORY.md (kana-trainer-app.md has the running notes).
+NEXT: Greg is starting a fresh Claude (this session's context was full). He may decide to work on the
+  DINING app next (see that repo's HANDOFF). For the kana app, the cheap win is the Words module.
