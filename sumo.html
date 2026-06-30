@@ -99,10 +99,10 @@
  .kfilter button.sel{color:#fff}
  .ksearch{width:100%;background:var(--ink2);border:1px solid var(--line);color:#fff;border-radius:11px;padding:11px 13px;font:15px var(--sans);margin-bottom:10px}
  .ksearch::placeholder{color:var(--muted)}
- .kgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px}
+ .kgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:13px}
  .kcard{position:relative;background:var(--paper);color:var(--ink);border-radius:14px;padding:9px 9px 11px;border-top:4px solid var(--ver)}
  .kcard svg{width:100%;display:block;background:#fbf8f0;border-radius:9px}
- .kcard img.kphoto{width:100%;height:104px;object-fit:cover;display:block;border-radius:9px;
+ .kcard img.kphoto{width:100%;height:172px;object-fit:cover;display:block;border-radius:9px;
    filter:grayscale(1) sepia(.30) saturate(.82) contrast(1.06) brightness(1.02)}
  .kbadge{position:absolute;top:7px;right:7px;font-size:9px;font-weight:800;letter-spacing:.04em;
    background:rgba(19,24,43,.82);color:#f3ead7;border-radius:6px;padding:2px 6px}
@@ -228,12 +228,16 @@
   <h4>Why the moves work — the physics</h4>
   <p class="body" style="font-size:13px;margin-top:4px">A wrestler stays upright only while his <b>center of gravity</b> sits over his <b>base of support</b> — the span between his feet. Every technique is a different way to make the opponent&rsquo;s center leave his base: shove it out, spin it off, lift it, or take the base away. Each diagram is tagged with its mechanism (⚙) and explains the efficacy.</p>
   <div class="klegend">
-   <span><span class="sw"><svg width="22" height="14"><circle cx="11" cy="7" r="5" fill="#fff" stroke="#e0a92e" stroke-width="1.8"/><circle cx="11" cy="7" r="2.4" fill="#e0a92e"/></svg></span>center of gravity</span>
-   <span><span class="sw"><svg width="22" height="14"><rect x="3" y="6" width="16" height="3" rx="1.5" fill="#3a78c2" opacity=".4"/><line x1="3" y1="3" x2="3" y2="11" stroke="#3a78c2" stroke-width="1.6"/><line x1="19" y1="3" x2="19" y2="11" stroke="#3a78c2" stroke-width="1.6"/></svg></span>base of support</span>
-   <span><span class="sw"><svg width="22" height="14"><line x1="3" y1="7" x2="16" y2="7" stroke="#E2553B" stroke-width="3" stroke-linecap="round"/><path d="M16,7 L11,4 L11,10 Z" fill="#E2553B"/></svg></span>applied force</span>
+   <span><span class="sw"><svg width="22" height="14"><ellipse cx="11" cy="8" rx="6" ry="6.5" fill="#b5673d"/><circle cx="11" cy="3" r="2.3" fill="#b5673d"/></svg></span>attacker</span>
+   <span><span class="sw"><svg width="22" height="14"><ellipse cx="11" cy="8" rx="6" ry="6.5" fill="#5b6473"/><circle cx="11" cy="3" r="2.3" fill="#5b6473"/></svg></span>defender</span>
+   <span><span class="sw"><svg width="22" height="14"><circle cx="11" cy="7" r="5.4" fill="#fff" stroke="#e8a72c" stroke-width="2"/><circle cx="11" cy="7" r="2.5" fill="#e8a72c"/></svg></span>center of gravity</span>
+   <span><span class="sw"><svg width="22" height="14"><rect x="3" y="6" width="16" height="3" rx="1.5" fill="#3f7fc4" opacity=".4"/><line x1="3" y1="3" x2="3" y2="11" stroke="#3f7fc4" stroke-width="1.8"/><line x1="19" y1="3" x2="19" y2="11" stroke="#3f7fc4" stroke-width="1.8"/></svg></span>base of support</span>
+   <span><span class="sw"><svg width="22" height="14"><line x1="3" y1="7" x2="15" y2="7" stroke="#d62a1e" stroke-width="3.2" stroke-linecap="round"/><path d="M16,7 L10,3.5 L10,10.5 Z" fill="#d62a1e"/></svg></span>force / rotation</span>
+   <span><span class="sw"><svg width="22" height="14"><circle cx="11" cy="7" r="5.4" fill="none" stroke="#d62a1e" stroke-width="2.2"/></svg></span>grip / hold</span>
+   <span><span class="sw"><svg width="22" height="14"><circle cx="11" cy="7" r="5.4" fill="none" stroke="#d62a1e" stroke-width="2.2" stroke-dasharray="3 3"/></svg></span>push / strike</span>
    <span><span class="sw"><svg width="22" height="14"><path d="M11,2 L17,11 L5,11 Z" fill="#13182B"/></svg></span>fulcrum (pivot)</span>
-   <span><span class="sw"><svg width="22" height="14"><g stroke="#E2553B" stroke-width="2.6" stroke-linecap="round"><line x1="6" y1="3" x2="16" y2="11"/><line x1="16" y1="3" x2="6" y2="11"/></g></svg></span>base removed</span>
-   <span><span class="sw"><svg width="22" height="14"><line x1="3" y1="7" x2="16" y2="7" stroke="#9aa0b6" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="3 3"/><path d="M16,7 L11,4 L11,10 Z" fill="#9aa0b6"/></svg></span>his own momentum</span>
+   <span><span class="sw"><svg width="22" height="14"><g stroke="#d62a1e" stroke-width="2.8" stroke-linecap="round"><line x1="6" y1="3" x2="16" y2="11"/><line x1="16" y1="3" x2="6" y2="11"/></g></svg></span>base removed</span>
+   <span><span class="sw"><svg width="22" height="14"><line x1="3" y1="7" x2="15" y2="7" stroke="#1f8a8a" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="3 3"/><path d="M16,7 L10,3.5 L10,10.5 Z" fill="#1f8a8a"/></svg></span>his own momentum</span>
   </div>
  </div>
  <input class="ksearch" id="ksearch" placeholder="Search a technique… (e.g. throw, yorikiri, leg)" oninput="renderKim()"/>
@@ -719,70 +723,200 @@ const WHY = {
 };
 
 function kdiagram(arch){
-  const mech = MECH[arch] || 'drive';
-  const W='#46506e', A='#E2553B';
-  const C={com:'#e0a92e', base:'#3a78c2', force:'#E2553B', fulc:'#13182B', ghost:'#9aa0b6', edge:'#cdbfa0'};
-  const belt = c => c===A ? '#7c2a1c' : '#243152';
-  const fig=(x,y,col,lean,sc)=>{ sc=sc||1; const b=belt(col);
-    return '<g transform="translate('+x+','+y+') rotate('+(lean||0)+') scale('+sc+')">'+
-      '<path d="M-3,11 L-10,26 -4,26 0,12 Z" fill="'+col+'"/>'+
-      '<path d="M3,11 L10,26 4,26 0,12 Z" fill="'+col+'"/>'+
-      '<ellipse cx="0" cy="0" rx="12" ry="13" fill="'+col+'"/>'+
-      '<path d="M-12,7 Q0,11 12,7 L12,13 Q0,17 -12,13 Z" fill="'+b+'"/>'+
-      '<circle cx="0" cy="-16" r="6.6" fill="'+col+'"/>'+
-      '<path d="M-4,-22 Q0,-26 4,-22 Z" fill="'+b+'"/>'+
-      '<rect x="-1.6" y="-24.5" width="3.2" height="4" rx="1.4" fill="'+b+'"/></g>';
-  };
-  const head=(x,y,a,col)=>'<path d="M'+x.toFixed(1)+','+y.toFixed(1)+' L'+(x-7*Math.cos(a-.5)).toFixed(1)+','+(y-7*Math.sin(a-.5)).toFixed(1)+' L'+(x-7*Math.cos(a+.5)).toFixed(1)+','+(y-7*Math.sin(a+.5)).toFixed(1)+' Z" fill="'+col+'"/>';
-  const arrow=(x1,y1,x2,y2,col,dashed)=>{ const a=Math.atan2(y2-y1,x2-x1);
-    return '<g stroke="'+col+'" stroke-width="'+(dashed?2.4:3)+'" stroke-linecap="round"><line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'"'+(dashed?' stroke-dasharray="3 3"':'')+'/></g>'+head(x2,y2,a,col); };
-  const arc=(cx,cy,r,a0,a1,col)=>{ const px=a=>cx+r*Math.cos(a), py=a=>cy+r*Math.sin(a);
-    const large=Math.abs(a1-a0)>Math.PI?1:0, sweep=a1>a0?1:0, tang=a1+(sweep?Math.PI/2:-Math.PI/2);
-    return '<path d="M'+px(a0).toFixed(1)+','+py(a0).toFixed(1)+' A'+r+','+r+' 0 '+large+' '+sweep+' '+px(a1).toFixed(1)+','+py(a1).toFixed(1)+'" fill="none" stroke="'+col+'" stroke-width="2.6"/>'+head(px(a1),py(a1),tang,col); };
-  const com=(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="5.4" fill="#fff" stroke="'+C.com+'" stroke-width="1.8"/><circle cx="'+x+'" cy="'+y+'" r="2.6" fill="'+C.com+'"/>';
-  const base=(x1,x2,y)=>'<rect x="'+x1+'" y="'+(y-1.6)+'" width="'+(x2-x1)+'" height="3.4" rx="1.7" fill="'+C.base+'" opacity="0.32"/><line x1="'+x1+'" y1="'+(y-4)+'" x2="'+x1+'" y2="'+(y+4)+'" stroke="'+C.base+'" stroke-width="1.6"/><line x1="'+x2+'" y1="'+(y-4)+'" x2="'+x2+'" y2="'+(y+4)+'" stroke="'+C.base+'" stroke-width="1.6"/>';
-  const fulc=(x,y)=>'<path d="M'+x+','+(y-6)+' L'+(x+5)+','+(y+2)+' L'+(x-5)+','+(y+2)+' Z" fill="'+C.fulc+'"/>';
-  const xmark=(x,y)=>'<g stroke="'+C.force+'" stroke-width="2.6" stroke-linecap="round"><line x1="'+(x-4)+'" y1="'+(y-4)+'" x2="'+(x+4)+'" y2="'+(y+4)+'"/><line x1="'+(x+4)+'" y1="'+(y-4)+'" x2="'+(x-4)+'" y2="'+(y+4)+'"/></g>';
-  const edge=x=>'<line x1="'+x+'" y1="38" x2="'+x+'" y2="74" stroke="'+C.edge+'" stroke-width="1.8" stroke-dasharray="3 3"/>';
-  const lbl=(x,y,t)=>'<text x="'+x+'" y="'+y+'" font-size="7.5" fill="#6b6250" text-anchor="middle" font-family="-apple-system,sans-serif">'+t+'</text>';
-  const ground='<line x1="6" y1="76" x2="114" y2="76" stroke="#d9c9a6" stroke-width="2.5" stroke-linecap="round"/>';
-  let s='';
-  switch(mech){
-    case 'drive':
-      s = base(50,74,76)+ fig(40,52,A,8)+ fig(62,50,W,-10)+ arrow(46,64,60,64,C.force)+
-          com(62,46)+ arrow(67,46,89,46,C.force)+ edge(90)+ lbl(90,86,'past the base'); break;
-    case 'lever':
-      s = base(54,70,76)+ fig(44,50,A,4)+ fig(67,52,W,46,0.92)+ fulc(55,69)+
-          '<line x1="55" y1="67" x2="72" y2="44" stroke="'+C.fulc+'" stroke-width="1.4" stroke-dasharray="4 3"/>'+ lbl(76,40,'lever arm')+
-          com(68,48)+ arc(57,52,21,-0.55,0.95,C.force)+ lbl(56,86,'fulcrum'); break;
-    case 'couple':
-      s = base(52,72,76)+ fig(62,50,W,0)+ arrow(53,42,72,42,C.force)+ arrow(71,61,52,61,C.force)+
-          com(62,49)+ arc(62,50,17,-1.15,0.5,C.force)+ lbl(62,86,'spun off his axis'); break;
-    case 'sweep':
-      s = fig(42,52,A,10)+ fig(64,50,W,-8)+ base(57,61,76)+ xmark(72,75)+
-          arrow(53,42,70,42,C.force)+ com(64,47)+ arrow(66,51,77,68,C.force)+ lbl(72,86,'base swept away'); break;
-    case 'capture':
-      s = fig(40,54,A,12,0.9)+ fig(64,50,W,-6)+ arrow(51,61,61,50,C.force)+ fulc(58,75)+
-          com(64,47)+ arc(58,52,18,-0.3,1.25,C.force)+ lbl(58,86,'one-point base'); break;
-    case 'lift':
-      s = fig(48,52,A,4)+ fig(67,41,W,0,0.9)+ arrow(61,61,61,49,C.force)+ arrow(73,61,73,49,C.force)+
-          '<line x1="56" y1="70" x2="80" y2="70" stroke="'+C.edge+'" stroke-width="1.6" stroke-dasharray="2 3"/>'+ com(67,37)+ lbl(68,86,'no base · no friction'); break;
-    case 'momentum':
-      s = base(58,66,76)+ fig(44,50,A,12)+ fig(70,56,W,58,0.92)+ arrow(55,42,79,49,C.ghost,1)+ lbl(84,42,'momentum')+
-          arrow(58,46,66,58,C.force)+ com(75,50)+ lbl(70,86,'center past front foot'); break;
-    case 'rear':
-      s = base(60,80,76)+ fig(52,50,A,-4)+ fig(72,50,W,-4)+ lbl(50,38,'behind')+
-          arrow(58,44,66,44,C.force)+ com(72,47)+ arrow(78,47,97,47,C.force)+ edge(98); break;
-    case 'sori':
-      s = fig(54,60,A,4,0.85)+ fig(64,42,W,150,0.85)+ fulc(56,69)+ arc(57,52,18,-1.9,0.25,C.force)+
-          com(64,40)+ lbl(56,86,'low fulcrum'); break;
-    case 'pivot':
-      s = edge(96)+ lbl(96,86,'ring edge')+ fig(86,52,A,18,0.9)+ fig(98,46,W,60,0.85)+ fulc(86,67)+
-          arc(88,50,17,-1.45,0.6,C.force)+ com(101,44); break;
-    case 'self': default:
-      s = base(54,68,76)+ fig(62,50,W,22)+ com(75,46)+ arrow(75,52,83,66,C.ghost,1)+ lbl(68,86,'over-steps his base'); break;
+  // 168x132 canvas. Two articulated rikishi (terracotta attacker / slate defender)
+  // posed for the specific grip + footwork, with the physics overlay on top.
+  const P={atk:'#c0703f',atkBelt:'#5a2f1a',atkLimb:'#a3582f',def:'#69727f',defBelt:'#2c333f',defLimb:'#4a525f',
+           force:'#d62a1e',com:'#e8a72c',base:'#3f7fc4',fulc:'#13182B',mom:'#1f8a8a',clay:'#d9c9a6',edge:'#cdbfa0',txt:'#5b5444'};
+  const A={body:P.atk,belt:P.atkBelt,limb:P.atkLimb}, D={body:P.def,belt:P.defBelt,limb:P.defLimb};
+  const f1=n=>(+n).toFixed(1);
+  const seg=(ax,ay,bx,by,w1,w2,col)=>{const dx=bx-ax,dy=by-ay,len=Math.hypot(dx,dy)||1,nx=-dy/len,ny=dx/len;
+    return `<path d="M${f1(ax+nx*w1/2)},${f1(ay+ny*w1/2)} L${f1(bx+nx*w2/2)},${f1(by+ny*w2/2)} L${f1(bx-nx*w2/2)},${f1(by-ny*w2/2)} L${f1(ax-nx*w1/2)},${f1(ay-ny*w1/2)} Z" fill="${col}"/><circle cx="${f1(ax)}" cy="${f1(ay)}" r="${f1(w1/2)}" fill="${col}"/><circle cx="${f1(bx)}" cy="${f1(by)}" r="${f1(w2/2)}" fill="${col}"/>`;};
+  const limb2=(ax,ay,jx,jy,bx,by,w,col)=>seg(ax,ay,jx,jy,w,w*0.82,col)+seg(jx,jy,bx,by,w*0.82,w*0.58,col);
+  const foot=(x,y,col)=>`<ellipse cx="${f1(x)}" cy="${f1(y)}" rx="5" ry="2.9" fill="${col}"/>`;
+  // articulated, crouched, muscular rikishi. o.y = belly centre (matches scene coords); feet/hands absolute.
+  function rik(o){
+    const s=o.s||1, face=o.face||1, lean=o.lean||0, rad=lean*Math.PI/180, co=Math.cos(rad), si=Math.sin(rad);
+    const Lp=(lx,ly)=>[o.x+(lx*co-ly*si)*s, o.y+(lx*si+ly*co)*s];
+    const hipL=Lp(-7,12),hipR=Lp(7,12),hipC=Lp(0,12),shL=Lp(-11,-9),shR=Lp(11,-9),hd=o.head||Lp(0,-23);
+    const waistL=Lp(-15,2),waistR=Lp(15,2),neckC=Lp(0,-15);
+    const bcol=o.body,mcol=o.belt; let g='';
+    (o.feet||[]).forEach((ft,i)=>{const hx=i===0?hipL[0]:hipR[0],hy=i===0?hipL[1]:hipR[1],kx=(hx+ft[0])/2+face*6*s,ky=(hy+ft[1])/2+2*s; g+=limb2(hx,hy,kx,ky,ft[0],ft[1],12*s,bcol);});
+    (o.feet||[]).forEach(ft=>{g+=foot(ft[0],ft[1],mcol);});
+    g+=`<path d="M${f1(hipL[0])},${f1(hipL[1])} Q${f1(waistL[0])},${f1(waistL[1])} ${f1(shL[0])},${f1(shL[1])} Q${f1(neckC[0])},${f1(neckC[1])} ${f1(shR[0])},${f1(shR[1])} Q${f1(waistR[0])},${f1(waistR[1])} ${f1(hipR[0])},${f1(hipR[1])} Z" fill="${bcol}"/>`;
+    g+=`<path d="M${f1(hipL[0])},${f1(hipL[1]-2)} Q${f1(hipC[0])},${f1(hipC[1]+4)} ${f1(hipR[0])},${f1(hipR[1]-2)} L${f1(hipR[0])},${f1(hipR[1]+4)} Q${f1(hipC[0])},${f1(hipC[1]+10)} ${f1(hipL[0])},${f1(hipL[1]+4)} Z" fill="${mcol}"/>`;
+    (o.hands||[]).forEach(h=>{const side=h[2]||(h[0]<o.x?'L':'R'),sx=side==='L'?shL[0]:shR[0],sy=side==='L'?shL[1]:shR[1],ex=(sx+h[0])/2+(side==='L'?-2:2),ey=(sy+h[1])/2+5*s; g+=limb2(sx,sy,ex,ey,h[0],h[1],8*s,bcol);});
+    (o.hands||[]).forEach(h=>{g+=`<circle cx="${f1(h[0])}" cy="${f1(h[1])}" r="${f1(4*s)}" fill="${bcol}"/>`;});
+    g+=`<circle cx="${f1(hd[0])}" cy="${f1(hd[1])}" r="${f1(8*s)}" fill="${bcol}"/>`;
+    g+=`<path d="M${f1(hd[0]-7*s)},${f1(hd[1]-5*s)} Q${f1(hd[0])},${f1(hd[1]-15*s)} ${f1(hd[0]+7*s)},${f1(hd[1]-5*s)} Q${f1(hd[0])},${f1(hd[1]-1*s)} ${f1(hd[0]-7*s)},${f1(hd[1]-5*s)} Z" fill="${mcol}"/>`;
+    g+=`<circle cx="${f1(hd[0]+face*7*s)}" cy="${f1(hd[1])}" r="${f1(2.3*s)}" fill="${bcol}"/>`;
+    return g;
   }
-  return '<svg viewBox="0 0 120 92" aria-hidden="true">'+ground+s+'</svg>';
+  const a=o=>rik(Object.assign({face:1,body:P.atk,belt:P.atkBelt},o)), d=o=>rik(Object.assign({face:-1,body:P.def,belt:P.defBelt},o));
+  const ah=(x,y,ang,col)=>{const L=9;return `<path d="M${f1(x)},${f1(y)} L${f1(x-L*Math.cos(ang-.5))},${f1(y-L*Math.sin(ang-.5))} L${f1(x-L*Math.cos(ang+.5))},${f1(y-L*Math.sin(ang+.5))} Z" fill="${col}"/>`;};
+  const FA=(x1,y1,x2,y2,col,dash)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="${dash?3:3.6}" stroke-linecap="round"${dash?' stroke-dasharray="4 4"':''}/>`+ah(x2,y2,Math.atan2(y2-y1,x2-x1),col);
+  const ARC=(cx,cy,r,a0,a1,col)=>{const px=t=>cx+r*Math.cos(t),py=t=>cy+r*Math.sin(t),large=Math.abs(a1-a0)>Math.PI?1:0,sweep=a1>a0?1:0,tang=a1+(sweep?Math.PI/2:-Math.PI/2);
+    return `<path d="M${f1(px(a0))},${f1(py(a0))} A${r},${r} 0 ${large} ${sweep} ${f1(px(a1))},${f1(py(a1))}" fill="none" stroke="${col}" stroke-width="3.2"/>`+ah(px(a1),py(a1),tang,col);};
+  const COM=(x,y)=>`<circle cx="${x}" cy="${y}" r="7" fill="#fff" stroke="${P.com}" stroke-width="2.2"/><circle cx="${x}" cy="${y}" r="3.3" fill="${P.com}"/>`;
+  const BASE=(x1,x2,y)=>`<rect x="${x1}" y="${y-2}" width="${x2-x1}" height="4.2" rx="2" fill="${P.base}" opacity="0.30"/><line x1="${x1}" y1="${y-5}" x2="${x1}" y2="${y+5}" stroke="${P.base}" stroke-width="2"/><line x1="${x2}" y1="${y-5}" x2="${x2}" y2="${y+5}" stroke="${P.base}" stroke-width="2"/>`;
+  const FUL=(x,y)=>`<path d="M${x},${y-8} L${x+6.5},${y+2} L${x-6.5},${y+2} Z" fill="${P.fulc}"/>`;
+  const XM=(x,y)=>`<g stroke="${P.force}" stroke-width="3.4" stroke-linecap="round"><line x1="${x-5.5}" y1="${y-5.5}" x2="${x+5.5}" y2="${y+5.5}"/><line x1="${x+5.5}" y1="${y-5.5}" x2="${x-5.5}" y2="${y+5.5}"/></g>`;
+  const EDGE=x=>`<line x1="${x}" y1="40" x2="${x}" y2="108" stroke="${P.edge}" stroke-width="2.2" stroke-dasharray="4 4"/>`;
+  const NB=(x1,x2,y)=>`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${P.edge}" stroke-width="2.2" stroke-dasharray="2 4"/>`;
+  const LB=(x,y,t,col)=>`<text x="${x}" y="${y}" font-size="8.5" fill="${col||P.txt}" text-anchor="middle" font-family="-apple-system,sans-serif">${t}</text>`;
+  const WRAP=(x,y,col)=>`<path d="M${x-6},${y+2} A7.5,7.5 0 1 1 ${x+5},${y+4}" fill="none" stroke="${col}" stroke-width="3" stroke-linecap="round"/>`;
+  const HOLD=(x,y)=>`<circle cx="${x}" cy="${y}" r="6.5" fill="none" stroke="${P.force}" stroke-width="2.4"/>`;       // a grip / hold
+  const PUSH=(x,y)=>`<circle cx="${x}" cy="${y}" r="6.5" fill="none" stroke="${P.force}" stroke-width="2.4" stroke-dasharray="3 3.5"/>`; // a push / strike
+  const clay=`<line x1="6" y1="108" x2="162" y2="108" stroke="${P.clay}" stroke-width="3.2" stroke-linecap="round"/>`;
+  let s='';
+  switch(arch){
+    case 'forceout':
+      s = d({x:104,y:64,lean:-16,feet:[[100,106],[118,104]],hands:[[86,58],[88,70]]})
+        + a({x:66,y:70,lean:14,feet:[[50,106],[80,101]],hands:[[96,80],[101,82]]})
+        + BASE(98,120,108)+FA(86,90,101,86,P.force)+COM(104,56)+FA(112,56,140,56,P.force)+EDGE(142)
+        + LB(70,22,'grip the belt — drive from the legs')+LB(126,50,'center past base'); break;
+    case 'forcedown':
+      s = d({x:100,y:72,lean:-44,feet:[[104,106],[120,103]],hands:[[84,66],[86,80]]})
+        + a({x:66,y:70,lean:16,feet:[[52,106],[82,100]],hands:[[92,80],[98,84]]})
+        + BASE(100,122,108)+FA(84,92,99,90,P.force)+COM(98,60)+FA(104,64,126,80,P.force)
+        + LB(70,22,'drive him down and back'); break;
+    case 'pushout':
+      s = d({x:102,y:66,lean:-14,feet:[[99,106],[116,104]]})
+        + a({x:64,y:68,lean:8,feet:[[50,106],[80,101]],hands:[[90,58],[92,70]]})
+        + BASE(97,118,108)+FA(86,64,96,64,P.force)+COM(102,58)+FA(110,58,138,58,P.force)+EDGE(140)
+        + LB(64,22,'palms to the chest — no belt grip'); break;
+    case 'pushdown':
+      s = d({x:100,y:72,lean:-42,feet:[[104,106],[120,103]]})
+        + a({x:64,y:68,lean:10,feet:[[50,106],[80,100]],hands:[[88,60],[90,72]]})
+        + BASE(100,122,108)+FA(86,66,98,66,P.force)+COM(98,60)+FA(104,64,124,78,P.force)
+        + LB(64,22,'push the chest, topple him back'); break;
+    case 'thrustout':
+      s = d({x:102,y:64,lean:-14,feet:[[99,106],[116,104]]})
+        + a({x:60,y:66,lean:4,feet:[[46,106],[76,101]],hands:[[86,52],[88,62]]})
+        + BASE(97,118,108)+FA(80,54,92,54,P.force)+FA(80,64,92,64,P.force)+COM(102,56)+FA(110,56,138,56,P.force)+EDGE(140)
+        + LB(62,22,'rapid thrusts (tsuki) to chest and throat'); break;
+    case 'thrustdown':
+      s = d({x:100,y:70,lean:-40,feet:[[104,106],[120,103]]})
+        + a({x:60,y:66,lean:6,feet:[[46,106],[76,101]],hands:[[86,54],[88,64]]})
+        + BASE(100,121,108)+FA(82,58,94,58,P.force)+COM(98,58)+FA(104,62,124,76,P.force)
+        + LB(62,22,'thrust him upright, then down'); break;
+    case 'overthrow':
+      s = d({x:100,y:66,lean:40,feet:[[104,106],[114,103]],hands:[[86,62]]})
+        + a({x:64,y:70,lean:6,feet:[[50,106],[78,101]],hands:[[106,74,'R'],[88,66,'L']]})
+        + FUL(70,99)+`<line x1="70" y1="97" x2="106" y2="74" stroke="${P.fulc}" stroke-width="1.6" stroke-dasharray="5 3"/>`+LB(127,60,'lever arm',P.fulc)
+        + COM(100,60)+ARC(74,80,30,-0.9,0.3,P.force)
+        + LB(64,22,'arm OVER the top to the far belt'); break;
+    case 'underthrow':
+      s = d({x:98,y:66,lean:-36,feet:[[102,106],[114,103]],hands:[[84,60]]})
+        + a({x:64,y:70,lean:4,feet:[[50,106],[78,101]],hands:[[96,82,'R'],[86,66,'L']]})
+        + FUL(70,99)+`<line x1="70" y1="97" x2="96" y2="82" stroke="${P.fulc}" stroke-width="1.6" stroke-dasharray="5 3"/>`
+        + COM(98,60)+ARC(74,80,28,-2.2,-0.6,P.force)
+        + LB(64,22,'arm UNDER the armpit to the belt'); break;
+    case 'armthrow':
+      s = d({x:98,y:66,lean:44,feet:[[102,106],[112,103]],hands:[[80,64,'L']]})
+        + a({x:62,y:70,lean:6,feet:[[48,106],[76,101]],hands:[[80,60],[82,68]]})
+        + FUL(80,66)+COM(98,60)+ARC(80,70,26,-1.0,0.3,P.force)
+        + LB(62,22,'clamp his extended arm — no belt')+LB(92,40,'his arm = lever',P.fulc); break;
+    case 'scoopthrow':
+      s = d({x:98,y:66,lean:34,feet:[[102,106],[112,103]],hands:[[86,60]]})
+        + a({x:64,y:70,lean:4,feet:[[50,106],[78,101]],hands:[[102,64,'R'],[88,68,'L']]})
+        + FUL(70,99)+COM(98,60)+ARC(74,78,28,-0.9,0.4,P.force)
+        + LB(64,22,'arm scoops under the armpit — no belt'); break;
+    case 'headthrow':
+      s = d({x:98,y:64,lean:46,feet:[[102,106],[112,103]],hands:[[86,62]]})
+        + a({x:62,y:70,lean:8,feet:[[48,106],[76,101]],hands:[[97,50,'R'],[86,66,'L']]})
+        + WRAP(97,48,P.atkLimb)+FUL(68,99)+COM(98,60)+ARC(72,76,30,-0.9,0.4,P.force)
+        + LB(60,22,'wrap the neck and pull down')+LB(104,38,'neck'); break;
+    case 'hipthrow':
+      s = a({x:68,y:76,lean:-6,feet:[[56,106],[80,104]],hands:[[96,58,'R'],[90,50,'L']]})
+        + d({x:92,y:58,lean:74,s:0.95,feet:[[108,52],[104,40]],hands:[[74,66]]})
+        + FUL(72,90)+COM(90,56)+ARC(74,76,28,-1.4,0.3,P.force)
+        + LB(74,22,'turn your hip in, load him over it'); break;
+    case 'shoulderthrow':
+      s = a({x:74,y:78,lean:-16,feet:[[62,106],[86,104]],hands:[[58,58,'L'],[54,52,'R']]})
+        + d({x:64,y:54,lean:132,s:0.92,feet:[[82,46],[76,34]],hands:[[56,66]]})
+        + FUL(70,68)+COM(66,54)+ARC(64,64,26,-2.5,-0.4,P.force)
+        + LB(70,22,'pull his arm over your shoulder'); break;
+    case 'legthrow':
+      s = d({x:100,y:66,lean:40,feet:[[110,103]],hands:[[86,62]]})
+        + a({x:66,y:70,lean:8,feet:[[52,106],[94,88,8]],hands:[[97,74],[90,66]]})
+        + FUL(70,99)+COM(100,60)+ARC(74,80,28,-0.9,0.3,P.force)
+        + LB(66,22,'hook his thigh, then throw'); break;
+    case 'liftslam':
+      s = a({x:64,y:72,lean:2,feet:[[50,106],[78,104]],hands:[[94,72],[99,74]]})
+        + d({x:100,y:56,lean:8,feet:[[96,90],[112,90]],hands:[[86,52]]})
+        + NB(92,118,98)+FA(96,96,96,80,P.force)+FA(112,96,112,80,P.force)+COM(100,50)+FA(102,52,118,70,P.force)
+        + LB(64,22,'lift him off the clay, then slam'); break;
+    case 'liftout':
+      s = a({x:62,y:72,lean:2,feet:[[48,106],[76,104]],hands:[[92,74],[97,76]]})
+        + d({x:98,y:54,lean:0,feet:[[94,90],[110,90]],hands:[[84,50],[86,58]]})
+        + NB(90,118,98)+FA(94,96,94,78,P.force)+FA(110,96,110,78,P.force)+COM(98,48)+FA(104,48,134,48,P.force)+EDGE(138)
+        + LB(62,22,'lift by the front belt — carry him out'); break;
+    case 'legtripin':
+      s = d({x:100,y:66,lean:-22,feet:[[110,104],[94,98]],hands:[[86,60],[88,70]]})
+        + a({x:66,y:70,lean:12,feet:[[52,106],[96,94,-6]],hands:[[98,74],[92,66]]})
+        + BASE(106,114,108)+COM(100,60)+FA(100,64,86,52,P.force)
+        + LB(66,22,'hook your shin INSIDE his, drive back')+LB(86,86,'hook',P.force); break;
+    case 'legtripout':
+      s = d({x:100,y:66,lean:-22,feet:[[92,104],[112,100]],hands:[[86,60],[88,70]]})
+        + a({x:66,y:70,lean:12,feet:[[52,106],[114,98,8]],hands:[[98,74],[92,66]]})
+        + BASE(88,96,108)+COM(100,60)+FA(100,64,114,52,P.force)
+        + LB(66,22,'wrap your leg OUTSIDE his, drive back')+LB(104,84,'hook',P.force); break;
+    case 'anklesweep':
+      s = d({x:98,y:64,lean:30,feet:[[104,104],[88,103]],hands:[[80,58]]})
+        + a({x:60,y:70,lean:6,feet:[[48,106],[88,104]],hands:[[84,58],[82,66]]})
+        + XM(90,104)+FA(96,104,84,104,P.force)+COM(98,58)+FA(86,58,72,62,P.force)
+        + LB(60,22,'kick his ankle out + pull the arm')+LB(76,98,'kick',P.force); break;
+    case 'leggrab':
+      s = d({x:106,y:60,lean:-12,feet:[[110,106],[92,80]],hands:[[96,54]]})
+        + a({x:64,y:78,lean:2,s:0.95,feet:[[50,106],[78,104]],hands:[[88,78],[92,82]]})
+        + FUL(110,106)+COM(106,54)+ARC(110,72,30,-1.8,-0.3,P.force)
+        + LB(64,22,'grab and LIFT the leg')+LB(83,66,'leg up'); break;
+    case 'twistdown':
+      s = d({x:96,y:66,lean:22,feet:[[92,106],[108,104]],hands:[[110,62]]})
+        + a({x:60,y:70,lean:4,feet:[[46,106],[76,101]],hands:[[86,60,'R'],[82,70,'L']]})
+        + FA(82,56,96,56,P.force)+FA(100,72,86,72,P.force)+COM(96,60)+ARC(96,64,20,-1.2,0.5,P.force)
+        + LB(60,22,'thrust his shoulder as his base holds'); break;
+    case 'pulldown':
+      s = a({x:56,y:68,lean:-8,feet:[[44,106],[70,103]],hands:[[78,64],[80,72]]})
+        + d({x:92,y:72,lean:46,feet:[[96,106],[82,102]],hands:[[74,68]]})
+        + FA(70,50,88,58,P.mom,1)+LB(98,46,'momentum',P.mom)+FA(80,66,72,76,P.force)+BASE(80,98,108)+COM(92,58)
+        + LB(56,22,'pull his arm sharply down and forward'); break;
+    case 'slapdown':
+      s = a({x:54,y:68,lean:-10,feet:[[42,106],[68,103]],hands:[[84,52,'R']]})
+        + d({x:90,y:74,lean:52,feet:[[96,106],[80,103]],hands:[[72,72]]})
+        + FA(68,48,86,56,P.mom,1)+LB(96,44,'momentum',P.mom)+FA(84,54,90,66,P.force)+BASE(78,98,108)+COM(94,58)
+        + LB(54,22,'step aside, slap the back of the neck'); break;
+    case 'rear':
+      s = a({x:58,y:70,lean:4,feet:[[44,106],[72,103]],hands:[[78,76],[82,78]]})
+        + d({x:94,y:66,lean:6,face:1,feet:[[90,106],[106,104]]})
+        + BASE(88,108,108)+FA(80,80,92,80,P.force)+COM(94,58)+FA(100,58,132,58,P.force)+EDGE(134)
+        + LB(58,22,'get behind him — he can’t brace')+LB(118,52,'straight out'); break;
+    case 'backdrop':
+      s = a({x:70,y:90,lean:0,s:0.9,feet:[[58,106],[84,106]],hands:[[94,88,'R'],[100,86,'R']]})
+        + d({x:92,y:64,lean:-120,s:0.9,face:-1,feet:[[98,42],[110,48]],hands:[[80,78]]})
+        + FUL(74,98)+COM(92,60)+ARC(76,72,32,-1.5,0.6,P.force)
+        + LB(70,22,'duck under — flip him over the top'); break;
+    case 'pivot':
+      s = EDGE(140)+LB(140,124,'ring edge')
+        + a({x:106,y:80,lean:16,feet:[[94,106],[116,104]],hands:[[126,66,'R'],[122,74,'R']]})
+        + d({x:126,y:64,lean:54,s:0.95,feet:[[132,94],[144,88]],hands:[[114,68]]})
+        + FUL(110,98)+COM(127,58)+ARC(112,78,30,-1.4,0.5,P.force)
+        + LB(92,22,'at the brink, spin him out first'); break;
+    case 'error': case 'self': default:
+      s = d({x:92,y:66,lean:24,face:1,feet:[[88,106],[104,104]]})
+        + BASE(86,108,108)+COM(104,56)+FA(104,62,116,80,P.mom,1)+EDGE(118)
+        + LB(92,22,'no technique — he steps himself out'); break;
+  }
+  // grip markers — solid ring = a hold/grip, dashed ring = a push/strike, placed at the key contact
+  const GRIP={ forceout:[[100,80,'h']], forcedown:[[98,82,'h']], pushout:[[92,64,'p']], pushdown:[[92,66,'p']],
+    thrustout:[[90,54,'p'],[90,64,'p']], thrustdown:[[90,58,'p']], overthrow:[[106,74,'h']], underthrow:[[96,82,'h']],
+    armthrow:[[81,65,'h']], scoopthrow:[[102,64,'h']], headthrow:[[97,49,'h']], hipthrow:[[92,56,'h']],
+    shoulderthrow:[[62,50,'h']], legthrow:[[94,87,'h']], liftslam:[[97,73,'h']], liftout:[[95,75,'h']],
+    legtripin:[[96,94,'h']], legtripout:[[114,98,'h']], anklesweep:[[90,104,'p']], leggrab:[[90,80,'h']],
+    twistdown:[[87,62,'p']], pulldown:[[79,68,'h']], slapdown:[[84,53,'p']], rear:[[80,77,'h']],
+    backdrop:[[97,94,'h']], pivot:[[124,70,'h']] };
+  (GRIP[arch]||[]).forEach(g=>{ s += g[2]==='p'?PUSH(g[0],g[1]):HOLD(g[0],g[1]); });
+  return `<svg viewBox="0 0 168 132" aria-hidden="true">${clay}${s}</svg>`;
 }
 
 let kimFilter='all';

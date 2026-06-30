@@ -1,6 +1,6 @@
 ★ FKTI LEARNING · 深い関係学び — HANDOFF (for a new Claude) ★
 ================================================================
-Last updated 2026-06-27. Status: LIVE, in classroom beta.
+Last updated 2026-06-29. Status: LIVE, in classroom beta.
 
 WHAT THIS IS
 Standalone Japanese-learning web apps by FKTI (Fukai Kankei, 深い関係 "deeply connected"; fkti.org).
@@ -9,7 +9,7 @@ Greg is a Japanese teacher; the kana trainer is replacing his workbooks and is i
 Sibling project: the Deeply Connected DINING app at C:\Users\FKTI Work\Downloads\dcd (separate repo —
 its own HANDOFF.txt). Don't conflate the two.
 
-LIVE: https://fkti-learning.pages.dev  (kana app at /kana.html)
+LIVE: https://fkti-learning.pages.dev  (kana app at /kana.html; sumo app at /sumo.html)
 DEPLOY — GREG DEPLOYS HIMSELF:  cd "C:/Users/FKTI Work/Downloads/fkti-learning" && npm run deploy
   (npm script = npx wrangler pages deploy .; his Cloudflare account; static, no KV/Functions/secrets.)
   NOTE: kana.html has NO service worker — changes go live on deploy + a normal refresh.
@@ -18,11 +18,18 @@ STANDING RULES: Greg deploys himself; no paid/unattended tokens; never handle hi
   bundle only open-licensed assets with attribution.
 
 DIRECTORY (own git repo)
-- index.html ........ landing hub (Deeply-Connected dark theme + logo).
+- index.html ........ landing hub (Deeply-Connected dark theme + logo). Tiles: Kana, Sumo, (soon) Vocab/Kanji.
 - kana.html ......... ★ the Kana Trainer (all HTML/CSS/JS in one file, ~430 lines).
+- sumo.html ......... ★ Sumo at Nagoya — tournament companion (single self-contained file, ~900 lines). See SUMO below.
+- sumo-src/ ......... build-time generators for sumo.html (Node, re-runnable; no tokens, only free HTTP):
+    photos.js .......... -> data/sumo_photos.json (wrestler photo map: Wikimedia CC -> JSA fallback).
+    kimarite-photos.js . -> data/kimarite_photos.json + img/sumo/kimarite/*.jpg (PD bout photos; JPEG-validated).
 - icons/ ............ logo (icon-192 etc.), copied from the dining app — same brand badge.
 - data/kana_assets.json ... {mnem:{hira:{romaji:path},kata:{...}}, credit:{...}} — mnemonic image map.
+- data/sumo_photos.json ... {rikishiId:{url,source,credit,license,page}} — 70 wrestlers (top 2 divisions).
+- data/kimarite_photos.json {romaji:{file,license,credit,page}} — 22 public-domain technique photos.
 - img/kana/mnem/{hira,kata}/ ... mnemonic images (hira CC0, kata CC BY-SA 3.0). Quality is mediocre.
+- img/sumo/kimarite/*.jpg ... 22 PD bout photos (PD-Japan-oldphoto, via Wikimedia Commons).
 - kanjivg/<codepoint>.svg ... 92 KanjiVG stroke files (CC BY-SA 3.0) for stroke-order.
 
 THEME: dining palette — --ink #13182B navy shell, --paper #F7F4EC cream cards, --ver #E2553B accent,
@@ -52,6 +59,31 @@ KANA TRAINER — CURRENT STATE (Home menu → sections, ‹ back nav; one screen
     re-renders on resize/orientationchange. Drives 4 CUSTOM DECKS by confidence band (bandPool):
     💪 boost (lvl3), 🙂 little (≥lvl2), 😤 challenge (≥lvl1), 🔥 hurt (everything); deck grades feed the chart.
  46 hiragana + 46 katakana, each with k/r/m (kana/romaji/text-mnemonic) in DATA{hira:[rows],kata:[rows]}.
+
+SUMO AT NAGOYA — sumo.html (built 2026-06-29 for Greg's class trip to the Nagoya basho, Day 8 / nakabi,
+  Sun 19 Jul 2026, IG Arena). Single self-contained file, offline-first, same Deeply-Connected theme.
+  Home menu -> sections (‹ back nav), like kana.html. Six sections:
+   • Today's Matchups — Day-8 torikumi (Makuuchi/Juryo). • Banzuke — full ranking, tap any wrestler -> bio.
+   • Sumo Primer • Ranks & the Banzuke • Ringside Glossary • The 82 Techniques (kimarite).
+  LIVE DATA: sumo-api.com (free, CORS open). BASHO='202607', NAKABI_DAY=8. getJSON() caches each response
+   to localStorage and falls back to it offline (graceful "not published yet" states until the JSA releases
+   the banzuke ~late June and each day's torikumi the evening before). Bios: /rikishi/:id + /:id/stats.
+  PHOTOS (wrestlers): pluggable slot in avaSrc() -> CARICATURE[id] (drop-in override) -> PHOTOMAP (Wikimedia
+   CC, else JSA) -> stylized placeholder. Map built by sumo-src/photos.js. Re-run after the final banzuke.
+  KIMARITE: 82 techniques + 7 non-techniques in KIM[]. Each card = a PHOTO (📷, 22 PD bout photos, duotoned)
+   if one exists in KPHOTO, else an ORIGINAL FKTI physics diagram from kdiagram(arch). Searchable/filterable.
+  THE DIAGRAMS (kdiagram): articulated crouched rikishi (rik(): 2-segment tapered limbs, mawashi, ōichō
+   topknot; o.y = belly centre; feet/hands absolute coords; a()=attacker terracotta face+1, d()=defender slate
+   face-1). Each technique maps to an 'arch' (pose, drawn per real grip/footwork) AND a MECH (physics family).
+   Overlay shows WHY it works: ● center of gravity, shaded base of support, red force/rotation, ▲ fulcrum,
+   ✕ removed base, teal=momentum, + red rings (solid=hold/grip, dashed=push/strike). Legend + physics primer
+   in-page. WHY[mech] = one-line explanation on every card. 11 mechanisms; ~27 arch poses.
+  SELF-QA THE ART: I can't see SVG by reading it. Render to PNG to check visually:
+   npm i @resvg/resvg-js in a SCRATCH dir (NOT the repo), eval the kdiagram() fn out of sumo.html, build a
+   contact-sheet SVG, Resvg->PNG, then view. Catches overlaps/pose errors. (resvg is strict XML: escape bare &.)
+  STYLE REFERENCE (do NOT copy): sumo.jpg in repo root is the © 2016 SOZOS / JAPAGRA "Top 20" poster Greg
+   shared — marked no-reuse. Used only as a style/convention target (athletic figures; red-arrow=movement,
+   red-ring=hold). All sumo art is original/procedural FKTI. sumo.jpg is intentionally NOT committed.
 
 DEV: edit kana.html directly; validate JS (new Function on each <script>) before committing; commit
   (author FKTI/gjswork@yahoo.com); GREG deploys. Known gotcha (fixed): the .rate button{color:#fff}
