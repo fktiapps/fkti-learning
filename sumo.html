@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="theme-color" content="#13182B"/>
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png"/>
+<title>Sumo · 相撲 — Deeply Connected Learning</title>
+<style>
+ :root{--ink:#13182B;--ink2:#1E2540;--line:#313a5e;--paper:#F7F4EC;--card:#1b2138;--cardline:#2a3152;
+  --text:#1B2233;--muted:#7A819A;--muted2:#9AA0B6;--ver:#E2553B;--gold:#cda434;
+  --display:"Hiragino Mincho ProN","Yu Mincho",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic","Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+ *{box-sizing:border-box}
+ body{margin:0;background:var(--ink);color:#EDEFF8;font:16px/1.55 var(--sans);-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+ header{padding:calc(env(safe-area-inset-top) + 14px) 16px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--ink);z-index:20}
+ .brand-badge{width:34px;height:34px;border-radius:8px;object-fit:cover;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);flex:0 0 auto}
+ h1{margin:0;font-family:var(--display);font-size:18px;font-weight:600;line-height:1.1}
+ h1 b{color:var(--ver)}
+ .jp{font-size:9.5px;color:var(--muted2);letter-spacing:3px;margin-top:2px}
+ .back{margin-left:auto;background:none;border:1px solid var(--line);color:#cfd6f0;border-radius:9px;padding:7px 12px;font:600 13px var(--sans);cursor:pointer}
+ .back:active{background:var(--ink2)}
+ main{max-width:620px;margin:0 auto;padding:16px}
+ section{display:none}
+ section.on{display:block;animation:fade .18s ease}
+ @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+ .lead{font-size:13.5px;color:var(--muted2);text-align:center;margin:2px 0 16px;line-height:1.5}
+ /* home tiles */
+ .tile{display:flex;align-items:center;gap:14px;background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:16px;padding:16px;margin:10px 0;text-decoration:none;box-shadow:0 8px 22px rgba(0,0,0,.26);cursor:pointer;width:100%;text-align:left;font:inherit}
+ .tile .ic{font-size:26px;width:46px;text-align:center;font-family:var(--display);color:var(--ver);flex:0 0 auto}
+ .tile h2{margin:0;font-size:16px}.tile p{margin:3px 0 0;font-size:12.5px;color:var(--muted)}
+ .tile .tag{margin-left:auto;font-size:10px;background:#f0e7d3;color:#9a7b35;border-radius:6px;padding:3px 8px;font-weight:800;letter-spacing:.04em;flex:0 0 auto}
+ .tile .tag.live{background:#e2f0e2;color:#3c8f4e}
+ /* generic content */
+ h3{font-family:var(--display);font-size:19px;margin:22px 0 8px;color:#fff}
+ h3:first-child{margin-top:4px}
+ h4{font-size:14px;margin:16px 0 4px;color:var(--ver);letter-spacing:.02em}
+ p.body{font-size:14px;color:#d7dcef;margin:6px 0}
+ .card{background:var(--card);border:1px solid var(--cardline);border-radius:14px;padding:14px 15px;margin:10px 0}
+ .muted{color:var(--muted2)}
+ .kbd{font-family:var(--display);color:#fff}
+ ul.clean{list-style:none;padding:0;margin:8px 0}
+ ul.clean li{padding:7px 0;border-bottom:1px solid var(--cardline);font-size:14px;color:#d7dcef}
+ ul.clean li:last-child{border-bottom:none}
+ ul.clean b{color:#fff}
+ .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--ink2);color:#cfd6f0;border:1px solid var(--line)}
+ /* status / data badges */
+ .databar{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted2);margin:2px 0 12px}
+ .dot{width:7px;height:7px;border-radius:50%;background:#3c8f4e;flex:0 0 auto}
+ .dot.stale{background:#cda434}.dot.err{background:#E2553B}
+ .reload{margin-left:auto;background:none;border:1px solid var(--line);color:#cfd6f0;border-radius:8px;padding:5px 10px;font:600 11.5px var(--sans);cursor:pointer}
+ .empty{text-align:center;color:var(--muted2);font-size:13.5px;padding:26px 14px;line-height:1.6}
+ .empty .big{font-size:30px;display:block;margin-bottom:8px;opacity:.8}
+ /* banzuke / matchups */
+ .rank-h{display:flex;align-items:center;gap:8px;margin:18px 0 4px}
+ .rank-h .rk{font-family:var(--display);font-size:15px;color:var(--gold);font-weight:700}
+ .rank-h .ln{flex:1;height:1px;background:var(--cardline)}
+ .bout{display:flex;align-items:stretch;background:var(--card);border:1px solid var(--cardline);border-radius:12px;margin:8px 0;overflow:hidden}
+ .bout .side{flex:1;display:flex;align-items:center;gap:9px;padding:9px 10px;cursor:pointer;min-width:0}
+ .bout .side.west{flex-direction:row-reverse;text-align:right}
+ .bout .vs{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 8px;background:var(--ink2);font-size:10px;color:var(--muted2);font-weight:700}
+ .ava{width:42px;height:42px;border-radius:10px;object-fit:cover;background:#2a3152;flex:0 0 auto}
+ .ava.sm{width:34px;height:34px;border-radius:9px}
+ .nm{min-width:0}
+ .nm .en{font-size:14px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .nm .rk{font-size:11px;color:var(--muted2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .nm .rec{font-size:11px;color:#9fb89f}
+ .won{color:var(--gold)!important}
+ .winmark{font-size:10px;color:var(--gold);font-weight:800}
+ .rowtap{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--cardline);cursor:pointer}
+ .rowtap:last-child{border-bottom:none}
+ .rowtap .east,.rowtap .west{flex:1;display:flex;align-items:center;gap:8px;min-width:0}
+ .rowtap .west{flex-direction:row-reverse;text-align:right}
+ .seg{display:flex;gap:6px;margin:6px 0 14px;flex-wrap:wrap}
+ .seg button{background:var(--ink2);border:1px solid var(--line);color:#cfd6f0;border-radius:999px;padding:6px 13px;font:600 12.5px var(--sans);cursor:pointer}
+ .seg button.sel{background:var(--ver);border-color:var(--ver);color:#fff}
+ /* rikishi bio overlay */
+ .overlay{position:fixed;inset:0;background:rgba(8,11,22,.72);backdrop-filter:blur(3px);z-index:50;display:none;align-items:flex-end;justify-content:center}
+ .overlay.on{display:flex}
+ .sheet{background:var(--paper);color:var(--text);width:100%;max-width:620px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 18px calc(env(safe-area-inset-bottom) + 22px)}
+ .sheet .grab{width:40px;height:4px;border-radius:2px;background:#d6ccb6;margin:0 auto 12px}
+ .biohead{display:flex;gap:14px;align-items:center}
+ .biohead .ava{width:74px;height:74px;border-radius:14px}
+ .biohead .en{font-family:var(--display);font-size:21px;font-weight:700;color:var(--ink);line-height:1.1}
+ .biohead .jpn{font-size:14px;color:#8a7f66}
+ .biohead .rkline{font-size:12.5px;color:var(--ver);font-weight:700;margin-top:3px}
+ .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+ .stat{background:#fff;border:1px solid #e8dfca;border-radius:11px;padding:9px 11px}
+ .stat .k{font-size:10.5px;color:#9a9078;text-transform:uppercase;letter-spacing:.05em}
+ .stat .v{font-size:15px;font-weight:700;color:var(--ink);margin-top:1px}
+ .credit{font-size:10px;color:#a59c86;margin-top:14px;line-height:1.5}
+ .closeb{width:100%;margin-top:14px;background:var(--ink);color:#fff;border:none;border-radius:12px;padding:13px;font:700 14px var(--sans);cursor:pointer}
+ .recstrip{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+ .recstrip span{width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff}
+ .rW{background:#3c8f4e}.rL{background:#c0473a}.rA{background:#b7ae99}
+ /* kimarite */
+ .kfilter{display:flex;gap:7px;flex-wrap:wrap;margin:4px 0 12px}
+ .kfilter button{background:var(--ink2);border:1px solid var(--line);color:#cfd6f0;border-radius:999px;padding:5px 11px;font:600 12px var(--sans);cursor:pointer}
+ .kfilter button.sel{color:#fff}
+ .ksearch{width:100%;background:var(--ink2);border:1px solid var(--line);color:#fff;border-radius:11px;padding:11px 13px;font:15px var(--sans);margin-bottom:10px}
+ .ksearch::placeholder{color:var(--muted)}
+ .kgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px}
+ .kcard{position:relative;background:var(--paper);color:var(--ink);border-radius:14px;padding:9px 9px 11px;border-top:4px solid var(--ver)}
+ .kcard svg{width:100%;display:block;background:#fbf8f0;border-radius:9px}
+ .kcard img.kphoto{width:100%;height:104px;object-fit:cover;display:block;border-radius:9px;
+   filter:grayscale(1) sepia(.30) saturate(.82) contrast(1.06) brightness(1.02)}
+ .kbadge{position:absolute;top:7px;right:7px;font-size:9px;font-weight:800;letter-spacing:.04em;
+   background:rgba(19,24,43,.82);color:#f3ead7;border-radius:6px;padding:2px 6px}
+ .kcard .en{font-size:13px;font-weight:700;margin:7px 1px 0;line-height:1.2}
+ .kcard .rj{font-size:12px;color:#8a7f66;font-style:italic}
+ .kcard .jpn{font-family:var(--display);font-size:13px;color:#6b6250}
+ .kcard .d{font-size:11.5px;color:#6b6250;line-height:1.4;margin-top:5px}
+ .kcard .kwhy{font-size:11px;color:#5b5444;line-height:1.42;margin-top:7px;border-top:1px dashed #e3d9c6;padding-top:6px}
+ .kcard .kwhy b{font-weight:800}
+ .kcard .freq{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.04em;padding:1px 6px;border-radius:5px;margin-top:7px}
+ .f-common{background:#e2f0e2;color:#3c8f4e}.f-occ{background:#f3ecd6;color:#9a7b35}.f-rare{background:#efe2e0;color:#b1503f}
+ .kcount{text-align:center;font-size:12px;color:var(--muted2);margin:10px 0 2px}
+ .kphysics h4{margin-top:0}
+ .klegend{display:flex;flex-wrap:wrap;gap:8px 12px;margin-top:10px}
+ .klegend span{display:flex;align-items:center;gap:6px;font-size:11.5px;color:#cfd6f0}
+ .klegend .sw{background:#fbf8f0;border-radius:5px;padding:2px 3px;display:inline-flex;flex:0 0 auto}
+ footer{text-align:center;font-size:11px;color:var(--muted2);margin:24px 0 8px;padding:0 12px;line-height:1.6}
+ footer a{color:var(--muted)}
+ a.link{color:#9fb6e0}
+</style>
+</head>
+<body>
+<header>
+ <img class="brand-badge" src="icons/icon-192.png" alt="FKTI logo"/>
+ <div><h1>Deeply Connected <b>Sumo</b></h1><div class="jp">相撲 · 名古屋場所</div></div>
+ <button class="back" id="backBtn" style="display:none" onclick="go('home')">‹ Back</button>
+</header>
+<main>
+
+<!-- ===================== HOME ===================== -->
+<section id="home" class="on">
+ <p class="lead">Your companion for the <b>Nagoya Grand Tournament</b> — Day 8 (nakabi), Sunday&nbsp;19&nbsp;July&nbsp;2026, IG&nbsp;Arena. Keep it open ringside.</p>
+ <button class="tile" onclick="go('today')"><span class="ic">⊕</span><div><h2>Today&rsquo;s Matchups</h2><p>Day 8 (中日) card — every top-division bout.</p></div><span class="tag live" id="todayTag">live</span></button>
+ <button class="tile" onclick="go('banzuke')"><span class="ic">番</span><div><h2>Banzuke &amp; Rikishi</h2><p>The full ranking sheet — tap any wrestler for their bio.</p></div><span class="tag live" id="banzukeTag">live</span></button>
+ <button class="tile" onclick="go('primer')"><span class="ic">道</span><div><h2>Sumo Primer</h2><p>How a bout, a day, and a tournament work.</p></div></button>
+ <button class="tile" onclick="go('ranks')"><span class="ic">位</span><div><h2>Ranks &amp; the Banzuke</h2><p>Yokozuna down to jonokuchi — how you climb.</p></div></button>
+ <button class="tile" onclick="go('kimarite')"><span class="ic">技</span><div><h2>The 82 Techniques</h2><p>Every legal winning move (kimarite), illustrated.</p></div></button>
+ <button class="tile" onclick="go('glossary')"><span class="ic">語</span><div><h2>Ringside Glossary</h2><p>Words you&rsquo;ll hear &mdash; and what to watch for.</p></div></button>
+</section>
+
+<!-- ===================== TODAY (torikumi) ===================== -->
+<section id="today">
+ <h3>Day 8 &mdash; 中日 (nakabi)</h3>
+ <p class="lead" style="margin-top:0">Sunday 19 July 2026 · the tournament&rsquo;s midpoint. Top-division bouts run ~15:40&ndash;18:00.</p>
+ <div class="seg" id="todayDiv"></div>
+ <div class="databar" id="todayBar"></div>
+ <div id="todayList"></div>
+</section>
+
+<!-- ===================== BANZUKE ===================== -->
+<section id="banzuke">
+ <h3>Banzuke &mdash; 番付</h3>
+ <p class="lead" style="margin-top:0">The official ranking sheet for Nagoya 2026. Tap any wrestler for their bio, stats &amp; record.</p>
+ <div class="seg" id="banzukeDiv"></div>
+ <div class="databar" id="banzukeBar"></div>
+ <div id="banzukeList"></div>
+</section>
+
+<!-- ===================== PRIMER ===================== -->
+<section id="primer">
+ <h3>A two-minute primer</h3>
+ <div class="card">
+  <h4>The goal</h4>
+  <p class="body">Two <span class="kbd">rikishi</span> (wrestlers) meet inside a <span class="kbd">dohyō</span> — a raised clay ring about 4.55&nbsp;m across, marked by a buried rope circle. You <b>win</b> the instant your opponent either steps/is forced <b>out of the ring</b>, or touches the clay with <b>any part of the body above the soles of the feet</b> (a hand, knee, even a topknot). Most bouts last only seconds.</p>
+ </div>
+ <div class="card">
+  <h4>One bout, beat by beat</h4>
+  <ul class="clean">
+   <li><b>Shikiri</b> — the staring, salt-throwing, crouching ritual. Salt purifies the ring; the glaring is psychological. They have a time limit (4&nbsp;min in the top division).</li>
+   <li><b>Tachiai</b> — the explosive simultaneous charge from the crouch. Whole matches are won and lost here.</li>
+   <li><b>The bout</b> — grappling for the <span class="kbd">mawashi</span> (belt), pushing, throwing. The <span class="kbd">gyōji</span> (referee, in robes) points his <span class="kbd">gunbai</span> (war-fan) to the winner.</li>
+   <li><b>Kimarite</b> — the named technique that won it is announced. There are 82 legal ones &mdash; see the Techniques tab.</li>
+  </ul>
+ </div>
+ <div class="card">
+  <h4>One day at the arena</h4>
+  <p class="body">Wrestling runs from morning to evening, <b>lowest ranks first</b>. The unpaid lower divisions open to a near-empty hall ~8:30; the salaried <span class="kbd">jūryō</span> enter mid-afternoon; the <span class="kbd">makuuchi</span> (top division) <b>ring-entering ceremony</b> (dohyō-iri) in embroidered aprons is ~15:40, the <span class="kbd">yokozuna</span> ceremony just after. The final, headline bout — the <span class="kbd">musubi-no-ichiban</span> — is around 18:00.</p>
+ </div>
+ <div class="card">
+  <h4>One tournament (basho)</h4>
+  <p class="body">Six <span class="kbd">honbasho</span> a year, each <b>15 days</b>. A top-division wrestler fights <b>once a day</b> — 15 bouts. Finish with a winning record (<b>8+ wins</b>, <span class="kbd">kachikoshi</span>) and you rise on the next banzuke; a losing record (<span class="kbd">makekoshi</span>) and you fall. The wrestler with the best record wins the <span class="kbd">yūshō</span> (championship); a 15&ndash;0 is a <span class="kbd">zenshō-yūshō</span>. Day 8 — today — is <span class="kbd">nakabi</span>, the symbolic midpoint.</p>
+ </div>
+ <button class="tile" onclick="go('ranks')" style="margin-top:14px"><span class="ic">位</span><div><h2>Next: how the ranks work</h2><p>The pyramid from yokozuna to jonokuchi.</p></div></button>
+</section>
+
+<!-- ===================== RANKS ===================== -->
+<section id="ranks">
+ <h3>Ranks &amp; the banzuke</h3>
+ <p class="body">Every wrestler sits somewhere on a single pyramid. The top division (<b>makuuchi</b>, 42 men) holds the named ranks; below it everyone is just numbered. Each rank has an <b>East</b> (slightly senior) and <b>West</b> side.</p>
+
+ <h4>The top division — makuuchi</h4>
+ <ul class="clean">
+  <li><b>Yokozuna</b> <span class="muted">横綱</span> — Grand Champion. Promoted for ~two straight championships at ōzeki; <b>can never be demoted</b> (a slumping yokozuna is expected to retire).</li>
+  <li><b>Ōzeki</b> <span class="muted">大関</span> — Champion. The second-highest rank; demotion only after two losing tournaments in a row.</li>
+  <li><b>Sekiwake</b> <span class="muted">関脇</span> — Junior champion.</li>
+  <li><b>Komusubi</b> <span class="muted">小結</span> — the lowest titled rank. Brutal — you face every top wrestler.</li>
+  <li class="muted">↑ These four titled ranks are the <b>san&rsquo;yaku</b> (三役).</li>
+  <li><b>Maegashira</b> <span class="muted">前頭</span> — the rank &amp; file, numbered <b>M1</b> (top) down to ~M17. Most of the division.</li>
+ </ul>
+
+ <h4>Below the top division</h4>
+ <ul class="clean">
+  <li><b>Jūryō</b> <span class="muted">十両</span> — 2nd division (28 men). The cutoff for being <b>salaried</b> &amp; called <span class="kbd">sekitori</span>. Above this line: a respected pro. Below it: an apprentice.</li>
+  <li><b>Makushita</b> · <b>Sandanme</b> · <b>Jonidan</b> · <b>Jonokuchi</b> <span class="muted">幕下・三段目・二段目・序ノ口</span> — the four unsalaried lower divisions. They get an allowance, do chores, and fight only 7 days a basho.</li>
+ </ul>
+
+ <div class="card">
+  <h4>Special honours</h4>
+  <ul class="clean">
+   <li><b>Yūshō</b> — the tournament championship (best record).</li>
+   <li><b>Sanshō</b> — three prizes for non-champions in the top division: <span class="kbd">Shukun-shō</span> (outstanding performance, usually for beating a yokozuna), <span class="kbd">Kantō-shō</span> (fighting spirit), <span class="kbd">Ginō-shō</span> (technique).</li>
+   <li><b>Kinboshi</b> <span class="muted">金星</span> — a &ldquo;gold star&rdquo; a maegashira earns by beating a yokozuna. It pays a bonus for the rest of his career.</li>
+  </ul>
+ </div>
+ <button class="tile" onclick="go('banzuke')" style="margin-top:6px"><span class="ic">番</span><div><h2>See the live Nagoya banzuke</h2><p>Who&rsquo;s ranked where this tournament.</p></div><span class="tag live">live</span></button>
+</section>
+
+<!-- ===================== KIMARITE ===================== -->
+<section id="kimarite">
+ <h3>The 82 techniques &mdash; 決まり手</h3>
+ <p class="body">Every sumo bout is officially decided by a named <b>kimarite</b>. The Japan Sumo Association recognises 82, in families based on <i>how</i> you win, plus a handful of &ldquo;non-techniques&rdquo; for when an opponent beats himself. Cards marked <b>📷</b> show a real public-domain bout photo; the rest are FKTI diagrams that show the <i>physics</i> of the move.</p>
+ <div class="card kphysics">
+  <h4>Why the moves work — the physics</h4>
+  <p class="body" style="font-size:13px;margin-top:4px">A wrestler stays upright only while his <b>center of gravity</b> sits over his <b>base of support</b> — the span between his feet. Every technique is a different way to make the opponent&rsquo;s center leave his base: shove it out, spin it off, lift it, or take the base away. Each diagram is tagged with its mechanism (⚙) and explains the efficacy.</p>
+  <div class="klegend">
+   <span><span class="sw"><svg width="22" height="14"><circle cx="11" cy="7" r="5" fill="#fff" stroke="#e0a92e" stroke-width="1.8"/><circle cx="11" cy="7" r="2.4" fill="#e0a92e"/></svg></span>center of gravity</span>
+   <span><span class="sw"><svg width="22" height="14"><rect x="3" y="6" width="16" height="3" rx="1.5" fill="#3a78c2" opacity=".4"/><line x1="3" y1="3" x2="3" y2="11" stroke="#3a78c2" stroke-width="1.6"/><line x1="19" y1="3" x2="19" y2="11" stroke="#3a78c2" stroke-width="1.6"/></svg></span>base of support</span>
+   <span><span class="sw"><svg width="22" height="14"><line x1="3" y1="7" x2="16" y2="7" stroke="#E2553B" stroke-width="3" stroke-linecap="round"/><path d="M16,7 L11,4 L11,10 Z" fill="#E2553B"/></svg></span>applied force</span>
+   <span><span class="sw"><svg width="22" height="14"><path d="M11,2 L17,11 L5,11 Z" fill="#13182B"/></svg></span>fulcrum (pivot)</span>
+   <span><span class="sw"><svg width="22" height="14"><g stroke="#E2553B" stroke-width="2.6" stroke-linecap="round"><line x1="6" y1="3" x2="16" y2="11"/><line x1="16" y1="3" x2="6" y2="11"/></g></svg></span>base removed</span>
+   <span><span class="sw"><svg width="22" height="14"><line x1="3" y1="7" x2="16" y2="7" stroke="#9aa0b6" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="3 3"/><path d="M16,7 L11,4 L11,10 Z" fill="#9aa0b6"/></svg></span>his own momentum</span>
+  </div>
+ </div>
+ <input class="ksearch" id="ksearch" placeholder="Search a technique… (e.g. throw, yorikiri, leg)" oninput="renderKim()"/>
+ <div class="kfilter" id="kfilter"></div>
+ <div class="kcount" id="kcount"></div>
+ <div class="kgrid" id="kgrid"></div>
+</section>
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+ <h3>Ringside glossary</h3>
+ <p class="lead" style="margin-top:0">The words the announcers and your neighbours will use.</p>
+ <ul class="clean" id="glossList"></ul>
+ <div class="card">
+  <h4>What to watch for on Day 8</h4>
+  <ul class="clean">
+   <li><b>The salt throws</b> — bigger, showier handfuls get the biggest cheers. Watch a yokozuna&rsquo;s.</li>
+   <li><b>The tachiai</b> — don&rsquo;t blink. Watch whose hands hit the clay first and who wins the chest-to-chest.</li>
+   <li><b>Hand on the belt</b> — once someone gets a deep <span class="kbd">mawashi</span> grip, especially a left-hand-inside (<span class="kbd">hidari-yotsu</span>) grip, they often control the bout.</li>
+   <li><b>An upset</b> — if a <span class="kbd">maegashira</span> beats a <span class="kbd">yokozuna</span>, the crowd throws seat cushions. That&rsquo;s a <span class="kbd">kinboshi</span>.</li>
+   <li><b>Nakabi</b> — Day 8. By now the championship race is taking shape; note who&rsquo;s still unbeaten.</li>
+  </ul>
+ </div>
+</section>
+
+</main>
+
+<!-- rikishi bio overlay -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeBio()">
+ <div class="sheet" id="sheet"></div>
+</div>
+
+<footer>
+ 深い関係 · Fukai Kankei — Deeply Connected.<br>
+ Live data: <a href="https://sumo-api.com" class="link">sumo-api.com</a>. Wrestler photos: Wikimedia Commons (CC) &amp; the Japan Sumo Association.
+ Technique photos (📷): public domain, Japan pre-1957, via Wikimedia Commons. Other technique diagrams &amp; all text: FKTI (original).
+</footer>
+
+<script>
+/* ============================================================
+   CONFIG
+   ============================================================ */
+const BASHO = '202607';      // Nagoya 2026
+const NAKABI_DAY = 8;        // Sun 19 Jul 2026
+const API = 'https://www.sumo-api.com/api';
+const DIVISIONS = ['Makuuchi','Juryo'];
+
+/* ============================================================
+   NAV
+   ============================================================ */
+const sections = [...document.querySelectorAll('section')];
+function go(id){
+  sections.forEach(s=>s.classList.toggle('on', s.id===id));
+  document.getElementById('backBtn').style.display = id==='home' ? 'none' : '';
+  window.scrollTo(0,0);
+  if(id==='today') loadToday();
+  if(id==='banzuke') loadBanzuke();
+  if(id==='kimarite') initKim();
+  if(id==='glossary') renderGloss();
+  try{ location.hash = id==='home'?'':id; }catch(e){}
+}
+window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&document.getElementById(h))go(h);});
+
+/* ============================================================
+   FETCH + CACHE  (offline-friendly: last good response kept)
+   ============================================================ */
+async function getJSON(path){
+  const key = 'fkti_sumo:'+path;
+  try{
+    const r = await fetch(API+path, {cache:'no-store'});
+    if(!r.ok) throw new Error(r.status);
+    const j = await r.json();
+    try{ localStorage.setItem(key, JSON.stringify({t:Date.now(), j})); }catch(e){}
+    return {j, cached:false, t:Date.now()};
+  }catch(err){
+    const raw = localStorage.getItem(key);
+    if(raw){ const o=JSON.parse(raw); return {j:o.j, cached:true, t:o.t, err}; }
+    return {j:null, cached:false, err};
+  }
+}
+function ago(t){
+  if(!t) return '';
+  const s=(Date.now()-t)/1000;
+  if(s<90) return 'just now';
+  if(s<5400) return Math.round(s/60)+' min ago';
+  if(s<172800) return Math.round(s/3600)+' h ago';
+  return Math.round(s/86400)+' d ago';
+}
+function bar(el, res, reloadFn){
+  let cls='dot', txt='Live · updated just now';
+  if(res.err && res.cached){ cls='dot stale'; txt='Offline — showing saved copy ('+ago(res.t)+')'; }
+  else if(res.err){ cls='dot err'; txt='Couldn&rsquo;t reach the live data'; }
+  else if(res.cached){ cls='dot stale'; txt='Cached ('+ago(res.t)+')'; }
+  el.innerHTML = '<span class="'+cls+'"></span><span>'+txt+'</span>'+
+    '<button class="reload">Refresh</button>';
+  el.querySelector('.reload').onclick = reloadFn;
+}
+
+/* ============================================================
+   PHOTOS  — pluggable slot:  caricature → photo map → placeholder
+   ============================================================ */
+let PHOTOMAP = {};            // {rikishiId: {url, credit, license, source}}
+const CARICATURE = {};        // {rikishiId: 'img/sumo/caricature/<id>.png'}  (drop-in overrides)
+fetch('data/sumo_photos.json',{cache:'no-store'}).then(r=>r.ok?r.json():null)
+  .then(m=>{ if(m) PHOTOMAP = m; }).catch(()=>{});
+let KPHOTO = {};              // {romaji: {file, license, credit, page}} — bundled PD bout photos
+fetch('data/kimarite_photos.json',{cache:'no-store'}).then(r=>r.ok?r.json():null)
+  .then(m=>{ if(m){ KPHOTO = m; if(document.getElementById('kgrid').childElementCount) renderKim(); } }).catch(()=>{});
+function placeholderAva(name){
+  const ch = (name||'?').trim().charAt(0).toUpperCase();
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'+
+    '<rect width="100" height="100" fill="#2a3152"/>'+
+    '<circle cx="50" cy="38" r="20" fill="#3c4570"/>'+
+    '<path d="M16,96 q34,-30 68,0 z" fill="#3c4570"/>'+
+    '<text x="50" y="60" text-anchor="middle" font-size="34" font-family="serif" fill="#aab2d6" opacity=".55">'+ch+'</text></svg>';
+  return 'data:image/svg+xml;utf8,'+encodeURIComponent(svg);
+}
+function avaSrc(id,name){
+  if(CARICATURE[id]) return CARICATURE[id];
+  const p = PHOTOMAP[id];
+  if(p && p.url) return p.url;
+  return placeholderAva(name);
+}
+function avaImg(id,name,cls){
+  const ph = placeholderAva(name);
+  return '<img class="ava '+(cls||'')+'" loading="lazy" src="'+avaSrc(id,name)+'" '+
+    'onerror="this.onerror=null;this.src=\''+ph+'\'" alt="'+esc(name||'')+'"/>';
+}
+function photoCredit(id){
+  const p = PHOTOMAP[id];
+  if(CARICATURE[id]) return 'Illustration © FKTI.';
+  if(p && p.source==='wikimedia') return 'Photo: '+(p.credit||'Wikimedia Commons')+' ('+(p.license||'CC')+'), via Wikimedia Commons.';
+  if(p && p.source==='jsa') return 'Photo: © Japan Sumo Association.';
+  return '';
+}
+const esc = s => (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+/* ============================================================
+   RANK FORMATTING
+   ============================================================ */
+function shortRank(r){
+  if(!r) return '';
+  return r.replace('Yokozuna','Y').replace('Ozeki','O').replace('Sekiwake','S')
+          .replace('Komusubi','K').replace('Maegashira','M').replace('Juryo','J')
+          .replace(' East',' E').replace(' West',' W');
+}
+
+/* ============================================================
+   TODAY — Day 8 torikumi
+   ============================================================ */
+let todayDivSel = 'Makuuchi';
+function loadToday(){
+  const seg = document.getElementById('todayDiv');
+  seg.innerHTML = DIVISIONS.map(d=>'<button class="'+(d===todayDivSel?'sel':'')+'" onclick="todayDivSel=\''+d+'\';loadToday()">'+d+'</button>').join('');
+  renderTorikumi();
+}
+async function renderTorikumi(){
+  const list = document.getElementById('todayList');
+  list.innerHTML = '<div class="empty">Loading the card…</div>';
+  const res = await getJSON('/basho/'+BASHO+'/torikumi/'+todayDivSel+'/'+NAKABI_DAY);
+  bar(document.getElementById('todayBar'), res, loadToday);
+  const t = res.j && res.j.torikumi;
+  if(!t || !t.length){
+    list.innerHTML = '<div class="empty"><span class="big">🗓️</span>'+
+      'The Day 8 card isn&rsquo;t out yet.<br>Each day&rsquo;s matchups are announced the <b>evening before</b> — so this fills in around <b>18 July</b>. Until then, explore the banzuke and techniques.</div>';
+    return;
+  }
+  list.innerHTML = t.map(boutCard).join('');
+}
+function boutCard(m){
+  const ew = (id,name,rank,won)=>'<div class="side '+(m.eastId===id?'east':'west')+'" onclick="openBio('+id+')">'+
+      avaImg(id,name)+'<div class="nm"><div class="en '+(won?'won':'')+'">'+(won?'<span class="winmark">▶ </span>':'')+esc(name)+'</div>'+
+      '<div class="rk">'+esc(shortRank(rank))+'</div></div></div>';
+  const ews = m.eastShikona, wss = m.westShikona;
+  const ewW = m.winnerId && m.winnerId===m.eastId;
+  const wsW = m.winnerId && m.winnerId===m.westId;
+  const mid = m.kimarite ? esc(m.kimarite) : 'vs';
+  return '<div class="bout">'+
+    ew(m.eastId, ews, m.eastRank, ewW)+
+    '<div class="vs">'+esc(mid)+'</div>'+
+    ew(m.westId, wss, m.westRank, wsW)+
+   '</div>';
+}
+
+/* ============================================================
+   BANZUKE
+   ============================================================ */
+let banzukeDivSel = 'Makuuchi';
+function loadBanzuke(){
+  const seg = document.getElementById('banzukeDiv');
+  seg.innerHTML = DIVISIONS.map(d=>'<button class="'+(d===banzukeDivSel?'sel':'')+'" onclick="banzukeDivSel=\''+d+'\';loadBanzuke()">'+d+'</button>').join('');
+  renderBanzuke();
+}
+async function renderBanzuke(){
+  const list = document.getElementById('banzukeList');
+  list.innerHTML = '<div class="empty">Loading the banzuke…</div>';
+  const res = await getJSON('/basho/'+BASHO+'/banzuke/'+banzukeDivSel);
+  bar(document.getElementById('banzukeBar'), res, loadBanzuke);
+  const j = res.j;
+  if(!j || (!j.east && !j.west)){
+    list.innerHTML = '<div class="empty"><span class="big">📜</span>'+
+      'The Nagoya banzuke hasn&rsquo;t been published yet.<br>It&rsquo;s released about <b>two weeks before</b> the tournament (late June). Check back — it&rsquo;ll appear here automatically.</div>';
+    return;
+  }
+  // merge east/west, sort by rankValue, pair into rows
+  const all = [...(j.east||[]).map(r=>({...r,side:'East'})), ...(j.west||[]).map(r=>({...r,side:'West'}))];
+  all.sort((a,b)=>(a.rankValue||999)-(b.rankValue||999));
+  // group by base rank label (strip East/West + number-side)
+  let html='', lastGroup='';
+  // build paired rows: same rankValue East vs West
+  const byVal = {};
+  all.forEach(r=>{ (byVal[r.rankValue] = byVal[r.rankValue]||[]).push(r); });
+  Object.keys(byVal).map(Number).sort((a,b)=>a-b).forEach(v=>{
+    const pair = byVal[v];
+    const baseRank = (pair[0].rank||'').replace(/ (East|West)$/,'').replace(/ \d+$/,'');
+    const grp = baseRank.split(' ')[0];
+    if(grp!==lastGroup){ html += '<div class="rank-h"><span class="rk">'+esc(grpLabel(grp))+'</span><span class="ln"></span></div>'; lastGroup=grp; }
+    const e = pair.find(p=>p.side==='East');
+    const w = pair.find(p=>p.side==='West');
+    html += '<div class="bout">'+banSide(e,'east')+'<div class="vs">'+esc((pair[0].rank||'').replace(/.* (\d+) (East|West)/,'$1')||'')+'</div>'+banSide(w,'west')+'</div>';
+  });
+  list.innerHTML = html;
+}
+function grpLabel(g){
+  return ({Yokozuna:'Yokozuna 横綱',Ozeki:'Ōzeki 大関',Sekiwake:'Sekiwake 関脇',Komusubi:'Komusubi 小結',
+           Maegashira:'Maegashira 前頭',Juryo:'Jūryō 十両'})[g] || g;
+}
+function recOf(r){
+  if(!r || !r.record) return '';
+  let w=0,l=0,a=0;
+  r.record.forEach(x=>{ if(/^win/.test(x.result))w++; else if(/loss/.test(x.result))l++; else if(x.result)a++; });
+  if(w+l+a===0) return '';
+  return w+'&ndash;'+l+(a?'&ndash;'+a:'');
+}
+function banSide(r,cls){
+  if(!r) return '<div class="side '+cls+'"></div>';
+  const id=r.rikishiID||r.rikishiId;
+  const rec=recOf(r);
+  return '<div class="side '+cls+'" onclick="openBio('+id+')">'+avaImg(id,r.shikonaEn)+
+    '<div class="nm"><div class="en">'+esc(r.shikonaEn)+'</div>'+
+    '<div class="rk">'+esc(r.side)+(rec?' · <span class="rec">'+rec+'</span>':'')+'</div></div></div>';
+}
+
+/* ============================================================
+   RIKISHI BIO
+   ============================================================ */
+async function openBio(id){
+  const ov=document.getElementById('overlay'), sh=document.getElementById('sheet');
+  ov.classList.add('on');
+  sh.innerHTML='<div class="grab"></div><div class="empty">Loading…</div>';
+  const [rr, sr] = await Promise.all([ getJSON('/rikishi/'+id+'?measurements=true'), getJSON('/rikishi/'+id+'/stats') ]);
+  const r = rr.j, st = sr.j;
+  if(!r){ sh.innerHTML='<div class="grab"></div><div class="empty">Couldn&rsquo;t load this wrestler.<button class="closeb" onclick="closeBio()">Close</button></div>'; return; }
+  const age = r.birthDate ? Math.floor((Date.now()-new Date(r.birthDate))/3.15576e10) : null;
+  const ht = r.height ? (r.height/100).toFixed(2)+' m' : '—';
+  const wt = r.weight ? r.weight+' kg' : '—';
+  const debut = r.debut ? bashoLabel(r.debut) : '—';
+  const cred = photoCredit(id);
+  const stat = (k,v)=>'<div class="stat"><div class="k">'+k+'</div><div class="v">'+v+'</div></div>';
+  let career='';
+  if(st){
+    const wins=st.totalWins||0, loss=st.totalLosses||0;
+    const mk=st.totalByDivision&&st.totalByDivision.Makuuchi;
+    career = '<div class="stat-grid">'+
+      stat('Career wins', wins)+ stat('Career losses', loss)+
+      stat('Tournaments', st.basho||'—')+ stat('Top-div bouts', mk||'—')+'</div>';
+    if(st.sansho){
+      const s=st.sansho, parts=[];
+      if(s['Shukun-sho'])parts.push(s['Shukun-sho']+'× Shukun-shō');
+      if(s['Kanto-sho'])parts.push(s['Kanto-sho']+'× Kantō-shō');
+      if(s['Gino-sho'])parts.push(s['Gino-sho']+'× Ginō-shō');
+      if(parts.length) career += '<p class="body" style="color:#6b6250;font-size:13px;margin:2px 0 0">🏅 '+parts.join(' · ')+'</p>';
+    }
+  }
+  sh.innerHTML =
+   '<div class="grab"></div>'+
+   '<div class="biohead">'+avaImg(id,r.shikonaEn)+
+     '<div><div class="en">'+esc(r.shikonaEn)+'</div>'+
+     '<div class="jpn">'+esc(r.shikonaJp||'')+'</div>'+
+     '<div class="rkline">'+esc(r.currentRank||'')+'</div></div></div>'+
+   '<div class="stat-grid">'+
+     stat('Stable', esc(r.heya||'—'))+
+     stat('From', esc((r.shusshin||'—')))+
+     stat('Height', ht)+
+     stat('Weight', wt)+
+     stat('Age', age?age+' yrs':'—')+
+     stat('Debut', debut)+
+   '</div>'+
+   recentStrip(r)+
+   career+
+   (cred?'<div class="credit">'+cred+'</div>':'')+
+   '<button class="closeb" onclick="closeBio()">Close</button>';
+}
+function recentStrip(r){
+  // r.record only present on banzuke objects, not the rikishi endpoint — guard
+  return '';
+}
+function bashoLabel(d){
+  // d like "201711"
+  if(!/^\d{6}$/.test(d)) return d;
+  const m=['','Jan','Mar','—','—','May','—','Jul','—','Sep','—','Nov'];
+  const mo=+d.slice(4), names={1:'Jan',3:'Mar',5:'May',7:'Jul',9:'Sep',11:'Nov'};
+  return (names[mo]||d.slice(4))+' '+d.slice(0,4);
+}
+function closeBio(){ document.getElementById('overlay').classList.remove('on'); }
+
+/* ============================================================
+   GLOSSARY
+   ============================================================ */
+const GLOSS = [
+ ['Dohyō 土俵','The raised clay ring. Stepping out = a loss.'],
+ ['Rikishi 力士','A sumo wrestler (literally &ldquo;strong man&rdquo;). Also: <i>sumōtori</i>.'],
+ ['Sekitori 関取','A salaried wrestler — top two divisions only. The dream.'],
+ ['Mawashi 廻し','The thick silk belt. Grips on it decide most bouts.'],
+ ['Tachiai 立合い','The initial charge from the crouch. The most important moment.'],
+ ['Gyōji 行司','The kimono-clad referee with the war-fan (gunbai).'],
+ ['Shimpan 審判','The five judges in black around the ring who can overrule the gyōji.'],
+ ['Heya 部屋','A &ldquo;stable&rdquo; — the communal house where wrestlers live &amp; train. Stablemates don&rsquo;t fight.'],
+ ['Oyakata 親方','A stablemaster — a retired elder who runs a heya.'],
+ ['Banzuke 番付','The ranking sheet, hand-brushed in sumo calligraphy before each basho.'],
+ ['Kachikoshi 勝ち越し','A winning record (8+ of 15) — you rise.'],
+ ['Makekoshi 負け越し','A losing record — you fall.'],
+ ['Yūshō 優勝','The tournament championship.'],
+ ['Kinboshi 金星','A &ldquo;gold star&rdquo;: a rank-and-filer beating a yokozuna.'],
+ ['Kenshō 懸賞','Sponsor banners paraded before a bout; the winner gets the cash envelopes.'],
+ ['Dohyō-iri 土俵入り','The ring-entering ceremony in ornamental aprons (keshō-mawashi).'],
+ ['Chonmage 丁髷','The topknot. Top-division men wear the fancy ōichō (ginkgo-leaf) style.'],
+ ['Shio 塩','Salt, thrown to purify the ring before each bout.']
+];
+function renderGloss(){
+  document.getElementById('glossList').innerHTML =
+    GLOSS.map(g=>'<li><b>'+g[0]+'</b> — '+g[1]+'</li>').join('');
+}
+
+/* ============================================================
+   KIMARITE  —  all 82 + non-techniques, illustrated by an
+   original parameterized SVG system (FKTI-owned, no licensing).
+   cat: basic | nage | kake | hineri | sori | special | hiwaza
+   arch: drives the diagram.  f: common | occ | rare
+   ============================================================ */
+const KCAT = {
+  basic:  ['Basic',           '基本技', '#E2553B'],
+  nage:   ['Throws',          '投げ手', '#c77d2e'],
+  kake:   ['Leg trips',       '掛け手', '#3c8f4e'],
+  hineri: ['Twist-downs',     '捻り手', '#9b59b6'],
+  sori:   ['Backward drops',  '反り手', '#2e86c7'],
+  special:['Special',         '特殊技', '#5d6d8a'],
+  hiwaza: ['Non-techniques',  '非技',   '#8a7f66']
+};
+const KIM = [
+ // ---- BASIC (kihonwaza) ----
+ ['yorikiri','寄り切り','Frontal force-out','basic','forceout','common','Gripping the belt, you walk your opponent straight out of the ring while he stays on his feet. The single most common finish — about a third of all bouts.'],
+ ['yoritaoshi','寄り倒し','Frontal crush-out','basic','forcedown','common','Like yorikiri, but you drive so hard he falls out rather than steps out.'],
+ ['oshidashi','押し出し','Frontal push-out','basic','pushout','common','Hands on his chest or throat, no belt grip — you simply push him out the front. The #2 technique.'],
+ ['oshitaoshi','押し倒し','Frontal push-down','basic','pushdown','common','A push-out that puts him on the clay instead of just over the line.'],
+ ['tsukidashi','突き出し','Frontal thrust-out','basic','thrustout','occ','A barrage of open-hand thrusts to the chest/face drives him out without ever latching on.'],
+ ['tsukitaoshi','突き倒し','Frontal thrust-down','basic','thrustdown','occ','Thrusting so forcefully he topples to the clay rather than stepping out.'],
+ ['abisetaoshi','浴びせ倒し','Backward force-down','basic','forcedown','rare','Chest to chest, you lean your whole weight forward and crush him down onto his back.'],
+ // ---- THROWS (nage-te) ----
+ ['uwatenage','上手投げ','Overarm throw','nage','overthrow','common','Reaching OVER his arm to grab the far side of the belt, you turn and swing him down. A signature power throw.'],
+ ['shitatenage','下手投げ','Underarm throw','nage','underthrow','common','Reaching UNDER his arm to the belt, you twist and pull him down — the inside-grip throw.'],
+ ['kotenage','小手投げ','Armlock throw','nage','armthrow','common','Clamping his outstretched arm against your body (no belt), you fling him down by the arm.'],
+ ['sukuinage','掬い投げ','Beltless arm throw','nage','scoopthrow','common','An arm scooped under his armpit, you swing him down with no belt grip at all.'],
+ ['kubinage','首投げ','Headlock throw','nage','headthrow','occ','Wrapping his head/neck in the crook of your arm, you throw him down.'],
+ ['uwatedashinage','上手出し投げ','Pulling overarm throw','nage','overthrow','occ','An overarm belt grip used to drag him forward and down as he lunges past you.'],
+ ['shitatedashinage','下手出し投げ','Pulling underarm throw','nage','underthrow','occ','An underarm belt grip used to pull him forward off his feet.'],
+ ['kakenage','掛け投げ','Hooking inner-thigh throw','nage','legthrow','rare','One leg hooks his thigh while your arms control him — a combined trip-and-throw.'],
+ ['koshinage','腰投げ','Hip throw','nage','hipthrow','rare','You load him onto your hip and roll him over it to the clay — a judo-style hip throw.'],
+ ['ipponzeoi','一本背負い','One-arm shoulder throw','nage','shoulderthrow','rare','Pulling his arm over your shoulder, you flip him over your back. Spectacular and rare.'],
+ ['nichonage','二丁投げ','Body-drop throw','nage','legthrow','rare','Sweeping both his legs with one of yours while throwing the upper body.'],
+ ['tsukaminage','つかみ投げ','Lifting throw','nage','liftslam','rare','Grabbing the belt, you lift him clear off the clay and throw him down — a feat of strength.'],
+ ['yaguranage','櫓投げ','Inner-thigh lift throw','nage','legthrow','rare','With mutual belt grips, a knee under his thigh lifts and topples him.'],
+ ['harimanage','波離間投げ','Backward belt throw','nage','headthrow','rare','Reaching over his back to the belt, you pull him over and past you.'],
+ // ---- LEG TRIPS (kake-te) ----
+ ['sotogake','外掛け','Outside leg trip','kake','legtripout','occ','Your leg hooks his from the OUTSIDE and you drive him backward over it.'],
+ ['uchigake','内掛け','Inside leg trip','kake','legtripin','occ','Your leg hooks his from the INSIDE and forces him down backward.'],
+ ['kirikaeshi','切り返し','Twisting knee trip','kake','legtripin','rare','A knee placed behind his and a twist sweeps him over it.'],
+ ['ketaguri','蹴手繰り','Pulling inside ankle sweep','kake','anklesweep','rare','At the charge, you kick his ankle inward and slap him down — a slick counter to a charging opponent.'],
+ ['kekaeshi','蹴返し','Minor inner foot sweep','kake','anklesweep','rare','A quick kick to the inside of his foot paired with a pull.'],
+ ['ashitori','足取り','Leg pick','kake','leggrab','rare','You grab a whole leg, lift it, and unbalance him to the clay.'],
+ ['komatasukui','小股掬い','Over-thigh scoop','kake','leggrab','rare','Scooping under his inner thigh, you lift and drop him.'],
+ ['kozumatori','小褄取り','Ankle pick (front)','kake','leggrab','rare','Lifting his ankle from the front to tip him over backward.'],
+ ['tsumatori','褄取り','Rear ankle pick','kake','leggrab','rare','Grabbing and lifting his ankle from behind as he loses forward balance.'],
+ ['watashikomi','渡し込み','Thigh-grab push-down','kake','leggrab','rare','One hand behind his thigh, you push the upper body to force him down.'],
+ ['chongake','ちょん掛け','Heel hook trip','kake','anklesweep','rare','Hooking his heel with yours to tip him straight backward.'],
+ ['kawazugake','河津掛け','Hooking leg counter-throw','kake','legtripin','rare','Wrapping your leg around his and clutching his body, you fall backward together — he lands first.'],
+ ['mitokorozeme','三所攻め','Triple-attack force-out','kake','leggrab','rare','A three-point attack: one leg inside, a hand on his other leg, head to his chest. A crowd-pleaser.'],
+ ['nimaigeri','二枚蹴り','Ankle-kick twist-down','kake','anklesweep','rare','Kicking the ankle of his standing leg, then twisting him down.'],
+ ['omata','大股','Thigh-scoop drop','kake','leggrab','rare','Scooping his lifted thigh from inside to drop him — a follow-on to an escaped scoop.'],
+ ['sotokomata','外小股','Outer thigh-scoop','kake','leggrab','rare','Scooping his thigh from the OUTSIDE to throw him down.'],
+ ['susoharai','裾払い','Rear foot sweep','kake','anklesweep','rare','Sweeping the back of his ankle out from under him.'],
+ ['susotori','裾取り','Rear toe pick','kake','leggrab','rare','Grabbing his ankle from behind and pulling it out.'],
+ // ---- TWIST-DOWNS (hineri-te) ----
+ ['tsukiotoshi','突き落とし','Thrust-down','hineri','twistdown','common','A sharp thrust to his side or shoulder spins him off balance and down. A classic counter.'],
+ ['katasukashi','肩透かし','Under-shoulder swing-down','hineri','twistdown','occ','Pulling his arm and slapping down on his shoulder, you swing him to the clay as he lunges.'],
+ ['tottari','とったり','Arm-bar throw','hineri','armthrow','rare','Seizing his outstretched arm with both hands, you twist him forward and down.'],
+ ['sakatottari','逆とったり','Arm-bar counter','hineri','armthrow','rare','The counter to tottari — you reverse his arm-bar attempt and twist HIM down.'],
+ ['kainahineri','腕捻り','Two-handed arm twist-down','hineri','twistdown','rare','Both arms wrap his and twist it, rolling him down.'],
+ ['shitatehineri','下手捻り','Twisting underarm throw','hineri','underthrow','rare','An underarm belt grip with a sharp twist that screws him into the clay.'],
+ ['uwatehineri','上手捻り','Twisting overarm throw','hineri','overthrow','rare','An overarm belt grip with a twisting motion downward.'],
+ ['makiotoshi','巻き落とし','Twist-down (no grip)','hineri','twistdown','rare','Twisting his off-balance body down to the clay without any belt grip.'],
+ ['kubihineri','首捻り','Head-twist throw','hineri','headthrow','rare','A hand on the back of his head/neck twists him down.'],
+ ['zubuneri','ずぶねり','Head-pivot twist-down','hineri','headthrow','rare','Using your head against his chest as a pivot to twist him down while bent low.'],
+ ['sotomuso','外無双','Outer thigh-prop twist','hineri','twistdown','rare','A hand on the OUTSIDE of his knee, twisting him over it.'],
+ ['uchimuso','内無双','Inner thigh-prop twist','hineri','twistdown','rare','A hand on the INSIDE of his thigh, twisting him down.'],
+ ['kotehineri','小手捻り','Arm-lock twist-down','hineri','armthrow','rare','Clamping and twisting his arm to spin him down.'],
+ ['osakate','大逆手','Backward twisting overarm','hineri','overthrow','rare','Seizing his arm and the belt, you twist him down backward — a rarely-seen throw.'],
+ ['tokkurinage','徳利投げ','Two-hand head twist','hineri','headthrow','rare','Both hands grip his head/neck like a sake bottle and twist him down.'],
+ ['gasshohineri','合掌捻り','Clasped-hand twist-down','hineri','twistdown','rare','Hands clasped around his back, you twist him to the clay.'],
+ ['amiuchi','網打ち','Fisherman&rsquo;s throw','hineri','armthrow','rare','Both hands haul his extended arm like casting a net, pitching him forward.'],
+ ['sabaori','鯖折り','Forward force-down','hineri','forcedown','rare','Belt grip with downward pressure that buckles his knees to the clay — &ldquo;bending the mackerel.&rdquo;'],
+ // ---- BACKWARD BODY DROPS (sori-te) ----
+ ['izori','居反り','Backward body drop','sori','backdrop','rare','You duck under his charge, grab behind his knees and drop backward, flipping him over you. Extremely rare.'],
+ ['kakezori','掛け反り','Hooking backward drop','sori','backdrop','rare','Head under his arm, you hook a leg and arch backward to flip him.'],
+ ['shumokuzori','撞木反り','Bell-hammer backward drop','sori','backdrop','rare','Shouldering him across your body, you arch back like a bell-hammer. Almost never seen.'],
+ ['tasukizori','たすき反り','Reverse backward drop','sori','backdrop','rare','One arm round his arm, one round a leg, you spin him over your shoulders.'],
+ ['sototasukizori','外たすき反り','Outer reverse backward drop','sori','backdrop','rare','The tasukizori done from the outside.'],
+ ['tsutaezori','伝え反り','Underarm forward drop','sori','backdrop','rare','Slipping his arm over your back and twisting it down to the clay.'],
+ // ---- SPECIAL (tokushuwaza) ----
+ ['hatakikomi','叩き込み','Slap-down','special','slapdown','common','Stepping aside, you slap his back or shoulder so his own momentum pitches him forward to the clay.'],
+ ['hikiotoshi','引き落とし','Hand pull-down','special','pulldown','common','Grabbing his arm or shoulder and yanking down/forward so he face-plants.'],
+ ['okuridashi','送り出し','Rear push-out','special','rear','common','You&rsquo;ve gotten behind him — now simply shove him out from the back.'],
+ ['tsuridashi','吊り出し','Frontal lift-out','special','liftout','occ','Both hands on the belt, you LIFT him off the clay and carry him out. Pure power.'],
+ ['kimedashi','極め出し','Arm-barring force-out','special','forceout','rare','Pinning both his arms against his body, you walk him out unable to grip.'],
+ ['kimetaoshi','極め倒し','Arm-barring force-down','special','forcedown','rare','Same arm-pin, but you force him down to the clay.'],
+ ['hikkake','引っ掛け','Arm-grab force-out','special','pulldown','rare','Hauling his arm with both of yours, you swing him out sideways.'],
+ ['okuritaoshi','送り倒し','Rear push-down','special','rear','rare','From behind, you knock him down to the clay.'],
+ ['okurinage','送り投げ','Rear throw','special','rear','rare','A throw applied from behind him.'],
+ ['okurihikiotoshi','送り引き落とし','Rear pull-down','special','rear','rare','Pulling him down from behind.'],
+ ['okurigake','送り掛け','Rear leg trip','special','rear','rare','Tripping his ankle from behind.'],
+ ['okuritsuridashi','送り吊り出し','Rear lift-out','special','liftout','rare','Lifting him by the belt from behind and carrying him out.'],
+ ['okuritsuriotoshi','送り吊り落とし','Rear lift-down','special','liftslam','rare','Lifting from behind and slamming him down.'],
+ ['tsuriotoshi','吊り落とし','Frontal lift-down','special','liftslam','rare','Lifting him by the belt and slamming him to the clay.'],
+ ['utchari','うっちゃり','Backward pivot throw','special','pivot','rare','At the ring&rsquo;s edge, on the brink of losing, you arch back and fling him out first. A heart-stopper.'],
+ ['yobimodoshi','呼び戻し','Pulling body slam','special','pulldown','rare','As he reacts to your pull, you re-grip his waist and slam him — &ldquo;the calling-back.&rdquo;'],
+ ['waridashi','割り出し','Upper-arm force-out','special','forceout','rare','An arm across his body plus leg pressure forces him out sideways off balance.'],
+ ['sokubiotoshi','素首落とし','Head-chop down','special','pulldown','rare','A chopping push to the back of his neck drops him forward.'],
+ ['ushiromotare','後ろもたれ','Backward lean-out','special','rear','rare','With him behind you, you lean back and push him out.'],
+ // ---- NON-TECHNIQUES (hiwaza) ----
+ ['isamiashi','勇み足','Forward step-out','hiwaza','error','occ','No technique — the attacker, over-committed, accidentally steps his own foot out of the ring first.'],
+ ['fumidashi','踏み出し','Rear step-out','hiwaza','error','rare','A wrestler accidentally backs his own foot out of the ring with no attack on him.'],
+ ['koshikudake','腰砕け','Collapse','hiwaza','error','rare','A wrestler crumples backward on his own from an over-committed move — no technique applied.'],
+ ['tsukihiza','つき膝','Knee touch-down','hiwaza','error','rare','A wrestler stumbles and touches the clay with his knee with no real contact.'],
+ ['tsukite','つき手','Hand touch-down','hiwaza','error','rare','A wrestler stumbles and touches down with his hand.'],
+ ['fusen','不戦','Default (absence)','hiwaza','error','occ','A walkover — the opponent is absent (injured/withdrawn), so the bout is awarded without wrestling.'],
+ ['hansoku','反則','Disqualification','hiwaza','error','rare','A win by foul — e.g. hair-pulling, closed-fist striking, or the belt coming undone.']
+];
+
+/* ---------- physics-aware technique illustrator (original, FKTI) ----------
+   Each diagram shows WHY the move works, in one symbol language:
+     ● center of gravity (must stay over the base)   shaded = base of support
+     red arrow = applied force / rotation   ▲ = fulcrum   ✕ = base removed
+     grey dashed = the opponent's own momentum                                  */
+const MECH = {                       // map each visual archetype -> physics mechanism
+  forceout:'drive', forcedown:'drive', pushout:'drive', pushdown:'drive', thrustout:'drive', thrustdown:'drive',
+  overthrow:'lever', underthrow:'lever', armthrow:'lever', scoopthrow:'lever', headthrow:'lever',
+  hipthrow:'lever', shoulderthrow:'lever', legthrow:'lever',
+  twistdown:'couple',
+  legtripin:'sweep', legtripout:'sweep', anklesweep:'sweep',
+  leggrab:'capture',
+  liftout:'lift', liftslam:'lift',
+  slapdown:'momentum', pulldown:'momentum',
+  rear:'rear', backdrop:'sori', pivot:'pivot', error:'self'
+};
+const MLABEL = {                     // [short name, accent colour]
+  drive:['Drive the base out','#E2553B'], lever:['Lever throw','#c77d2e'], couple:['Twisting couple','#9b59b6'],
+  sweep:['Sweep the base','#3c8f4e'], capture:['Lift a leg','#3c8f4e'], lift:['Remove the base','#2e86c7'],
+  momentum:['Use his momentum','#5d6d8a'], rear:['Attack the rear','#5d6d8a'], sori:['Roll the fulcrum','#2e86c7'],
+  pivot:['Edge pivot','#2e86c7'], self:['Self-fall','#8a7f66']
+};
+const WHY = {
+  drive:'Force driven low — below his center of gravity — tips him back and pushes that center past his rear foot before he can reset.',
+  lever:'Your hip, leg or his trapped arm becomes a fulcrum; the long lever arm multiplies your force and swings his center of gravity outside his feet.',
+  couple:'Two opposite forces — top one way, base the other — spin him about his own axis; his planted feet can’t follow, so his center falls off the side.',
+  sweep:'Take a foot away and his base of support collapses; a push the other way drops his center into the empty space.',
+  capture:'Lift one leg and his two-footed base becomes a single pivot point — now any push topples him.',
+  lift:'Off the clay there is no base and no friction — he can’t push or resist, so you carry his center wherever you want.',
+  momentum:'He is already leaning past his front foot, held up only by your resistance; remove it and a light tap lets his own momentum carry him down.',
+  rear:'From behind he can’t brace backward or see it — his base offers no resistance that way, so he goes straight out.',
+  sori:'Duck under and your dropped body is a low fulcrum; his own forward charge rotates him up and over the top.',
+  pivot:'At the edge, drop below his center and turn him around your hip so his body crosses the line a heartbeat before yours.',
+  self:'No technique — he over-commits and his own center of gravity leaves his base.'
+};
+
+function kdiagram(arch){
+  const mech = MECH[arch] || 'drive';
+  const W='#46506e', A='#E2553B';
+  const C={com:'#e0a92e', base:'#3a78c2', force:'#E2553B', fulc:'#13182B', ghost:'#9aa0b6', edge:'#cdbfa0'};
+  const belt = c => c===A ? '#7c2a1c' : '#243152';
+  const fig=(x,y,col,lean,sc)=>{ sc=sc||1; const b=belt(col);
+    return '<g transform="translate('+x+','+y+') rotate('+(lean||0)+') scale('+sc+')">'+
+      '<path d="M-3,11 L-10,26 -4,26 0,12 Z" fill="'+col+'"/>'+
+      '<path d="M3,11 L10,26 4,26 0,12 Z" fill="'+col+'"/>'+
+      '<ellipse cx="0" cy="0" rx="12" ry="13" fill="'+col+'"/>'+
+      '<path d="M-12,7 Q0,11 12,7 L12,13 Q0,17 -12,13 Z" fill="'+b+'"/>'+
+      '<circle cx="0" cy="-16" r="6.6" fill="'+col+'"/>'+
+      '<path d="M-4,-22 Q0,-26 4,-22 Z" fill="'+b+'"/>'+
+      '<rect x="-1.6" y="-24.5" width="3.2" height="4" rx="1.4" fill="'+b+'"/></g>';
+  };
+  const head=(x,y,a,col)=>'<path d="M'+x.toFixed(1)+','+y.toFixed(1)+' L'+(x-7*Math.cos(a-.5)).toFixed(1)+','+(y-7*Math.sin(a-.5)).toFixed(1)+' L'+(x-7*Math.cos(a+.5)).toFixed(1)+','+(y-7*Math.sin(a+.5)).toFixed(1)+' Z" fill="'+col+'"/>';
+  const arrow=(x1,y1,x2,y2,col,dashed)=>{ const a=Math.atan2(y2-y1,x2-x1);
+    return '<g stroke="'+col+'" stroke-width="'+(dashed?2.4:3)+'" stroke-linecap="round"><line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'"'+(dashed?' stroke-dasharray="3 3"':'')+'/></g>'+head(x2,y2,a,col); };
+  const arc=(cx,cy,r,a0,a1,col)=>{ const px=a=>cx+r*Math.cos(a), py=a=>cy+r*Math.sin(a);
+    const large=Math.abs(a1-a0)>Math.PI?1:0, sweep=a1>a0?1:0, tang=a1+(sweep?Math.PI/2:-Math.PI/2);
+    return '<path d="M'+px(a0).toFixed(1)+','+py(a0).toFixed(1)+' A'+r+','+r+' 0 '+large+' '+sweep+' '+px(a1).toFixed(1)+','+py(a1).toFixed(1)+'" fill="none" stroke="'+col+'" stroke-width="2.6"/>'+head(px(a1),py(a1),tang,col); };
+  const com=(x,y)=>'<circle cx="'+x+'" cy="'+y+'" r="5.4" fill="#fff" stroke="'+C.com+'" stroke-width="1.8"/><circle cx="'+x+'" cy="'+y+'" r="2.6" fill="'+C.com+'"/>';
+  const base=(x1,x2,y)=>'<rect x="'+x1+'" y="'+(y-1.6)+'" width="'+(x2-x1)+'" height="3.4" rx="1.7" fill="'+C.base+'" opacity="0.32"/><line x1="'+x1+'" y1="'+(y-4)+'" x2="'+x1+'" y2="'+(y+4)+'" stroke="'+C.base+'" stroke-width="1.6"/><line x1="'+x2+'" y1="'+(y-4)+'" x2="'+x2+'" y2="'+(y+4)+'" stroke="'+C.base+'" stroke-width="1.6"/>';
+  const fulc=(x,y)=>'<path d="M'+x+','+(y-6)+' L'+(x+5)+','+(y+2)+' L'+(x-5)+','+(y+2)+' Z" fill="'+C.fulc+'"/>';
+  const xmark=(x,y)=>'<g stroke="'+C.force+'" stroke-width="2.6" stroke-linecap="round"><line x1="'+(x-4)+'" y1="'+(y-4)+'" x2="'+(x+4)+'" y2="'+(y+4)+'"/><line x1="'+(x+4)+'" y1="'+(y-4)+'" x2="'+(x-4)+'" y2="'+(y+4)+'"/></g>';
+  const edge=x=>'<line x1="'+x+'" y1="38" x2="'+x+'" y2="74" stroke="'+C.edge+'" stroke-width="1.8" stroke-dasharray="3 3"/>';
+  const lbl=(x,y,t)=>'<text x="'+x+'" y="'+y+'" font-size="7.5" fill="#6b6250" text-anchor="middle" font-family="-apple-system,sans-serif">'+t+'</text>';
+  const ground='<line x1="6" y1="76" x2="114" y2="76" stroke="#d9c9a6" stroke-width="2.5" stroke-linecap="round"/>';
+  let s='';
+  switch(mech){
+    case 'drive':
+      s = base(50,74,76)+ fig(40,52,A,8)+ fig(62,50,W,-10)+ arrow(46,64,60,64,C.force)+
+          com(62,46)+ arrow(67,46,89,46,C.force)+ edge(90)+ lbl(90,86,'past the base'); break;
+    case 'lever':
+      s = base(54,70,76)+ fig(44,50,A,4)+ fig(67,52,W,46,0.92)+ fulc(55,69)+
+          '<line x1="55" y1="67" x2="72" y2="44" stroke="'+C.fulc+'" stroke-width="1.4" stroke-dasharray="4 3"/>'+ lbl(76,40,'lever arm')+
+          com(68,48)+ arc(57,52,21,-0.55,0.95,C.force)+ lbl(56,86,'fulcrum'); break;
+    case 'couple':
+      s = base(52,72,76)+ fig(62,50,W,0)+ arrow(53,42,72,42,C.force)+ arrow(71,61,52,61,C.force)+
+          com(62,49)+ arc(62,50,17,-1.15,0.5,C.force)+ lbl(62,86,'spun off his axis'); break;
+    case 'sweep':
+      s = fig(42,52,A,10)+ fig(64,50,W,-8)+ base(57,61,76)+ xmark(72,75)+
+          arrow(53,42,70,42,C.force)+ com(64,47)+ arrow(66,51,77,68,C.force)+ lbl(72,86,'base swept away'); break;
+    case 'capture':
+      s = fig(40,54,A,12,0.9)+ fig(64,50,W,-6)+ arrow(51,61,61,50,C.force)+ fulc(58,75)+
+          com(64,47)+ arc(58,52,18,-0.3,1.25,C.force)+ lbl(58,86,'one-point base'); break;
+    case 'lift':
+      s = fig(48,52,A,4)+ fig(67,41,W,0,0.9)+ arrow(61,61,61,49,C.force)+ arrow(73,61,73,49,C.force)+
+          '<line x1="56" y1="70" x2="80" y2="70" stroke="'+C.edge+'" stroke-width="1.6" stroke-dasharray="2 3"/>'+ com(67,37)+ lbl(68,86,'no base · no friction'); break;
+    case 'momentum':
+      s = base(58,66,76)+ fig(44,50,A,12)+ fig(70,56,W,58,0.92)+ arrow(55,42,79,49,C.ghost,1)+ lbl(84,42,'momentum')+
+          arrow(58,46,66,58,C.force)+ com(75,50)+ lbl(70,86,'center past front foot'); break;
+    case 'rear':
+      s = base(60,80,76)+ fig(52,50,A,-4)+ fig(72,50,W,-4)+ lbl(50,38,'behind')+
+          arrow(58,44,66,44,C.force)+ com(72,47)+ arrow(78,47,97,47,C.force)+ edge(98); break;
+    case 'sori':
+      s = fig(54,60,A,4,0.85)+ fig(64,42,W,150,0.85)+ fulc(56,69)+ arc(57,52,18,-1.9,0.25,C.force)+
+          com(64,40)+ lbl(56,86,'low fulcrum'); break;
+    case 'pivot':
+      s = edge(96)+ lbl(96,86,'ring edge')+ fig(86,52,A,18,0.9)+ fig(98,46,W,60,0.85)+ fulc(86,67)+
+          arc(88,50,17,-1.45,0.6,C.force)+ com(101,44); break;
+    case 'self': default:
+      s = base(54,68,76)+ fig(62,50,W,22)+ com(75,46)+ arrow(75,52,83,66,C.ghost,1)+ lbl(68,86,'over-steps his base'); break;
+  }
+  return '<svg viewBox="0 0 120 92" aria-hidden="true">'+ground+s+'</svg>';
+}
+
+let kimFilter='all';
+function initKim(){
+  if(document.getElementById('kfilter').childElementCount) { renderKim(); return; }
+  const f=document.getElementById('kfilter');
+  const cats=['all',...Object.keys(KCAT)];
+  f.innerHTML = cats.map(c=>{
+    const col = c==='all'?'#cfd6f0':KCAT[c][2];
+    const lab = c==='all'?'All':KCAT[c][0];
+    return '<button data-c="'+c+'" class="'+(c==='all'?'sel':'')+'" style="border-color:'+col+';'+(c==='all'?'':'color:'+col)+'" onclick="setKimFilter(\''+c+'\')">'+lab+'</button>';
+  }).join('');
+  renderKim();
+}
+function setKimFilter(c){
+  kimFilter=c;
+  [...document.querySelectorAll('#kfilter button')].forEach(b=>{
+    const on=b.dataset.c===c; b.classList.toggle('sel',on);
+    b.style.background = on ? (c==='all'?'var(--ver)':KCAT[c][2]) : 'var(--ink2)';
+    b.style.color = on ? '#fff' : (c==='all'?'#cfd6f0':KCAT[c][2]);
+  });
+  renderKim();
+}
+function renderKim(){
+  const q=(document.getElementById('ksearch').value||'').toLowerCase().trim();
+  const grid=document.getElementById('kgrid');
+  const rows=KIM.filter(k=>{
+    if(kimFilter!=='all' && k[3]!==kimFilter) return false;
+    if(!q) return true;
+    const cat=KCAT[k[3]][0].toLowerCase();
+    return (k[0]+' '+k[2]+' '+k[6]+' '+cat).toLowerCase().includes(q);
+  });
+  document.getElementById('kcount').innerHTML = rows.length+' of '+KIM.length+' techniques';
+  const fl={common:['f-common','common'],occ:['f-occ','occasional'],rare:['f-rare','rare']};
+  grid.innerHTML = rows.map(k=>{
+    const col=KCAT[k[3]][2];
+    const f=fl[k[5]]||fl.rare;
+    const ph=KPHOTO[k[0]];
+    const visual = ph
+      ? '<img class="kphoto" loading="lazy" src="'+ph.file+'" alt="'+esc(k[2])+'"/><span class="kbadge">📷 PHOTO</span>'
+      : kdiagram(k[4]);
+    const mech = MECH[k[4]]||'drive', ml=MLABEL[mech];
+    return '<div class="kcard" style="border-top-color:'+col+'">'+
+      visual+
+      '<div class="en">'+esc(k[2])+'</div>'+
+      '<div class="rj">'+esc(k[0])+'</div>'+
+      '<div class="jpn">'+esc(k[1])+'</div>'+
+      '<div class="d">'+k[6]+'</div>'+
+      '<div class="kwhy"><b style="color:'+ml[1]+'">⚙ '+ml[0]+'.</b> '+WHY[mech]+'</div>'+
+      '<span class="freq '+f[0]+'">'+f[1]+'</span>'+
+    '</div>';
+  }).join('');
+}
+
+/* ---------- boot ---------- */
+(function(){
+  const h=location.hash.slice(1);
+  if(h && document.getElementById(h)) go(h);
+})();
+</script>
+</body>
+</html>
