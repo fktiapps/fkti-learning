@@ -24,8 +24,10 @@
  .art{width:100%;max-width:150px;aspect-ratio:1/1;display:block;margin:0 auto}
  .motionwrap .art{cursor:pointer}
  .sstroke{fill:none;stroke:var(--ink);stroke-width:5.4;stroke-linecap:round;stroke-linejoin:round}
+ .blink{animation:blink 1.1s steps(1,end) infinite}
+ @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
  .mstroke{fill:none;stroke:var(--ink);stroke-width:5.6;stroke-linecap:round;stroke-linejoin:round;
-   stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .6s linear,stroke .25s}
+   stroke-dasharray:1 2;stroke-dashoffset:1;transition:stroke-dashoffset .6s linear,stroke .25s}
  .mstroke.active{stroke:var(--ver)}
  .key{font-size:.82rem;font-weight:700;margin:5px 0 1px}
  .hook{font-size:.68rem;color:var(--muted);line-height:1.3;font-family:system-ui,sans-serif;min-height:2.2em}
@@ -54,7 +56,7 @@
         <div class="key">Apple</div>
         <div class="hook">a fat apple shape filling the 3rd stroke (the loop)</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"a-cross"},{"stroke":2,"to":0,"text":"a-down"},{"stroke":3,"to":0,"text":"all a-round"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;a-cross&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;a-down&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;all a-round&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M31.01,33c0.88,0.88,2.75,1.82,5.25,1.75c8.62-0.25,20-2.12,29.5-4.25c1.51-0.34,4.62-0.88,6.62-0.5"/><path class="mstroke" data-i="1" pathLength="1" d="M49.76,17.62c0.88,1,1.82,3.26,1.38,5.25c-3.75,16.75-6.25,38.13-5.13,53.63c0.41,5.7,1.88,10.88,3.38,13.62"/><path class="mstroke" data-i="2" pathLength="1" d="M65.63,44.12c0.75,1.12,1.16,4.39,0.5,6.12c-4.62,12.26-11.24,23.76-25.37,35.76c-6.86,5.83-15.88,3.75-16.25-8.38c-0.34-10.87,13.38-23.12,32.38-26.74c12.42-2.37,27,1.38,30.5,12.75c4.05,13.18-3.76,26.37-20.88,30.49"/></svg>
         <div class="chant"><span class="beat">a-cross</span><span class="beat">a-down</span><span class="beat">all a-round</span></div>
@@ -71,7 +73,7 @@
         <div class="key">Two eels</div>
         <div class="hook">the two strokes ARE the eels — googly eyes on top</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"EE— big eel"},{"stroke":2,"to":0,"text":"ee! little eel"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;EE— big eel&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;ee! little eel&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M21.5,29.66c2.01,2.17,2.61,4.68,2.17,7.43c-3.09,19.16-1.03,32.01,7.93,41.45c6.12,6.45,6.26,3.14,7.04-5.21"/><path class="mstroke" data-i="1" pathLength="1" d="M72.96,36.51c9.44,8.05,17.79,18.82,18.41,33.83"/></svg>
         <div class="chant"><span class="beat">EE— big eel</span><span class="beat">ee! little eel</span></div>
@@ -88,7 +90,7 @@
         <div class="key">U-turn</div>
         <div class="hook">a U-turn arrow nestled inside the 2nd stroke’s curve, not touching it</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"Oo! a cop! 🚓"},{"stroke":2,"to":0,"text":"quick — oo turn!"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;Oo! a cop! 🚓&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;quick — oo turn!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M42,15.5c5.62,2.12,9.62,3,12.88,3c8.27,0,8,1.12-0.38,5.5"/><path class="mstroke" data-i="1" pathLength="1" d="M33,42.38c2.12,1.12,4.12,2.88,8.5,1.38c4.38-1.5,12.75-7.12,18.5-7c5.75,0.12,10.25,5,10.25,18c0,15.49-8.25,30.24-24.37,41.24"/></svg>
         <div class="chant"><span class="beat">Oo! a cop! 🚓</span><span class="beat">quick — oo turn!</span></div>
@@ -105,7 +107,7 @@
         <div class="key">Energetic squiggle</div>
         <div class="hook">the character vibrating with energy</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"a flourish up top…"},{"stroke":2,"to":0,"text":"…one elegant signature ✒️"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;a flourish up top…&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;…one elegant signature ✒️&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M40.52,13.25c5.62,2.12,10,3,14.12,3c8.27,0,8,1.12-0.38,5.5"/><path class="mstroke" data-i="1" pathLength="1" d="M32.52,45.12c1.88,1.25,4.5,1.75,7.38,0.62c3.29-1.29,17-7.88,21.25-9.88c4.25-2,8.32,0.04,4.38,4.62c-12.26,14.27-27.26,31.52-39.51,44.4c-3.26,3.42-0.58,3.54,1.5,1.37c13.5-14.12,18.12-20.12,23.62-20.12c7.13,0,3.5,16.75,6.75,22.38c3.25,5.63,19.12,3.75,26.12,2.12"/></svg>
         <div class="chant"><span class="beat">a flourish up top…</span><span class="beat">…one elegant signature ✒️</span></div>
@@ -122,7 +124,7 @@
         <div class="key">Tree, pond &amp; moon</div>
         <div class="hook">the down-stroke is the trunk, cross is a branch; loop = pond; top-right = moon</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"Across the sky…"},{"stroke":2,"to":0,"text":"down to earth and around the pond…"},{"stroke":3,"to":0,"text":"to see the moon 🌙"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;Across the sky…&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;down to earth and around the pond…&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;to see the moon 🌙&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M22.88,35.12c1.38,1,3.62,2.38,6,2.12c2.38-0.26,19.62-5.12,21.12-5.74c1.5-0.62,4-1.25,5.88-2"/><path class="mstroke" data-i="1" pathLength="1" d="M41.5,16.12c2.25,1,3.59,4.39,3.12,7.38c-2.5,16.12-3.37,45.53-2.25,58.38c0.75,8.62-0.64,10.45-7.12,7.12c-5.13-2.62-13.75-8-13.75-12.38c0-7.5,24.38-23.62,44.75-23.62c17.25,0,25,8.25,25,17.25c0,8.25-9.38,18.88-26.75,21"/><path class="mstroke" data-i="2" pathLength="1" d="M73,22.12c5.38,2.62,8.88,5.88,10.62,8.25c2.27,3.08,0.38,4.5-1.12,5"/></svg>
         <div class="chant"><span class="beat">Across the sky…</span><span class="beat">down to earth and around the pond…</span><span class="beat">to see the moon 🌙</span></div>
@@ -135,14 +137,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🪁</text><path class="sstroke" d="M24.62,38.62c1.88,1.62,4.65,2.33,8.62,1c25.5-8.5,29.5-4.13,29.5,7.62c0,9.38-1.24,17.46-4.25,25.25c-7.62,19.76-10.87,17.39-16.12,10.89"/><path class="sstroke" d="M48.5,17.5c1,1.38,1.29,4.7,0.5,7.12c-5,15.25-18.02,40.93-19.62,43.88c-3.12,5.75-6.38,11.88-9.38,16.25"/><path class="sstroke" d="M77.37,31.62c7.5,6.88,13.25,15.75,15,24.88"/></svg>
-        <div class="key">🪁 Kite</div>
-        <div class="hook">the cross is the kite frame, the curl its tail</div>
+        <svg class="art" viewBox="0 0 109 109"><path class="sstroke" d="M24.62,38.62c1.88,1.62,4.65,2.33,8.62,1c25.5-8.5,29.5-4.13,29.5,7.62c0,9.38-1.24,17.46-4.25,25.25c-7.62,19.76-10.87,17.39-16.12,10.89"/><path class="sstroke" d="M48.5,17.5c1,1.38,1.29,4.7,0.5,7.12c-5,15.25-18.02,40.93-19.62,43.88c-3.12,5.75-6.38,11.88-9.38,16.25"/><path class="sstroke" d="M77.37,31.62c7.5,6.88,13.25,15.75,15,24.88"/><g class="blink" fill="none" stroke="#E2553B" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><path d="M80,52 C74,46 64,49 63,57 C62,66 75,68 80,61"/><path d="M80,46 L81,67"/></g></svg>
+        <div class="key">It spells “Ka”</div>
+        <div class="hook">two red strokes finish the “a” (it spells Ka) — they blink</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"up goes the kite"},{"stroke":2,"to":0,"text":"cross the frame"},{"stroke":3,"to":0,"text":"kaa— tail flick"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;part of the K…&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;…the rest of the K…&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;add the little a — Ka!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M24.62,38.62c1.88,1.62,4.65,2.33,8.62,1c25.5-8.5,29.5-4.13,29.5,7.62c0,9.38-1.24,17.46-4.25,25.25c-7.62,19.76-10.87,17.39-16.12,10.89"/><path class="mstroke" data-i="1" pathLength="1" d="M48.5,17.5c1,1.38,1.29,4.7,0.5,7.12c-5,15.25-18.02,40.93-19.62,43.88c-3.12,5.75-6.38,11.88-9.38,16.25"/><path class="mstroke" data-i="2" pathLength="1" d="M77.37,31.62c7.5,6.88,13.25,15.75,15,24.88"/></svg>
-        <div class="chant"><span class="beat">up goes the kite</span><span class="beat">cross the frame</span><span class="beat">kaa— tail flick</span></div>
+        <div class="chant"><span class="beat">part of the K…</span><span class="beat">…the rest of the K…</span><span class="beat">add the little a — Ka!</span></div>
       </div>
     </div>
   </div>
@@ -152,14 +154,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🔑</text><path class="sstroke" d="M30.5,30.25c1.88,0.75,4.64,1.06,5.88,0.88c6.75-1,22.25-4.5,26.5-6c2.17-0.76,3.5-1.25,4.88-2.12"/><path class="sstroke" d="M36.25,48.7c2.01,0.85,4.97,1.2,6.29,0.99c7.23-1.13,23.82-5.09,28.37-6.79c2.32-0.86,3.75-1.41,5.22-2.4"/><path class="sstroke" d="M42,14.12c1.5,0.88,3.13,2.94,4,5.12c5.5,13.76,16,29.26,26.37,40.76c7.64,8.47,9.12,9.38-6,3.88"/><path class="sstroke" d="M33.75,83.25c10.62,9.75,27.25,8.62,38.12,5"/></svg>
-        <div class="key">🔑 Key</div>
-        <div class="hook">sounds like 'key'; the bars are its teeth</div>
+        <svg class="art" viewBox="0 0 109 109"><text x="54" y="74" text-anchor="middle" font-size="58" transform="rotate(90 54 54)">🔑</text><path class="sstroke" d="M30.5,30.25c1.88,0.75,4.64,1.06,5.88,0.88c6.75-1,22.25-4.5,26.5-6c2.17-0.76,3.5-1.25,4.88-2.12"/><path class="sstroke" d="M36.25,48.7c2.01,0.85,4.97,1.2,6.29,0.99c7.23-1.13,23.82-5.09,28.37-6.79c2.32-0.86,3.75-1.41,5.22-2.4"/><path class="sstroke" d="M42,14.12c1.5,0.88,3.13,2.94,4,5.12c5.5,13.76,16,29.26,26.37,40.76c7.64,8.47,9.12,9.38-6,3.88"/><path class="sstroke" d="M33.75,83.25c10.62,9.75,27.25,8.62,38.12,5"/></svg>
+        <div class="key">Key</div>
+        <div class="hook">sounds like 'key' — 🔑 rotated 90° onto the character</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"top tooth"},{"stroke":2,"to":0,"text":"second tooth"},{"stroke":3,"to":0,"text":"long stem"},{"stroke":4,"to":0,"text":"ki!—it turns"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;top tooth&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;second tooth&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;long shaft down&quot;},{&quot;stroke&quot;:4,&quot;to&quot;:0,&quot;text&quot;:&quot;ki!—it turns&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M30.5,30.25c1.88,0.75,4.64,1.06,5.88,0.88c6.75-1,22.25-4.5,26.5-6c2.17-0.76,3.5-1.25,4.88-2.12"/><path class="mstroke" data-i="1" pathLength="1" d="M36.25,48.7c2.01,0.85,4.97,1.2,6.29,0.99c7.23-1.13,23.82-5.09,28.37-6.79c2.32-0.86,3.75-1.41,5.22-2.4"/><path class="mstroke" data-i="2" pathLength="1" d="M42,14.12c1.5,0.88,3.13,2.94,4,5.12c5.5,13.76,16,29.26,26.37,40.76c7.64,8.47,9.12,9.38-6,3.88"/><path class="mstroke" data-i="3" pathLength="1" d="M33.75,83.25c10.62,9.75,27.25,8.62,38.12,5"/></svg>
-        <div class="chant"><span class="beat">top tooth</span><span class="beat">second tooth</span><span class="beat">long stem</span><span class="beat">ki!—it turns</span></div>
+        <div class="chant"><span class="beat">top tooth</span><span class="beat">second tooth</span><span class="beat">long shaft down</span><span class="beat">ki!—it turns</span></div>
       </div>
     </div>
   </div>
@@ -169,14 +171,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🐦</text><path class="sstroke" d="M60.66,15c0.5,1.62,0.35,5.44-1,7.38c-6.75,9.62-14.3,19.08-18.62,24.5c-4,5-3.79,7.03-0.88,11c5.5,7.5,12.75,18.75,17.62,27.25c1.48,2.59,2.75,4.75,4.5,8.62"/></svg>
-        <div class="key">🐦 Cuckoo beak</div>
-        <div class="hook">one open beak going 'ku-ku'</div>
+        <svg class="art" viewBox="0 0 109 109"><path class="sstroke" d="M60.66,15c0.5,1.62,0.35,5.44-1,7.38c-6.75,9.62-14.3,19.08-18.62,24.5c-4,5-3.79,7.03-0.88,11c5.5,7.5,12.75,18.75,17.62,27.25c1.48,2.59,2.75,4.75,4.5,8.62"/><text x="72" y="49" font-size="13" font-family="Arial,Helvetica,sans-serif" font-style="italic" fill="#7a756a">coo</text></svg>
+        <div class="key">Open beak</div>
+        <div class="hook">the &lt; is a beak opening to the right, saying 'coo'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"one beak — 'kuuu'"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the beak opens — coo!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M60.66,15c0.5,1.62,0.35,5.44-1,7.38c-6.75,9.62-14.3,19.08-18.62,24.5c-4,5-3.79,7.03-0.88,11c5.5,7.5,12.75,18.75,17.62,27.25c1.48,2.59,2.75,4.75,4.5,8.62"/></svg>
-        <div class="chant"><span class="beat">one beak — 'kuuu'</span></div>
+        <div class="chant"><span class="beat">the beak opens — coo!</span></div>
       </div>
     </div>
   </div>
@@ -186,14 +188,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🦵</text><path class="sstroke" d="M24.67,19.75c1.25,1.5,2.62,3.75,2.12,6.38c-3,15.88-6.5,29.5-4.88,44.62c2.02,18.84,2.25,4.75,6.75-3.5"/><path class="sstroke" d="M53.67,38.62c2.12,1.38,4.28,1.89,6.88,1.5c8.25-1.25,15.39-2.57,20.62-4c2.76-0.74,5.26-1.12,6.88-1.12"/><path class="sstroke" d="M71.67,14.38c2.13,1.37,2.88,3.35,2.88,5.12c0,11.62,0.12,20.38,0.12,30.12c0,20.75-0.62,30.88-12.5,42.25"/></svg>
-        <div class="key">🦵 Kick</div>
-        <div class="hook">stand tall, then kick — 'ke'</div>
+        <svg class="art" viewBox="0 0 109 109"><g opacity="0.7"><rect x="20" y="34" width="70" height="11" rx="3" fill="#bcd0d6"/><rect x="35" y="28" width="23" height="21" rx="4" fill="#e3edee" stroke="#7fa6ad" stroke-width="1.5"/><circle cx="46.5" cy="38.5" r="1.6" fill="#7fa6ad"/><path d="M46.5,38.5 L46.5,32.5 M46.5,38.5 L51,40.5" stroke="#7fa6ad" stroke-width="1.2" fill="none" stroke-linecap="round"/></g><path class="sstroke" d="M24.67,19.75c1.25,1.5,2.62,3.75,2.12,6.38c-3,15.88-6.5,29.5-4.88,44.62c2.02,18.84,2.25,4.75,6.75-3.5"/><path class="sstroke" d="M53.67,38.62c2.12,1.38,4.28,1.89,6.88,1.5c8.25-1.25,15.39-2.57,20.62-4c2.76-0.74,5.26-1.12,6.88-1.12"/><path class="sstroke" d="M71.67,14.38c2.13,1.37,2.88,3.35,2.88,5.12c0,11.62,0.12,20.38,0.12,30.12c0,20.75-0.62,30.88-12.5,42.25"/></svg>
+        <div class="key">Tokei (wristwatch)</div>
+        <div class="hook">a diagram for your watch: verticals = the forearm, cross = where the to-KE-i straps on</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"stand up tall"},{"stroke":2,"to":0,"text":"the body"},{"stroke":3,"to":0,"text":"kick! — ke"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;one side of the arm…&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;strap on your to-KE-i ⌚&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;…and the other side&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M24.67,19.75c1.25,1.5,2.62,3.75,2.12,6.38c-3,15.88-6.5,29.5-4.88,44.62c2.02,18.84,2.25,4.75,6.75-3.5"/><path class="mstroke" data-i="1" pathLength="1" d="M53.67,38.62c2.12,1.38,4.28,1.89,6.88,1.5c8.25-1.25,15.39-2.57,20.62-4c2.76-0.74,5.26-1.12,6.88-1.12"/><path class="mstroke" data-i="2" pathLength="1" d="M71.67,14.38c2.13,1.37,2.88,3.35,2.88,5.12c0,11.62,0.12,20.38,0.12,30.12c0,20.75-0.62,30.88-12.5,42.25"/></svg>
-        <div class="chant"><span class="beat">stand up tall</span><span class="beat">the body</span><span class="beat">kick! — ke</span></div>
+        <div class="chant"><span class="beat">one side of the arm…</span><span class="beat">strap on your to-KE-i ⌚</span><span class="beat">…and the other side</span></div>
       </div>
     </div>
   </div>
@@ -203,14 +205,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🐛</text><path class="sstroke" d="M34.75,26.75c1.12,0.88,2.91,2.01,6,1.5c7.62-1.25,14.11-2.56,22.38-2.62c15.5-0.12,5.88,5-5.75,9"/><path class="sstroke" d="M30,68.12c2.25,14.5,15.26,17.96,31,16.75c6.5-0.5,11.88-1.25,17.62-2.88"/></svg>
-        <div class="key">🐛 Two caterpillars</div>
-        <div class="hook">two little curls, 'ko-ko'</div>
+        <svg class="art" viewBox="0 0 109 109"><path class="sstroke" d="M34.75,26.75c1.12,0.88,2.91,2.01,6,1.5c7.62-1.25,14.11-2.56,22.38-2.62c15.5-0.12,5.88,5-5.75,9"/><path class="sstroke" d="M30,68.12c2.25,14.5,15.26,17.96,31,16.75c6.5-0.5,11.88-1.25,17.62-2.88"/><circle cx="58" cy="30" r="2.8" fill="#13182B"/><circle cx="77" cy="80" r="2.8" fill="#13182B"/></svg>
+        <div class="key">Two caterpillars</div>
+        <div class="hook">two caterpillars inching — 'ko-ko'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"top curl — ko"},{"stroke":2,"to":0,"text":"bottom curl — ko"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;top one — ko&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;bottom one — ko&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M34.75,26.75c1.12,0.88,2.91,2.01,6,1.5c7.62-1.25,14.11-2.56,22.38-2.62c15.5-0.12,5.88,5-5.75,9"/><path class="mstroke" data-i="1" pathLength="1" d="M30,68.12c2.25,14.5,15.26,17.96,31,16.75c6.5-0.5,11.88-1.25,17.62-2.88"/></svg>
-        <div class="chant"><span class="beat">top curl — ko</span><span class="beat">bottom curl — ko</span></div>
+        <div class="chant"><span class="beat">top one — ko</span><span class="beat">bottom one — ko</span></div>
       </div>
     </div>
   </div>
@@ -222,12 +224,12 @@
         <div class="sty">STATIC</div>
         <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🪚</text><path class="sstroke" d="M27,38.9c2.42,1.33,5.38,1.47,8.32,1.06c8.79-1.24,28.67-7.76,34.15-10.43c2.79-1.36,3.78-1.91,6.28-3.53"/><path class="sstroke" d="M41.5,13.88c1.5,0.88,3.63,2.94,4.5,5.12c5.5,13.75,15.25,27.62,26.87,39.5c7.98,8.15,6.38,10-6,3.12"/><path class="sstroke" d="M35.25,80.5c4.5,11.75,20.88,12.5,38.38,7.5"/></svg>
         <div class="key">🪚 Saw</div>
-        <div class="hook">cross, hook, and saw — 'sa-sa'</div>
+        <div class="hook">lay your board, set the saw across it, grab the handle and saw</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"cross the top"},{"stroke":2,"to":0,"text":"hook down"},{"stroke":3,"to":0,"text":"saw it — sa!"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;put down your board&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;lay the saw across&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;grab the handle — saw!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M27,38.9c2.42,1.33,5.38,1.47,8.32,1.06c8.79-1.24,28.67-7.76,34.15-10.43c2.79-1.36,3.78-1.91,6.28-3.53"/><path class="mstroke" data-i="1" pathLength="1" d="M41.5,13.88c1.5,0.88,3.63,2.94,4.5,5.12c5.5,13.75,15.25,27.62,26.87,39.5c7.98,8.15,6.38,10-6,3.12"/><path class="mstroke" data-i="2" pathLength="1" d="M35.25,80.5c4.5,11.75,20.88,12.5,38.38,7.5"/></svg>
-        <div class="chant"><span class="beat">cross the top</span><span class="beat">hook down</span><span class="beat">saw it — sa!</span></div>
+        <div class="chant"><span class="beat">put down your board</span><span class="beat">lay the saw across</span><span class="beat">grab the handle — saw!</span></div>
       </div>
     </div>
   </div>
@@ -237,14 +239,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">😊</text><path class="sstroke" d="M39.12,17.5c1.25,3.12,0.93,6.74,0.38,10.25c-2.12,13.5-3,26.5-3,39.12c0,27.38,19.88,30.12,45.5,17.25"/></svg>
-        <div class="key">😊 A smile</div>
-        <div class="hook">one swoosh up like a grin — 'she'</div>
+        <svg class="art" viewBox="0 0 109 109"><text x="30" y="62" font-size="60" text-anchor="middle">😊</text><g transform="translate(24,0)"><path class="sstroke" d="M39.12,17.5c1.25,3.12,0.93,6.74,0.38,10.25c-2.12,13.5-3,26.5-3,39.12c0,27.38,19.88,30.12,45.5,17.25"/></g></svg>
+        <div class="key">She has long hair!</div>
+        <div class="hook">the long stroke is her hair — big face on the left, hair flows right</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"one curve up — 'shiii'"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;one swoosh down — &#39;shiii&#39;&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M39.12,17.5c1.25,3.12,0.93,6.74,0.38,10.25c-2.12,13.5-3,26.5-3,39.12c0,27.38,19.88,30.12,45.5,17.25"/></svg>
-        <div class="chant"><span class="beat">one curve up — 'shiii'</span></div>
+        <div class="chant"><span class="beat">one swoosh down — 'shiii'</span></div>
       </div>
     </div>
   </div>
@@ -254,14 +256,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🌀</text><path class="sstroke" d="M15.5,37.12c2.88,2.12,6.94,1.51,12.75,0.25c16.12-3.5,36.14-5.38,46.62-6.5c7-0.75,11.88-0.62,17.75,0.12"/><path class="sstroke" d="M57.62,13.38c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,35.12,0,40.75c0,14.62-15.62,16.38-15.62,1.75c0-14.25,18-14.12,18,6.38c0,13.25-7.75,21.5-16,28.38"/></svg>
-        <div class="key">🌀 Swing</div>
-        <div class="hook">a loop with a tail — swing through, 'su'</div>
+        <svg class="art" viewBox="0 0 109 109"><rect x="6" y="37" width="97" height="58" rx="2" fill="#a9c6db" opacity="0.4"/><path d="M14,54 q8,-3 16,0 t16,0 t16,0 t16,0" stroke="#7fa6ad" stroke-width="1.5" fill="none" opacity="0.5"/><path d="M52,32 l-3,-5 M58,31 l0,-6 M64,32 l3,-5" stroke="#7fa6ad" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.7"/><path class="sstroke" d="M15.5,37.12c2.88,2.12,6.94,1.51,12.75,0.25c16.12-3.5,36.14-5.38,46.62-6.5c7-0.75,11.88-0.62,17.75,0.12"/><path class="sstroke" d="M57.62,13.38c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,35.12,0,40.75c0,14.62-15.62,16.38-15.62,1.75c0-14.25,18-14.12,18,6.38c0,13.25-7.75,21.5-16,28.38"/></svg>
+        <div class="key">SU-wimming dive</div>
+        <div class="hook">the top stroke is the water’s surface — dive down through it, SU-wim!</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"down the pole"},{"stroke":2,"to":0,"text":"loop-and-swiiing — su"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the water’s surface…&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;dive through — SU-wim! 🏊&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M15.5,37.12c2.88,2.12,6.94,1.51,12.75,0.25c16.12-3.5,36.14-5.38,46.62-6.5c7-0.75,11.88-0.62,17.75,0.12"/><path class="mstroke" data-i="1" pathLength="1" d="M57.62,13.38c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,35.12,0,40.75c0,14.62-15.62,16.38-15.62,1.75c0-14.25,18-14.12,18,6.38c0,13.25-7.75,21.5-16,28.38"/></svg>
-        <div class="chant"><span class="beat">down the pole</span><span class="beat">loop-and-swiiing — su</span></div>
+        <div class="chant"><span class="beat">the water’s surface…</span><span class="beat">dive through — SU-wim! 🏊</span></div>
       </div>
     </div>
   </div>
@@ -275,7 +277,7 @@
         <div class="key">🎯 Set &amp; aim</div>
         <div class="hook">cross, stand, swoosh — ready, 'set'!</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"cross bar"},{"stroke":2,"to":0,"text":"the vertical"},{"stroke":3,"to":0,"text":"swoosh — set!"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;cross bar&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;the vertical&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;swoosh — set!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M16.5,49.93c2.88,2.42,6.86,1.57,12.75,0.53c19-3.34,33-5.72,47.12-7.64c6.99-0.95,11.88-1.21,17.75-0.36"/><path class="mstroke" data-i="1" pathLength="1" d="M69.74,17.75c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,17.88,0,23.5c0,25.62-5.75,23.25-11.88,19"/><path class="mstroke" data-i="2" pathLength="1" d="M35.62,26.25c2,1.5,2.75,3.25,2.75,5.88c0,10.38,0,28.38,0,34c0,14.5,6.38,19.55,20.14,19.55c10.24,0,13.74,0.07,22.61-1.68"/></svg>
         <div class="chant"><span class="beat">cross bar</span><span class="beat">the vertical</span><span class="beat">swoosh — set!</span></div>
@@ -288,14 +290,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🧵</text><path class="sstroke" d="M38.4,22c1.88,1.25,4.98,1.05,7.5,0.38c6.5-1.75,13.25-3.75,19.38-5.38c4.63-1.23,7.18,2.06,3.62,5.25c-12.12,10.87-31.14,24.4-40,30.25c-6.25,4.12-5.88,5.75,1.38,3.88c17.08-4.42,35.96-8.68,50.12-10.38c9.38-1.12,9.62,0.12,0.5,1.38c-15.82,2.17-34.38,14.25-34.38,26.5c0,12.88,11.62,20.38,31.5,16.62"/></svg>
-        <div class="key">🧵 Sewing thread</div>
-        <div class="hook">one zig-zag stitch — 'so' (sew)</div>
+        <svg class="art" viewBox="0 0 109 109"><line x1="8" y1="40" x2="101" y2="40" stroke="#c9b89a" stroke-width="2" stroke-dasharray="3 3" opacity="0.5"/><line x1="8" y1="74" x2="101" y2="74" stroke="#c9b89a" stroke-width="2" stroke-dasharray="3 3" opacity="0.5"/><path class="sstroke" d="M38.4,22c1.88,1.25,4.98,1.05,7.5,0.38c6.5-1.75,13.25-3.75,19.38-5.38c4.63-1.23,7.18,2.06,3.62,5.25c-12.12,10.87-31.14,24.4-40,30.25c-6.25,4.12-5.88,5.75,1.38,3.88c17.08-4.42,35.96-8.68,50.12-10.38c9.38-1.12,9.62,0.12,0.5,1.38c-15.82,2.17-34.38,14.25-34.38,26.5c0,12.88,11.62,20.38,31.5,16.62"/></svg>
+        <div class="key">A stitch</div>
+        <div class="hook">a back-and-forth stitch through fabric — so (sew)</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"one zig-zag — 'sooo'"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;stitch in and out — sooo!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
-        <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M38.4,22c1.88,1.25,4.98,1.05,7.5,0.38c6.5-1.75,13.25-3.75,19.38-5.38c4.63-1.23,7.18,2.06,3.62,5.25c-12.12,10.87-31.14,24.4-40,30.25c-6.25,4.12-5.88,5.75,1.38,3.88c17.08-4.42,35.96-8.68,50.12-10.38c9.38-1.12,9.62,0.12,0.5,1.38c-15.82,2.17-34.38,14.25-34.38,26.5c0,12.88,11.62,20.38,31.5,16.62"/></svg>
-        <div class="chant"><span class="beat">one zig-zag — 'sooo'</span></div>
+        <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M38.4,22c1.88,1.25,4.98,1.05,7.5,0.38c6.5-1.75,13.25-3.75,19.38-5.38c4.63-1.23,7.18,2.06,3.62,5.25c-12.12,10.87-31.14,24.4-40,30.25c-6.25,4.12-5.88,5.75,1.38,3.88c17.08-4.42,35.96-8.68,50.12-10.38c9.38-1.12,9.62,0.12,0.5,1.38c-15.82,2.17-34.38,14.25-34.38,26.5c0,12.88,11.62,20.38,31.5,16.62"/><circle r="3" fill="#E2553B"><animateMotion dur="1.8s" repeatCount="indefinite" path="M38.4,22c1.88,1.25,4.98,1.05,7.5,0.38c6.5-1.75,13.25-3.75,19.38-5.38c4.63-1.23,7.18,2.06,3.62,5.25c-12.12,10.87-31.14,24.4-40,30.25c-6.25,4.12-5.88,5.75,1.38,3.88c17.08-4.42,35.96-8.68,50.12-10.38c9.38-1.12,9.62,0.12,0.5,1.38c-15.82,2.17-34.38,14.25-34.38,26.5c0,12.88,11.62,20.38,31.5,16.62"/></circle></svg>
+        <div class="chant"><span class="beat">stitch in and out — sooo!</span></div>
       </div>
     </div>
   </div>
@@ -305,14 +307,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🎉</text><path class="sstroke" d="M24.38,35.38c1.38,0.62,3.88,1.51,6.38,1.12c6.5-1,16.25-2.88,24.88-4.75c2.64-0.57,5.38-1.5,7.62-2.38"/><path class="sstroke" d="M45,16.88c0.75,1.25,0.87,3.62,0.38,5.25c-6.35,20.94-12.75,36.37-18.88,52.37c-1.36,3.56-4.75,11.75-6,14.62"/><path class="sstroke" d="M56.38,53.25c12.38-2.75,18.25-3.7,23.62-3.12c15.12,1.62-1.12,2.25-4.25,4.88"/><path class="sstroke" d="M54.13,82.25c4.38,7,14.25,8.12,34.5,5.62"/></svg>
-        <div class="key">🎉 Ta-da!</div>
-        <div class="hook">draw it and finish with a 'ta-da!'</div>
+        <svg class="art" viewBox="0 0 109 109"><path class="sstroke" d="M24.38,35.38c1.38,0.62,3.88,1.51,6.38,1.12c6.5-1,16.25-2.88,24.88-4.75c2.64-0.57,5.38-1.5,7.62-2.38"/><path class="sstroke" d="M45,16.88c0.75,1.25,0.87,3.62,0.38,5.25c-6.35,20.94-12.75,36.37-18.88,52.37c-1.36,3.56-4.75,11.75-6,14.62"/><path class="sstroke" d="M56.38,53.25c12.38-2.75,18.25-3.7,23.62-3.12c15.12,1.62-1.12,2.25-4.25,4.88"/><path class="sstroke" d="M54.13,82.25c4.38,7,14.25,8.12,34.5,5.62"/><g class="blink" fill="none" stroke="#E2553B" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round"><path d="M56.38,53.25c12.38-2.75,18.25-3.7,23.62-3.12c15.12,1.62-1.12,2.25-4.25,4.88"/><path d="M54.13,82.25c4.38,7,14.25,8.12,34.5,5.62"/></g></svg>
+        <div class="key">It spells “Ta”</div>
+        <div class="hook">black strokes = the t, the red bottom strokes = the a — they blink</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"cross the top"},{"stroke":2,"to":0,"text":"down the stem"},{"stroke":3,"to":0,"text":"ta-"},{"stroke":4,"to":0,"text":"-da! the box"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;cross the t…&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;down the t…&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;start the a…&quot;},{&quot;stroke&quot;:4,&quot;to&quot;:0,&quot;text&quot;:&quot;close it — Ta!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M24.38,35.38c1.38,0.62,3.88,1.51,6.38,1.12c6.5-1,16.25-2.88,24.88-4.75c2.64-0.57,5.38-1.5,7.62-2.38"/><path class="mstroke" data-i="1" pathLength="1" d="M45,16.88c0.75,1.25,0.87,3.62,0.38,5.25c-6.35,20.94-12.75,36.37-18.88,52.37c-1.36,3.56-4.75,11.75-6,14.62"/><path class="mstroke" data-i="2" pathLength="1" d="M56.38,53.25c12.38-2.75,18.25-3.7,23.62-3.12c15.12,1.62-1.12,2.25-4.25,4.88"/><path class="mstroke" data-i="3" pathLength="1" d="M54.13,82.25c4.38,7,14.25,8.12,34.5,5.62"/></svg>
-        <div class="chant"><span class="beat">cross the top</span><span class="beat">down the stem</span><span class="beat">ta-</span><span class="beat">-da! the box</span></div>
+        <div class="chant"><span class="beat">cross the t…</span><span class="beat">down the t…</span><span class="beat">start the a…</span><span class="beat">close it — Ta!</span></div>
       </div>
     </div>
   </div>
@@ -322,14 +324,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🐔</text><path class="sstroke" d="M24.5,32.62c1.38,0.62,3.88,1.51,6.38,1.12c6.5-1,18.25-4.12,26.88-6c2.64-0.57,5.38-1.5,7.62-2.38"/><path class="sstroke" d="M45.62,15.62c0.75,1.25,0.71,3.58,0.38,5.25c-3,15-4.25,22.59-8.38,38.62c-3.25,12.62-5.38,11.12,3.62,4.38c8.29-6.21,19.75-9.5,28.5-9.5c8.62,0,14.58,5.88,14.5,14.5c-0.12,13.5-16.5,20.62-29.88,23.25"/></svg>
-        <div class="key">🐔 A chick</div>
-        <div class="hook">little beak, big belly — 'chi-ck'</div>
+        <svg class="art" viewBox="0 0 109 109"><text x="50" y="80" font-size="66" font-family="Arial,Helvetica,sans-serif" font-style="italic" fill="#cfd9ee" opacity="0.8" text-anchor="middle">5</text><path class="sstroke" d="M24.5,32.62c1.38,0.62,3.88,1.51,6.38,1.12c6.5-1,18.25-4.12,26.88-6c2.64-0.57,5.38-1.5,7.62-2.38"/><path class="sstroke" d="M45.62,15.62c0.75,1.25,0.71,3.58,0.38,5.25c-3,15-4.25,22.59-8.38,38.62c-3.25,12.62-5.38,11.12,3.62,4.38c8.29-6.21,19.75-9.5,28.5-9.5c8.62,0,14.58,5.88,14.5,14.5c-0.12,13.5-16.5,20.62-29.88,23.25"/></svg>
+        <div class="key">The cheapest 5</div>
+        <div class="hook">ち looks like a 5 — “the CHEApest 5 I’ve ever seen” (chi)</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"little beak"},{"stroke":2,"to":0,"text":"big belly — chiii"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the CHEApest…&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;…5 I’ve ever seen!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M24.5,32.62c1.38,0.62,3.88,1.51,6.38,1.12c6.5-1,18.25-4.12,26.88-6c2.64-0.57,5.38-1.5,7.62-2.38"/><path class="mstroke" data-i="1" pathLength="1" d="M45.62,15.62c0.75,1.25,0.71,3.58,0.38,5.25c-3,15-4.25,22.59-8.38,38.62c-3.25,12.62-5.38,11.12,3.62,4.38c8.29-6.21,19.75-9.5,28.5-9.5c8.62,0,14.58,5.88,14.5,14.5c-0.12,13.5-16.5,20.62-29.88,23.25"/></svg>
-        <div class="chant"><span class="beat">little beak</span><span class="beat">big belly — chiii</span></div>
+        <div class="chant"><span class="beat">the CHEApest…</span><span class="beat">…5 I’ve ever seen!</span></div>
       </div>
     </div>
   </div>
@@ -339,14 +341,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🌊</text><path class="sstroke" d="M14,44.75c1.88,1.62,4.68,2.09,8.12,0.62c17.88-7.62,30-11.12,44.88-10.88c12.56,0.21,22.98,7.17,22.87,19.17c-0.18,18.77-24.75,28.71-45.01,32.08"/></svg>
-        <div class="key">🌊 Tsunami</div>
-        <div class="hook">one curling wave — tsu-nami!</div>
+        <svg class="art" viewBox="0 0 109 109"><text x="54" y="74" text-anchor="middle" font-size="56" transform="translate(108,0) scale(-1,1)">🌊</text><path class="sstroke" d="M14,44.75c1.88,1.62,4.68,2.09,8.12,0.62c17.88-7.62,30-11.12,44.88-10.88c12.56,0.21,22.98,7.17,22.87,19.17c-0.18,18.77-24.75,28.71-45.01,32.08"/></svg>
+        <div class="key">Tsunami</div>
+        <div class="hook">a tsunami wave with its opening facing left (tsu)</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"one swoop — 'tsuuu'"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the wave curls — tsu-nami!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M14,44.75c1.88,1.62,4.68,2.09,8.12,0.62c17.88-7.62,30-11.12,44.88-10.88c12.56,0.21,22.98,7.17,22.87,19.17c-0.18,18.77-24.75,28.71-45.01,32.08"/></svg>
-        <div class="chant"><span class="beat">one swoop — 'tsuuu'</span></div>
+        <div class="chant"><span class="beat">the wave curls — tsu-nami!</span></div>
       </div>
     </div>
   </div>
@@ -360,7 +362,7 @@
         <div class="key">🖐️ Hand (te)</div>
         <div class="hook">'te' = 手 = hand; the stroke is the arm</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"one bend — reach out, 'te'"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;one bend — reach out, &#39;te&#39;&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M20.5,26.38c1.87,1.62,4.42,1.97,8.12,1.37c21.75-3.5,33-5.12,50.12-8.38c12.34-2.34,13-0.88,0.38,1.38c-17.89,3.19-33.78,19.12-33.78,37.62c0,20.5,17.91,30.25,35.16,30.25"/></svg>
         <div class="chant"><span class="beat">one bend — reach out, 'te'</span></div>
@@ -373,14 +375,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🦶</text><path class="sstroke" d="M35.5,18.38c1.74,0.74,3.62,2.62,4.12,5.37c0.5,2.75,4.75,25,5.38,28.12"/><path class="sstroke" d="M78.12,25.5c0.25,1.88,0.04,4.09-2.25,5.75c-6.37,4.63-13.22,8.49-22.75,15.25c-12.88,9.12-21.62,18.38-21.62,27.5c0,10.12,8.5,13.88,26.88,13.88c6.25,0,14.75-0.12,21.62-1.25"/></svg>
-        <div class="key">🦶 Toe + needle</div>
-        <div class="hook">a needle stuck in a toe — 'toe'</div>
+        <svg class="art" viewBox="0 0 109 109"><ellipse cx="56" cy="66" rx="27" ry="23" fill="#e8cdaf" opacity="0.5"/><path class="sstroke" d="M35.5,18.38c1.74,0.74,3.62,2.62,4.12,5.37c0.5,2.75,4.75,25,5.38,28.12"/><path class="sstroke" d="M78.12,25.5c0.25,1.88,0.04,4.09-2.25,5.75c-6.37,4.63-13.22,8.49-22.75,15.25c-12.88,9.12-21.62,18.38-21.62,27.5c0,10.12,8.5,13.88,26.88,13.88c6.25,0,14.75-0.12,21.62-1.25"/><path d="M37,18 L46,52" stroke="#7a5a3a" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M41,30 l5,-3 M43,41 l5,-3" stroke="#7a5a3a" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+        <div class="key">Thorn in the lion’s toe</div>
+        <div class="hook">the lion’s toe (the curve) with a thorn stuck in it — from the fable (to)</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"the needle"},{"stroke":2,"to":0,"text":"the toe curve — to!"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the thorn…&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;…in the lion’s toe — to!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M35.5,18.38c1.74,0.74,3.62,2.62,4.12,5.37c0.5,2.75,4.75,25,5.38,28.12"/><path class="mstroke" data-i="1" pathLength="1" d="M78.12,25.5c0.25,1.88,0.04,4.09-2.25,5.75c-6.37,4.63-13.22,8.49-22.75,15.25c-12.88,9.12-21.62,18.38-21.62,27.5c0,10.12,8.5,13.88,26.88,13.88c6.25,0,14.75-0.12,21.62-1.25"/></svg>
-        <div class="chant"><span class="beat">the needle</span><span class="beat">the toe curve — to!</span></div>
+        <div class="chant"><span class="beat">the thorn…</span><span class="beat">…in the lion’s toe — to!</span></div>
       </div>
     </div>
   </div>
@@ -390,11 +392,11 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🏟️</text><path class="sstroke" d="M22.88,28.96c1.18,0.58,3.3,1.1,5.47,1.05c5.53-0.13,10.9-0.98,16.52-2.42c4.82-1.23,9.13-3.12,11.38-4.22"/><path class="sstroke" d="M42.99,14c0.63,0.89,0.56,2.52,0.31,3.72c-2.96,14.16-7.95,26.56-14.25,37.87c-2.05,3.69-4.25,7.24-6.55,10.65"/><path class="sstroke" d="M72.26,23.25c6.88,2.5,12.62,5.62,14.75,9.5c4.06,7.41-0.25,3.38-3.5,3.88"/><path class="sstroke" d="M68.88,44.62c-1,1.88-2.14,5.24-1.88,8.25c0.62,7,1.5,13.12,1.5,20.62c0,20-27.88,19.75-27.88,9.38c0-5.62,8.25-8.25,13.88-8.25c8.75,0,21.5,3.25,29.75,11.5"/></svg>
-        <div class="key">🏟️ The cheer</div>
-        <div class="hook">cross = na-na, tick = hey, curl = 👋 goodbye</div>
+        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">👋</text><path class="sstroke" d="M22.88,28.96c1.18,0.58,3.3,1.1,5.47,1.05c5.53-0.13,10.9-0.98,16.52-2.42c4.82-1.23,9.13-3.12,11.38-4.22"/><path class="sstroke" d="M42.99,14c0.63,0.89,0.56,2.52,0.31,3.72c-2.96,14.16-7.95,26.56-14.25,37.87c-2.05,3.69-4.25,7.24-6.55,10.65"/><path class="sstroke" d="M72.26,23.25c6.88,2.5,12.62,5.62,14.75,9.5c4.06,7.41-0.25,3.38-3.5,3.88"/><path class="sstroke" d="M68.88,44.62c-1,1.88-2.14,5.24-1.88,8.25c0.62,7,1.5,13.12,1.5,20.62c0,20-27.88,19.75-27.88,9.38c0-5.62,8.25-8.25,13.88-8.25c8.75,0,21.5,3.25,29.75,11.5"/></svg>
+        <div class="key">👋 The cheer</div>
+        <div class="hook">na-na (cross), hey (tick), and the curl waves 👋 goodbye</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"na na na na"},{"stroke":2,"to":0,"text":"na na na na"},{"stroke":3,"to":0,"text":"hey hey hey"},{"stroke":4,"to":0,"text":"👋 goodbye"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;na na na na&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;na na na na&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;hey hey hey&quot;},{&quot;stroke&quot;:4,&quot;to&quot;:0,&quot;text&quot;:&quot;👋 goodbye&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M22.88,28.96c1.18,0.58,3.3,1.1,5.47,1.05c5.53-0.13,10.9-0.98,16.52-2.42c4.82-1.23,9.13-3.12,11.38-4.22"/><path class="mstroke" data-i="1" pathLength="1" d="M42.99,14c0.63,0.89,0.56,2.52,0.31,3.72c-2.96,14.16-7.95,26.56-14.25,37.87c-2.05,3.69-4.25,7.24-6.55,10.65"/><path class="mstroke" data-i="2" pathLength="1" d="M72.26,23.25c6.88,2.5,12.62,5.62,14.75,9.5c4.06,7.41-0.25,3.38-3.5,3.88"/><path class="mstroke" data-i="3" pathLength="1" d="M68.88,44.62c-1,1.88-2.14,5.24-1.88,8.25c0.62,7,1.5,13.12,1.5,20.62c0,20-27.88,19.75-27.88,9.38c0-5.62,8.25-8.25,13.88-8.25c8.75,0,21.5,3.25,29.75,11.5"/></svg>
         <div class="chant"><span class="beat">na na na na</span><span class="beat">na na na na</span><span class="beat">hey hey hey</span><span class="beat">👋 goodbye</span></div>
@@ -407,14 +409,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🦵</text><path class="sstroke" d="M24.53,22.75c1.25,1.5,1.62,3.75,1.12,6.38c-3,15.88-9,32.5-7.38,47.62c2.02,18.84,4.5,5.75,8.5-3.5"/><path class="sstroke" d="M53.2,30.64c0.96,0.79,2.44,1.58,5.1,1.35c6.98-0.61,15.01-3.3,22.04-3.36c13.19-0.11,1.5,3.75-8.39,7.35"/><path class="sstroke" d="M52.53,68c1.76,12.92,11.92,16.01,24.23,14.93c5.08-0.45,8.9-0.8,14.27-2.06"/></svg>
-        <div class="key">🦵 Knee</div>
-        <div class="hook">sounds like 'knee'; two little knees</div>
+        <svg class="art" viewBox="0 0 109 109"><rect x="12" y="22" width="13" height="58" rx="6" fill="#ecd9c6" opacity="0.4"/><ellipse cx="70" cy="55" rx="20" ry="24" fill="#ecd9c6" opacity="0.55"/><ellipse cx="70" cy="55" rx="20" ry="24" fill="none" stroke="#c9a98c" stroke-width="1.5" opacity="0.5"/><path class="sstroke" d="M24.53,22.75c1.25,1.5,1.62,3.75,1.12,6.38c-3,15.88-9,32.5-7.38,47.62c2.02,18.84,4.5,5.75,8.5-3.5"/><path class="sstroke" d="M53.2,30.64c0.96,0.79,2.44,1.58,5.1,1.35c6.98-0.61,15.01-3.3,22.04-3.36c13.19-0.11,1.5,3.75-8.39,7.35"/><path class="sstroke" d="M52.53,68c1.76,12.92,11.92,16.01,24.23,14.93c5.08-0.45,8.9-0.8,14.27-2.06"/></svg>
+        <div class="key">Kneecap close-up</div>
+        <div class="hook">right strokes = the kneecap (patella), left stroke = the side of the leg — knee (ni)</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"the post"},{"stroke":2,"to":0,"text":"knee one"},{"stroke":3,"to":0,"text":"knee two — niii"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the side of the leg…&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;top of the kneecap…&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;round the cap — knee!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M24.53,22.75c1.25,1.5,1.62,3.75,1.12,6.38c-3,15.88-9,32.5-7.38,47.62c2.02,18.84,4.5,5.75,8.5-3.5"/><path class="mstroke" data-i="1" pathLength="1" d="M53.2,30.64c0.96,0.79,2.44,1.58,5.1,1.35c6.98-0.61,15.01-3.3,22.04-3.36c13.19-0.11,1.5,3.75-8.39,7.35"/><path class="mstroke" data-i="2" pathLength="1" d="M52.53,68c1.76,12.92,11.92,16.01,24.23,14.93c5.08-0.45,8.9-0.8,14.27-2.06"/></svg>
-        <div class="chant"><span class="beat">the post</span><span class="beat">knee one</span><span class="beat">knee two — niii</span></div>
+        <div class="chant"><span class="beat">the side of the leg…</span><span class="beat">top of the kneecap…</span><span class="beat">round the cap — knee!</span></div>
       </div>
     </div>
   </div>
@@ -424,14 +426,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">🍜</text><path class="sstroke" d="M25.38,28.5c2,1.38,2.97,3.23,3.38,5.88c1.87,12.18,4.12,23.92,8.54,34.67c1.79,4.36,3.96,8.33,6.84,12.46"/><path class="sstroke" d="M57.12,19.25c0.88,2.12,1.06,3.79,0.62,5.88c-3.12,15-13.14,39.81-18.12,48.62c-11.87,21-20.62,1.25-20.62-4.5c0-22.63,43.75-44.25,62.36-29.59c7.66,6.03,9.8,14.58,9.14,23.34c-2,26.75-32.88,28.38-32.88,16.88c0-9.38,17.38-7.12,27.12-1.12c3.1,1.91,7.25,5.25,9.5,7.5"/></svg>
-        <div class="key">🍜 Noodles</div>
-        <div class="hook">a bowl of noodles with a swirl — 'nu'</div>
+        <svg class="art" viewBox="0 0 109 109"><circle cx="54" cy="58" r="40" fill="#e8ddc8" opacity="0.5"/><circle cx="54" cy="58" r="40" fill="none" stroke="#c9b89a" stroke-width="2" opacity="0.6"/><circle cx="54" cy="58" r="33" fill="none" stroke="#c9b89a" stroke-width="1" opacity="0.4"/><path class="sstroke" d="M25.38,28.5c2,1.38,2.97,3.23,3.38,5.88c1.87,12.18,4.12,23.92,8.54,34.67c1.79,4.36,3.96,8.33,6.84,12.46"/><path class="sstroke" d="M57.12,19.25c0.88,2.12,1.06,3.79,0.62,5.88c-3.12,15-13.14,39.81-18.12,48.62c-11.87,21-20.62,1.25-20.62-4.5c0-22.63,43.75-44.25,62.36-29.59c7.66,6.03,9.8,14.58,9.14,23.34c-2,26.75-32.88,28.38-32.88,16.88c0-9.38,17.38-7.12,27.12-1.12c3.1,1.91,7.25,5.25,9.5,7.5"/></svg>
+        <div class="key">Noodles (top-down)</div>
+        <div class="hook">a bowl of noodles seen from above — the swirl is the noodles (nu)</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"cross down"},{"stroke":2,"to":0,"text":"swirl the noodles — nuuu"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the chopstick…&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;swirl the noodles — nuuu&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M25.38,28.5c2,1.38,2.97,3.23,3.38,5.88c1.87,12.18,4.12,23.92,8.54,34.67c1.79,4.36,3.96,8.33,6.84,12.46"/><path class="mstroke" data-i="1" pathLength="1" d="M57.12,19.25c0.88,2.12,1.06,3.79,0.62,5.88c-3.12,15-13.14,39.81-18.12,48.62c-11.87,21-20.62,1.25-20.62-4.5c0-22.63,43.75-44.25,62.36-29.59c7.66,6.03,9.8,14.58,9.14,23.34c-2,26.75-32.88,28.38-32.88,16.88c0-9.38,17.38-7.12,27.12-1.12c3.1,1.91,7.25,5.25,9.5,7.5"/></svg>
-        <div class="chant"><span class="beat">cross down</span><span class="beat">swirl the noodles — nuuu</span></div>
+        <div class="chant"><span class="beat">the chopstick…</span><span class="beat">swirl the noodles — nuuu</span></div>
       </div>
     </div>
   </div>
@@ -445,7 +447,7 @@
         <div class="key">🐱 Neko (cat)</div>
         <div class="hook">'ne' for neko; the loop is its tail</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"the post"},{"stroke":2,"to":0,"text":"loop the tail — ne"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the post&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;loop the tail — ne&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M33.29,14.5c1.62,1.62,2.1,3.21,1.88,5.88c-1.03,11.93-2.06,31.66-2.53,53.12c-0.1,4.62-0.18,9.31-0.22,14"/><path class="mstroke" data-i="1" pathLength="1" d="M17.16,37.88c1.62,0.88,3.25,1.38,5.62,0.75c2.14-0.56,7.8-2.31,12.37-4.03c6.26-2.35,6.88-1.47,3.12,3.63c-5.56,7.53-13.02,17.38-18.48,26.77c-5.6,9.62-3.45,8.3,2,3c19.12-18.62,38.5-39.12,54.12-39.12c11.38,0,12.88,11.25,12.88,32.5c0,28.62-30.18,24.88-30.18,16.26c0-9.63,18.73-7.82,28.06-1.88c2.75,1.75,5.88,4.88,7.5,6.75"/></svg>
         <div class="chant"><span class="beat">the post</span><span class="beat">loop the tail — ne</span></div>
@@ -462,7 +464,7 @@
         <div class="key">🚫 No sign</div>
         <div class="hook">one big swirl — like a 'no' circle</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"one spiral — 'nooo'"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;one spiral — &#39;nooo&#39;&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M53.82,28.62c1,1.5,1.34,4.12,0.88,6.62c-1.75,9.5-6.89,25-10.75,33.12c-9.63,20.26-16.55,14.74-24.38-1.98c-9.13-19.5,23.5-48.88,50.63-40.38c32.38,10.15,28,54.62-4.75,60.88"/></svg>
         <div class="chant"><span class="beat">one spiral — 'nooo'</span></div>
@@ -479,7 +481,7 @@
         <div class="key">😄 Ha-ha!</div>
         <div class="hook">a laughing face — 'ha-ha-ha'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"the post"},{"stroke":2,"to":0,"text":"the cross"},{"stroke":3,"to":0,"text":"loop — ha-ha!"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the post&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;the cross&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;loop — ha-ha!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M24.51,18c1.25,1.5,2.15,4,1.62,6.62c-3.5,17.62-6.98,36.4-4,54.88c2.5,15.5,1.12,2,5.62-6.25"/><path class="mstroke" data-i="1" pathLength="1" d="M49.64,37.89c2.41,1.57,4.85,2.16,7.8,1.71c9.36-1.43,17.46-2.94,23.4-4.57c3.12-0.86,5.96-1.29,7.8-1.29"/><path class="mstroke" data-i="2" pathLength="1" d="M69.77,16.5c2.25,2.12,2.88,4.12,2.88,6.5c0,2.38,1.5,38.62,1.5,48c0,22.5-30.62,19.62-30.62,10.5c0-9.75,23.88-5.62,29.5-2.88c5.62,2.74,11.98,8.26,13.36,9.38"/></svg>
         <div class="chant"><span class="beat">the post</span><span class="beat">the cross</span><span class="beat">loop — ha-ha!</span></div>
@@ -492,14 +494,14 @@
     <div class="pair">
       <div class="mini">
         <div class="sty">STATIC</div>
-        <svg class="art" viewBox="0 0 109 109"><text class="emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">😆</text><path class="sstroke" d="M20,25.12c1.25,0.88,3.75,2.25,6.5,1.38c2.75-0.87,7.31-2.38,11.38-4.5c6-3.12,8.42-1.01,4.25,4c-27.13,32.62-23.76,58.5-1.52,62.88c18.07,3.56,37.63-16.38,35.63-56.51c-0.72-14.5-0.17-14.78,4.12-1.75c3.76,11.38,10.26,20.76,16.14,26.5"/></svg>
-        <div class="key">😆 Big grin</div>
-        <div class="hook">one smiling swoop — 'hee!'</div>
+        <svg class="art" viewBox="0 0 109 109"><path class="sstroke" d="M20,25.12c1.25,0.88,3.75,2.25,6.5,1.38c2.75-0.87,7.31-2.38,11.38-4.5c6-3.12,8.42-1.01,4.25,4c-27.13,32.62-23.76,58.5-1.52,62.88c18.07,3.56,37.63-16.38,35.63-56.51c-0.72-14.5-0.17-14.78,4.12-1.75c3.76,11.38,10.26,20.76,16.14,26.5"/><circle cx="16" cy="18" r="5" fill="#E2553B"/><circle cx="95" cy="20" r="5" fill="#E2553B"/><path d="M24,93.5 Q55,109.5 86,93.5" fill="none" stroke="#E2553B" stroke-width="3" stroke-linecap="round"/></svg>
+        <div class="key">HE has a big nose</div>
+        <div class="hook">a face — eyes upper-left &amp; right, a smile underneath, ひ is the big nose (hi=he)</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"one grin — 'heee'"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;draw HE’s big nose — hiii!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M20,25.12c1.25,0.88,3.75,2.25,6.5,1.38c2.75-0.87,7.31-2.38,11.38-4.5c6-3.12,8.42-1.01,4.25,4c-27.13,32.62-23.76,58.5-1.52,62.88c18.07,3.56,37.63-16.38,35.63-56.51c-0.72-14.5-0.17-14.78,4.12-1.75c3.76,11.38,10.26,20.76,16.14,26.5"/></svg>
-        <div class="chant"><span class="beat">one grin — 'heee'</span></div>
+        <div class="chant"><span class="beat">draw HE’s big nose — hiii!</span></div>
       </div>
     </div>
   </div>
@@ -513,7 +515,7 @@
         <div class="key">🗻 Mt. Fuji</div>
         <div class="hook">peak + scattered clouds — 'fu' (Fuji)</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"the peak"},{"stroke":2,"to":0,"text":"the slope"},{"stroke":3,"to":0,"text":"puff…"},{"stroke":4,"to":0,"text":"puff — fuuu"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the peak&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;the slope&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;puff…&quot;},{&quot;stroke&quot;:4,&quot;to&quot;:0,&quot;text&quot;:&quot;puff — fuuu&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M42.63,15.62c3.62,3.38,7.5,5.38,12.74,6.13c9.59,1.37,3.5,3.38-1.88,6.12"/><path class="mstroke" data-i="1" pathLength="1" d="M43.63,46.88c1.88,4.62,7.5,9.41,14.25,17.5c10.62,12.74,0.49,30-19.13,21.62"/><path class="mstroke" data-i="2" pathLength="1" d="M16.5,73.38c0.75,4,1.88,8.12,5,10.12c1.16,0.74,0.12-3.38,13.25-9.12"/><path class="mstroke" data-i="3" pathLength="1" d="M80.13,61.88c5.12,3.38,10.28,7.49,11.38,8.88c6.75,8.5-0.25,4.62-4.62,7.12"/></svg>
         <div class="chant"><span class="beat">the peak</span><span class="beat">the slope</span><span class="beat">puff…</span><span class="beat">puff — fuuu</span></div>
@@ -530,7 +532,7 @@
         <div class="key">⛰️ A peak</div>
         <div class="hook">one little mountain — 'heh'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"over and down — 'he'"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;over and down — &#39;he&#39;&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M15,48.75c2.25,1.62,4.67,1.96,7-0.38c3.62-3.62,7.46-6.54,11.25-10.5c5.5-5.75,8.48-4.75,13.12-0.88c12.12,10.12,30.38,25.12,33.38,27.38c3,2.26,12.37,10.38,13.87,11.63"/></svg>
         <div class="chant"><span class="beat">over and down — 'he'</span></div>
@@ -547,7 +549,7 @@
         <div class="key">🎅 Ho-ho-ho</div>
         <div class="hook">like は with a hat — Santa's 'ho ho ho'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"the post"},{"stroke":2,"to":0,"text":"the cross"},{"stroke":3,"to":0,"text":"top bar"},{"stroke":4,"to":0,"text":"loop — ho ho ho!"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the post&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;the cross&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;top bar&quot;},{&quot;stroke&quot;:4,&quot;to&quot;:0,&quot;text&quot;:&quot;loop — ho ho ho!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M24.51,18.75c1.25,1.5,2.15,4,1.62,6.62c-3.5,17.63-6.98,37.4-4,55.88c2.5,15.5,1.12,2,5.62-6.25"/><path class="mstroke" data-i="1" pathLength="1" d="M53.08,21.13c1.9,1.28,3.82,1.76,6.14,1.4c7.36-1.17,13.73-2.4,18.41-3.73c2.46-0.7,4.69-1.05,6.13-1.05"/><path class="mstroke" data-i="2" pathLength="1" d="M53.83,44.3c2.21,1.44,4.46,1.98,7.16,1.57c8.59-1.31,15.78-2.44,21.23-3.94c2.87-0.79,5.72-1.18,7.41-1.18"/><path class="mstroke" data-i="3" pathLength="1" d="M72.51,23c1.38,1.62,1.62,4.12,1.62,6.5c0,2.38,2,35.12,2,44.5c0,17.5-29.88,17.12-29.88,8c0-9.75,21.38-7.88,29.5-2.88c5.33,3.28,12,8.25,13.38,9.38"/></svg>
         <div class="chant"><span class="beat">the post</span><span class="beat">the cross</span><span class="beat">top bar</span><span class="beat">loop — ho ho ho!</span></div>
@@ -564,7 +566,7 @@
         <div class="key">👩 Mama</div>
         <div class="hook">mama with a curl of hair — 'ma'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"top line"},{"stroke":2,"to":0,"text":"cross line"},{"stroke":3,"to":0,"text":"curl of hair — maa"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;top line&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;cross line&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;curl of hair — maa&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M29.83,32.28c2.2,1.15,4.43,1.5,7.14,1.26c11.54-1.04,25.94-3.12,34.66-4.85c2.87-0.57,5.45-0.44,7.13-0.44"/><path class="mstroke" data-i="1" pathLength="1" d="M33.83,51.84c2.45,1.61,4.94,1.72,7.94,1.26c9.52-1.46,17.87-3.1,27.03-5.16c3.22-0.72,6.34-1.32,8.21-1.32"/><path class="mstroke" data-i="2" pathLength="1" d="M55.81,14c1.52,1.8,1.8,4.57,1.8,7.19c0,2.63,0.46,43.88,0.46,54.25c0,21.3-30.07,19.96-30.07,9.86c0-10.79,25.88-9.93,38.57-3.18c6.12,3.25,11.55,6.38,14.8,9.13"/></svg>
         <div class="chant"><span class="beat">top line</span><span class="beat">cross line</span><span class="beat">curl of hair — maa</span></div>
@@ -581,7 +583,7 @@
         <div class="key">🎵 Mi (the note)</div>
         <div class="hook">do-re-MI; a loop and a tail</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"swoop down"},{"stroke":2,"to":0,"text":"loop and cross — miii"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;swoop down&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;loop and cross — miii&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M32.5,26c1.88,1.75,4.06,1.7,6.88,1.25c3.88-0.62,7.62-1.75,11.88-3.12c4.26-1.37,6.25-0.12,4.5,5.12c-1.75,5.24-6.66,17.39-12,30.12c-13.63,32.51-29.26,29.26-29.26,18.63c0-14.25,20.48-15.36,33-13.5c18.5,2.75,30,6.62,44.38,14.25"/><path class="mstroke" data-i="1" pathLength="1" d="M79.38,54.75c0.75,2.38,0.49,4.37,0,6.25c-2.12,8.12-7.5,25-22.12,33.75"/></svg>
         <div class="chant"><span class="beat">swoop down</span><span class="beat">loop and cross — miii</span></div>
@@ -598,7 +600,7 @@
         <div class="key">🐮 A cow</div>
         <div class="hook">a cow says 'muuu' (moo)</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"the cross"},{"stroke":2,"to":0,"text":"big loop body"},{"stroke":3,"to":0,"text":"flick the tail — muuu"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the cross&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;big loop body&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;flick the tail — muuu&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M19.59,31.65c2.1,1.55,4.24,1.66,6.81,1.21c8.17-1.41,15.33-2.98,23.19-4.96c2.76-0.69,5.44-1.27,7.05-1.27"/><path class="mstroke" data-i="1" pathLength="1" d="M37.02,15.5c1.62,1.25,2.31,2.88,2.12,5.25c-0.88,11.12-1.5,20.75-4,34.88c-3.61,20.44-19.25,16.99-18.62,7.37c0.5-7.74,6.25-12.86,12.62-13.5c5-0.5,14.28,1.93,5.88,15c-12.62,19.62-11.42,24.51,5.11,25.54c10.98,0.68,19.26,0.72,28.49-0.92c14.15-2.5,7.4-2.63,7.4-11.13"/><path class="mstroke" data-i="2" pathLength="1" d="M78.52,36.25c6.88,3.12,11.71,5.95,14.88,10.12c6.25,8.25-1.38,3.62-4.5,4.5"/></svg>
         <div class="chant"><span class="beat">the cross</span><span class="beat">big loop body</span><span class="beat">flick the tail — muuu</span></div>
@@ -615,7 +617,7 @@
         <div class="key">👁️ Eye (me)</div>
         <div class="hook">'me' = 目 = eye; the loop is the eyeball</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"the cross"},{"stroke":2,"to":0,"text":"loop the eye — me"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the cross&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;loop the eye — me&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M27.48,31.75c1.75,1,2.41,3.09,2.5,5.25c0.5,11.62,2.75,23.5,7.25,31.38c1.39,2.44,5.38,8.5,7.25,10.38"/><path class="mstroke" data-i="1" pathLength="1" d="M59.6,19.38c1,1.5,1.35,4.12,0.88,6.62c-2.75,14.62-13.62,37.75-20.1,47.24c-12.28,17.14-16.78,13.14-22.28,0.64c-5.38-15.38,26.4-42.18,53.42-35.28c29.08,8.27,23.96,46.02-7.98,50.15"/></svg>
         <div class="chant"><span class="beat">the cross</span><span class="beat">loop the eye — me</span></div>
@@ -632,7 +634,7 @@
         <div class="key">🎣 Fishhook</div>
         <div class="hook">catching 'mo're' fish — 'mo'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"long hook down"},{"stroke":2,"to":0,"text":"cross once"},{"stroke":3,"to":0,"text":"cross twice — moo"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;long hook down&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;cross once&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;cross twice — moo&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M49.17,14.75c1.88,1.88,1.86,4.52,1.12,8c-3,14.25-5,26.62-7,42.12c-2.55,19.73-0.75,29.88,17,29.86c20.25-0.02,28.63-13.11,20.01-35.73"/><path class="mstroke" data-i="1" pathLength="1" d="M26.54,34.62c1.12,0.88,2.87,2.21,6,2c11.12-0.75,20-2.12,27.74-3.46c3.88-0.67,5.88-1.17,8.88-1.04"/><path class="mstroke" data-i="2" pathLength="1" d="M26.42,53.38c-1.5,4,1,6.75,7.75,6.75c8.75,0,17.62-1,22.88-1.88c2.01-0.33,5.38-1,7.5-1.75"/></svg>
         <div class="chant"><span class="beat">long hook down</span><span class="beat">cross once</span><span class="beat">cross twice — moo</span></div>
@@ -649,7 +651,7 @@
         <div class="key">⛵ Yacht / yak</div>
         <div class="hook">a mast with a sail-flick — 'ya'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"the mast"},{"stroke":2,"to":0,"text":"the cross"},{"stroke":3,"to":0,"text":"sail-flick — yaa"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the mast&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;the cross&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;sail-flick — yaa&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M18,49.38c1.88,1.62,5.25,2.5,8.62,0.88c18.51-8.88,35.76-19.38,50.83-19.26c9.02,0.14,16.01,4.13,15.93,12.29c0,8.33-10.88,16.58-24.5,17.83"/><path class="mstroke" data-i="1" pathLength="1" d="M47.13,15.88c5.12,0.88,10.41,4.05,11.5,6.62c2.12,5-1,2.38-2.88,2.62"/><path class="mstroke" data-i="2" pathLength="1" d="M30,24.38c2.38,1.88,3.28,2.87,3.88,5.25c2.62,10.5,11.12,41.12,14.75,52.5c0.65,2.04,1.88,6.25,2.88,9.38"/></svg>
         <div class="chant"><span class="beat">the mast</span><span class="beat">the cross</span><span class="beat">sail-flick — yaa</span></div>
@@ -666,7 +668,7 @@
         <div class="key">🐟 A fish (you)</div>
         <div class="hook">a swimming fish with a loop — 'yu' (you)</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"loop the body"},{"stroke":2,"to":0,"text":"slash the tail — yuuu"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;loop the body&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;slash the tail — yuuu&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M21.05,25.38c1.38,1.5,2.02,4.13,1.5,6.25c-2.88,11.75-4,22.25-2.12,35c2.77,18.85,1.12,3.88,3.25-1.5c9-22.75,27.24-34.5,44.38-34.5c16.88,0,21.88,11.38,21.88,20.25c0,27.38-30.88,29.62-43,16.75"/><path class="mstroke" data-i="1" pathLength="1" d="M58.42,16.75c2.62,1.75,3.17,3.13,3.5,7.12c0.88,10.5,1.4,18.72,1.62,29.38c0.5,24-6.25,32-12.38,39.25"/></svg>
         <div class="chant"><span class="beat">loop the body</span><span class="beat">slash the tail — yuuu</span></div>
@@ -683,7 +685,7 @@
         <div class="key">🪀 Yo-yo</div>
         <div class="hook">a yo-yo on a string — 'yo!'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"the string down"},{"stroke":2,"to":0,"text":"loop the yo-yo — yo!"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the string down&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;loop the yo-yo — yo!&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M58.24,35.38c7.5-1.28,13.74-2.63,18.5-4.1c2.5-0.77,4.77-1.15,6.25-1.15"/><path class="mstroke" data-i="1" pathLength="1" d="M54.62,13.88c2.25,2.12,2.98,4.13,2.88,6.5c-0.75,17-0.12,34.88,1.39,53.5c1.88,23.07-34.89,20.88-34.89,11.5c0-12,26.25-8,35.98-4.12c8.1,3.23,11.52,4.88,18.52,10.38"/></svg>
         <div class="chant"><span class="beat">the string down</span><span class="beat">loop the yo-yo — yo!</span></div>
@@ -700,7 +702,7 @@
         <div class="key">🐰 Rabbit</div>
         <div class="hook">a little ear + a hopping body — 'ra'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"little ear"},{"stroke":2,"to":0,"text":"hop the body — raa"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;little ear&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;hop the body — raa&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M35.33,15c3.75,3,9.22,4.41,16.5,4.25c11.12-0.25-0.25,2.38-1.25,3.5"/><path class="mstroke" data-i="1" pathLength="1" d="M35.83,35.75c-2.14,4.34-2.79,8.67-3.11,13.24c-0.42,5.84-0.31,12.05-2.14,19.13c-3.16,12.27,1.49,4.77,3,3.5c11.88-10,21.7-12.67,32.61-12.49c9.21,0.15,16.85,5.19,16.76,13.88c-0.12,13.6-14.24,21.49-32.49,22.49"/></svg>
         <div class="chant"><span class="beat">little ear</span><span class="beat">hop the body — raa</span></div>
@@ -717,7 +719,7 @@
         <div class="key">🎋 Two reeds</div>
         <div class="hook">two reeds bending in the wind — 'ree'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"left reed"},{"stroke":2,"to":0,"text":"long right reed — riii"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;left reed&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;long right reed — riii&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M38.75,25.25c1.25,1.5,2.24,4.03,1.62,6.62c-2.88,12.13-6.29,29.65-4.25,42.38c2,12.5,1.75-0.75,5.62-6.25"/><path class="mstroke" data-i="1" pathLength="1" d="M69.37,18.75c2.25,2.12,2.88,4.12,2.88,6.5c0,2.38,0,26.38,0,35.75c0,16.5-5,25.75-12.62,33.12"/></svg>
         <div class="chant"><span class="beat">left reed</span><span class="beat">long right reed — riii</span></div>
@@ -734,7 +736,7 @@
         <div class="key">🦘 Kangaroo (roo)</div>
         <div class="hook">a looping tail in one swoop — 'roo'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"one swoop + curl — 'ruuu'"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;one swoop + curl — &#39;ruuu&#39;&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M34.31,20.38c1.75,1.25,4.62,2.62,8.5,1.5c3.88-1.12,9.62-2.5,15.62-4.62c6-2.12,7.5-0.12,4.38,4.25c-3.12,4.37-18.89,24.62-27.75,34c-8.5,9-13.09,11.89,0.75,3.25c15.62-9.75,43-10.88,43,13.38c0,22.5-40.88,24.5-40.88,12.62c0-11.25,18.12-8.75,24.38-0.38"/></svg>
         <div class="chant"><span class="beat">one swoop + curl — 'ruuu'</span></div>
@@ -751,7 +753,7 @@
         <div class="key">⚡ Energy kick</div>
         <div class="hook">a post + an energetic kick — 'reh'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"the post"},{"stroke":2,"to":0,"text":"energetic loop-kick — reh"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the post&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;energetic loop-kick — reh&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M34.48,13c1.5,1.38,2.83,3.74,2.5,6.38c-0.5,4-2.75,44.5-2.75,52.88c0,8.38,0.12,16.62,0.12,19.5"/><path class="mstroke" data-i="1" pathLength="1" d="M16.98,40.75c2.12,1.38,3.74,1.46,7.5,0c4.5-1.75,6.55-2.66,13-5.5c4.25-1.88,4.4,0.24,2.5,3.5c-5.25,9-10.5,16.75-18.88,27.62c-7.55,9.81-6.93,12.85,3.25,3.12c14-13.38,20.34-19.76,33.88-32.5c6.38-6,19.39-12.09,18.14,0.88c-1.02,10.63-1.89,22.13-2.29,30.75c-1.02,21.71,11.53,18,20.15,8.63"/></svg>
         <div class="chant"><span class="beat">the post</span><span class="beat">energetic loop-kick — reh</span></div>
@@ -768,7 +770,7 @@
         <div class="key">🛣️ Winding road</div>
         <div class="hook">one winding road — 'roooo'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"one winding zig-zag — 'rooo'"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;one winding zig-zag — &#39;rooo&#39;&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M36.95,21.88c1.5,2,4.62,3.62,8.5,2.5c3.88-1.12,8.12-2.25,14.12-4.38c6-2.13,6.53-0.1,3.38,4.25c-7.88,10.88-18,22.75-27.5,35.25c-7.49,9.86-10.68,11.32,2.88,2.25c17.38-11.62,46.62-14,46.62,8.12c0,15.62-16,22.5-32.12,25.12"/></svg>
         <div class="chant"><span class="beat">one winding zig-zag — 'rooo'</span></div>
@@ -785,7 +787,7 @@
         <div class="key">🦢 Swan</div>
         <div class="hook">a post + a loop (ね/れ family) — 'wa'</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"the post"},{"stroke":2,"to":0,"text":"loop it round — waa"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;the post&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;loop it round — waa&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M38.53,14.75c1.5,1.38,2.22,3.73,2,6.38c-1,11.87-2.75,44.49-2.75,52.87c0,8.38-0.62,16.62-0.62,19.5"/><path class="mstroke" data-i="1" pathLength="1" d="M17.53,40.75c2.12,1.38,3.68,1.3,7.5,0c5.88-2,9.8-3.16,16.25-6c4.25-1.88,6.12,0,2.75,4c-6.72,7.96-13,16.5-22.12,27.88c-7.75,9.66-7.54,12.21,3,2.88c21.88-19.38,49.75-35.62,63.5-21c14.36,15.27,1.62,36.62-23.38,42.62"/></svg>
         <div class="chant"><span class="beat">the post</span><span class="beat">loop it round — waa</span></div>
@@ -802,7 +804,7 @@
         <div class="key">🤸 Yoga twist</div>
         <div class="hook">cross, twist, kick — 'wo' (o)</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"cross the top"},{"stroke":2,"to":0,"text":"twist down"},{"stroke":3,"to":0,"text":"kick out — wooo"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;cross the top&quot;},{&quot;stroke&quot;:2,&quot;to&quot;:0,&quot;text&quot;:&quot;twist down&quot;},{&quot;stroke&quot;:3,&quot;to&quot;:0,&quot;text&quot;:&quot;kick out — wooo&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M28.56,27.87c1.62,1.13,3.17,1.64,6.01,1.12c10.86-1.99,16.74-3.37,24.71-4.72c3.64-0.62,5.65-0.93,8.4-0.75"/><path class="mstroke" data-i="1" pathLength="1" d="M49.93,14.38c0.75,1,1.48,3.22,0.38,5.62c-4.62,10.12-10,20.75-17.12,30.25c-9.25,12.33-9.25,11.19,2.12,2.5c9-6.88,23.75-12.12,22.88,19.88"/><path class="mstroke" data-i="2" pathLength="1" d="M83.06,39.88c0.62,1.75,0,4-3,5.75c-3,1.75-49.62,24.16-44.75,38.25c3.28,9.48,17.93,9.12,29.98,7.75c4.48-0.51,9.15-1.12,12.4-1.75"/></svg>
         <div class="chant"><span class="beat">cross the top</span><span class="beat">twist down</span><span class="beat">kick out — wooo</span></div>
@@ -819,7 +821,7 @@
         <div class="key">✍️ Signature</div>
         <div class="hook">one little squiggle — the 'n' sound</div>
       </div>
-      <div class="mini motionwrap" data-beats='[{"stroke":1,"to":0,"text":"one squiggle — 'nnn'"}]'>
+      <div class="mini motionwrap" data-beats="[{&quot;stroke&quot;:1,&quot;to&quot;:0,&quot;text&quot;:&quot;one squiggle — &#39;nnn&#39;&quot;}]">
         <div class="sty">MOTION · tap to replay</div>
         <svg class="art mn" viewBox="0 0 109 109"><path class="mstroke" data-i="0" pathLength="1" d="M56.35,16.5c0.75,1.75,1.13,5.83-0.38,8.25c-7,11.25-27.22,43.47-33.88,54.37c-9,14.75-7.62,16.25,1.5,1.25c17.86-29.36,32-23.76,32-6.75c0,25,19,26.5,34.25-5"/></svg>
         <div class="chant"><span class="beat">one squiggle — 'nnn'</span></div>
@@ -838,7 +840,11 @@
    const chips=[...wrap.querySelectorAll('.beat')];
    const beats=JSON.parse(wrap.dataset.beats);
    let i=0,timer=null;
-   function reset(){strokes.forEach(s=>{s.style.strokeDashoffset='1';s.classList.remove('active');});chips.forEach(c=>c.classList.remove('on'));}
+   // instant disappear (no transition) — the character vanishes rather than un-drawing
+   function vanish(){
+     strokes.forEach(s=>{s.style.transition='none';s.style.strokeDashoffset='1';s.classList.remove('active');});
+     chips.forEach(c=>c.classList.remove('on'));
+   }
    function step(){
      const be=beats[i];
      strokes.forEach(s=>s.classList.remove('active'));
@@ -846,12 +852,13 @@
      if(st){st.style.strokeDashoffset=String(be.to);st.classList.add('active');}
      chips.forEach((c,k)=>c.classList.toggle('on',k===i));
      i++;
-     if(i>=beats.length){i=0;timer=setTimeout(()=>{reset();timer=setTimeout(step,150);},1500);}
+     if(i>=beats.length){i=0;timer=setTimeout(()=>{vanish();timer=setTimeout(draw,500);},3500);}
      else timer=setTimeout(step,820);
    }
-   function start(){reset();timer=setTimeout(step,150);}
-   wrap.addEventListener('click',()=>{clearTimeout(timer);i=0;start();});
-   start();
+   // re-enable the stroke-dashoffset transition, then draw from the first beat
+   function draw(){strokes.forEach(s=>{s.style.transition='';});i=0;step();}
+   wrap.addEventListener('click',()=>{clearTimeout(timer);vanish();timer=setTimeout(draw,200);});
+   draw();
  }
  document.querySelectorAll('.mn').forEach((s,i)=>setTimeout(()=>animate(s), i*80));
 </script>
