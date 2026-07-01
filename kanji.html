@@ -280,11 +280,22 @@ window.addEventListener('resize',()=>{if(mode==='write')setupCanvas();});
 // ===== quiz gate (unlock next tranche) — kanji → meaning =====
 function shuf(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 const ml=m=>m.split(';')[0].trim();
+const readingPrimary=c=>{if(c.on&&c.on!=='—')return c.on.split('・')[0];if(c.ku&&c.ku!=='—')return c.ku.split('・')[0];return '';};
 let gate=null;
+// missing a quiz item drops that kanji one confidence level (and breaks its streak)
+function downgrade(k){const p=prog();const c=p.cards[k]||{lvl:0,streak:0,seen:0};c.lvl=Math.max(0,c.lvl-1);c.streak=0;c.seen=c.seen||1;p.cards[k]=c;setProg(p);}
 function buildGate(){
  const fr=shuf(frontier().cells.slice());
- const pool=[...new Set(ALL.map(c=>ml(c.m)))];
- const qs=fr.map(c=>{const right=ml(c.m);const opts=[right];while(opts.length<4){const r=pool[Math.floor(Math.random()*pool.length)];if(!opts.includes(r))opts.push(r);}return{k:c.k,r:right,opts:shuf(opts)};});
+ const mPool=[...new Set(ALL.map(c=>ml(c.m)))];
+ const rPool=[...new Set(ALL.map(readingPrimary).filter(Boolean))];
+ const T=['meaning','pron','stroke'];
+ const qs=fr.map((c,idx)=>{
+  let type=T[idx%3];
+  if(type==='pron'&&!readingPrimary(c))type='meaning';
+  if(type==='meaning'){const a=ml(c.m);const opts=[a];let g=0;while(opts.length<4&&g++<60){const r=mPool[Math.floor(Math.random()*mPool.length)];if(!opts.includes(r))opts.push(r);}return{type,k:c.k,a,opts:shuf(opts)};}
+  if(type==='pron'){const a=readingPrimary(c);const opts=[a];let g=0;while(opts.length<4&&g++<60){const r=rPool[Math.floor(Math.random()*rPool.length)];if(!opts.includes(r))opts.push(r);}return{type,k:c.k,a,opts:shuf(opts)};}
+  return{type:'stroke',k:c.k,m:c.m};
+ });
  gate={qs,i:0,wrong:0};renderGate();
 }
 function renderGate(){
@@ -295,8 +306,30 @@ function renderGate(){
   return;
  }
  const q=g.qs[g.i];
- $('prompt').innerHTML='<div style="font-size:12px;color:var(--muted)">Unlock quiz · '+(g.i+1)+' / '+g.qs.length+'</div><div style="font-size:72px;font-weight:600;margin:6px 0;color:var(--text);font-family:var(--display)">'+q.k+'</div>'+q.opts.map(o=>'<button class="opt" data-r="'+o+'">'+o+'</button>').join('');
- $('prompt').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(b.dataset.done)return;const ok=b.dataset.r===q.r;$('prompt').querySelectorAll('.opt').forEach(x=>{x.dataset.done=1;if(x.dataset.r===q.r)x.classList.add('ok');});if(!ok){b.classList.add('no');g.wrong++;}setTimeout(()=>{g.i++;renderGate();},560);});
+ const head='<div style="font-size:12px;color:var(--muted)">Unlock quiz · '+(g.i+1)+' / '+g.qs.length+'</div>';
+ if(q.type==='stroke'){renderGateStroke(q,head);return;}
+ const sub=q.type==='pron'?'Which reading?':'Which meaning?';
+ $('prompt').innerHTML=head+'<div style="font-size:12px;color:var(--muted);margin-top:3px">'+sub+'</div><div style="font-size:72px;font-weight:600;margin:6px 0;color:var(--text);font-family:var(--display)">'+q.k+'</div>'+q.opts.map(o=>'<button class="opt" data-r="'+o+'">'+o+'</button>').join('');
+ $('prompt').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(b.dataset.done)return;const ok=b.dataset.r===q.a;$('prompt').querySelectorAll('.opt').forEach(x=>{x.dataset.done=1;if(x.dataset.r===q.a)x.classList.add('ok');});if(!ok){b.classList.add('no');g.wrong++;downgrade(q.k);}setTimeout(()=>{g.i++;renderGate();},560);});
+}
+function renderGateStroke(q,head){
+ $('prompt').innerHTML=head+
+  '<div style="font-size:12px;color:var(--muted);margin-top:3px">Draw it in stroke order — “'+ml(q.m)+'”</div>'+
+  '<div class="trace-wrap" style="margin:10px auto"><div class="guide-char" id="gGuide">'+q.k+'</div><svg id="gSvg" viewBox="0 0 109 109" preserveAspectRatio="xMidYMid meet" style="position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none"></svg><canvas id="gCanvas" style="position:absolute;inset:0;width:100%;height:100%;touch-action:none;z-index:2"></canvas></div>'+
+  '<div class="rate" style="grid-template-columns:1fr 1fr 1fr;margin-top:10px"><button class="ghost" id="gWatch">▶ Watch</button><button class="ghost" id="gClear">Clear</button><button class="r-kinda" id="gCheck" style="color:#fff">Check ✓</button></div>'+
+  '<div id="gFb" style="margin-top:8px;font-size:13px;min-height:1.2em"></div>'+
+  '<button class="ghost" id="gSkip" style="margin-top:4px">Skip (counts as missed)</button>';
+ const cv=$('gCanvas');let strokes=null,user=[],drawing=false,ctx=null;
+ function setup(){const r=cv.getBoundingClientRect();if(!r.width)return;cv.width=r.width;cv.height=r.height;ctx=cv.getContext('2d');ctx.lineWidth=10;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#E2553B';}
+ function gpos(e){const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
+ setup();loadStrokes(q.k).then(s=>strokes=s);
+ cv.addEventListener('pointerdown',e=>{e.preventDefault();if(!ctx)setup();drawing=true;const p=gpos(e);user.push([p]);ctx.beginPath();ctx.moveTo(p.x,p.y);try{cv.setPointerCapture(e.pointerId);}catch(_){}});
+ cv.addEventListener('pointermove',e=>{if(!drawing)return;e.preventDefault();const p=gpos(e);user[user.length-1].push(p);ctx.lineTo(p.x,p.y);ctx.stroke();});
+ cv.addEventListener('pointerup',()=>drawing=false);cv.addEventListener('pointercancel',()=>drawing=false);
+ $('gWatch').onclick=()=>{if(strokes)watchOn($('gSvg'),strokes);};
+ $('gClear').onclick=()=>{user=[];if(ctx)ctx.clearRect(0,0,cv.width,cv.height);$('gSvg').innerHTML='';$('gFb').innerHTML='';};
+ $('gCheck').onclick=()=>{if(!strokes){$('gFb').innerHTML='loading…';return;}if(gradeDrawn(strokes,user,cv.width||300)){$('gFb').innerHTML='<span style="color:#2E7D32;font-weight:800">✓ Correct!</span>';setTimeout(()=>{gate.i++;renderGate();},700);}else{$('gFb').innerHTML='<span style="color:#C4452E;font-weight:700">Not quite — Clear &amp; retry, or ▶ Watch.</span>';}};
+ $('gSkip').onclick=()=>{gate.wrong++;downgrade(q.k);gate.i++;renderGate();};
 }
 function addRow(){const pp=prog();pp.rows++;pp.phase='forward';pp.pk=[];setProg(pp);seqPtr=0;gate=null;$('prompt').classList.add('hidden');$('card').classList.remove('hidden');next_();}
 
@@ -378,11 +411,23 @@ function renderStroke(){
  setupStk();clearStk();stkStrokes=null;
  loadStrokes(c.k).then(s=>{stkStrokes=s;$('stkCount').textContent=s.length+' stroke'+(s.length>1?'s':'');}).catch(()=>{$('stkCount').textContent='(stroke data unavailable)';});
 }
-function watchStrokes(){
- if(!stkStrokes)return;const svg=$('stkSvg');svg.innerHTML='';const n=stkStrokes.length;
- const dur=Math.max(0.45,Math.min(1.8,9/n)),step=dur*1000+300;
- const ps=stkStrokes.map(s=>{const p=document.createElementNS(SVGNS,'path');p.setAttribute('d',s.d);p.setAttribute('fill','none');p.setAttribute('stroke','#E2553B');p.setAttribute('stroke-width','6');p.setAttribute('stroke-linecap','round');p.setAttribute('stroke-linejoin','round');svg.appendChild(p);return p;});
+function watchOn(svg,strokes){
+ svg.innerHTML='';const n=strokes.length;const dur=Math.max(0.45,Math.min(1.8,9/n)),step=dur*1000+300;
+ const ps=strokes.map(s=>{const p=document.createElementNS(SVGNS,'path');p.setAttribute('d',s.d);p.setAttribute('fill','none');p.setAttribute('stroke','#E2553B');p.setAttribute('stroke-width','6');p.setAttribute('stroke-linecap','round');p.setAttribute('stroke-linejoin','round');svg.appendChild(p);return p;});
  let t=200;ps.forEach(p=>{let L=8;try{L=p.getTotalLength();}catch(_){}p.style.strokeDasharray=L;p.style.strokeDashoffset=L;setTimeout(()=>{p.style.transition='stroke-dashoffset '+dur+'s linear';p.style.strokeDashoffset=0;},t);t+=step;});
+}
+function watchStrokes(){if(stkStrokes)watchOn($('stkSvg'),stkStrokes);}
+function gradeDrawn(strokes,user,sz){
+ let allOk=user.length===strokes.length;
+ for(let i=0;i<strokes.length;i++){
+  const c=strokes[i],u=user[i];if(!u||u.length<1){allOk=false;continue;}
+  const us={x:u[0].x/sz,y:u[0].y/sz},ue={x:u[u.length-1].x/sz,y:u[u.length-1].y/sz},cs=c.pts[0],ce=c.pts[c.pts.length-1];
+  const sd=Math.hypot(us.x-cs.x,us.y-cs.y);
+  const udx=ue.x-us.x,udy=ue.y-us.y,cdx=ce.x-cs.x,cdy=ce.y-cs.y,um=Math.hypot(udx,udy)||1e-6,cm=Math.hypot(cdx,cdy)||1e-6;
+  const dot=(udx*cdx+udy*cdy)/(um*cm),tiny=cm<0.06,startOk=sd<0.26,dirOk=tiny||dot>0.4;
+  if(!(startOk&&dirOk))allOk=false;
+ }
+ return allOk;
 }
 function checkStrokes(){
  if(!stkStrokes)return;
