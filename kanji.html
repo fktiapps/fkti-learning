@@ -285,24 +285,30 @@ let gate=null;
 // missing a quiz item drops that kanji one confidence level (and breaks its streak)
 function downgrade(k){const p=prog();const c=p.cards[k]||{lvl:0,streak:0,seen:0};c.lvl=Math.max(0,c.lvl-1);c.streak=0;c.seen=c.seen||1;p.cards[k]=c;setProg(p);}
 function buildGate(){
- const fr=shuf(frontier().cells.slice());
+ // review a balanced sample of previously-learned kanji: up to 5 from each confidence band, max 20
+ const bands={3:[],2:[],1:[],0:[]};
+ for(const c of activeCells()){const s=cardState(c.k);if(s.seen)bands[s.lvl].push(c);}
+ let sel=[];for(const lv of [3,2,1,0])sel=sel.concat(shuf(bands[lv].slice()).slice(0,5));
+ if(!sel.length)sel=frontier().cells.slice();
+ sel=shuf(sel);
  const mPool=[...new Set(ALL.map(c=>ml(c.m)))];
  const rPool=[...new Set(ALL.map(readingPrimary).filter(Boolean))];
  const T=['meaning','pron','stroke'];
- const qs=fr.map((c,idx)=>{
+ const qs=sel.map((c,idx)=>{
+  const st=cardState(c.k),strong=!!(st.seen&&st.lvl>=2); // "know it"/"kinda" — must not miss these
   let type=T[idx%3];
   if(type==='pron'&&!readingPrimary(c))type='meaning';
-  if(type==='meaning'){const a=ml(c.m);const opts=[a];let g=0;while(opts.length<4&&g++<60){const r=mPool[Math.floor(Math.random()*mPool.length)];if(!opts.includes(r))opts.push(r);}return{type,k:c.k,a,opts:shuf(opts)};}
-  if(type==='pron'){const a=readingPrimary(c);const opts=[a];let g=0;while(opts.length<4&&g++<60){const r=rPool[Math.floor(Math.random()*rPool.length)];if(!opts.includes(r))opts.push(r);}return{type,k:c.k,a,opts:shuf(opts)};}
-  return{type:'stroke',k:c.k,m:c.m};
+  if(type==='meaning'){const a=ml(c.m);const opts=[a];let g=0;while(opts.length<4&&g++<60){const r=mPool[Math.floor(Math.random()*mPool.length)];if(!opts.includes(r))opts.push(r);}return{type,k:c.k,a,opts:shuf(opts),strong};}
+  if(type==='pron'){const a=readingPrimary(c);const opts=[a];let g=0;while(opts.length<4&&g++<60){const r=rPool[Math.floor(Math.random()*rPool.length)];if(!opts.includes(r))opts.push(r);}return{type,k:c.k,a,opts:shuf(opts),strong};}
+  return{type:'stroke',k:c.k,m:c.m,strong};
  });
- gate={qs,i:0,wrong:0};renderGate();
+ gate={qs,i:0,wrong:0,strongMiss:0};renderGate();
 }
 function renderGate(){
  const g=gate;
  if(g.i>=g.qs.length){
-  if(g.wrong===0){$('prompt').innerHTML='🎯 <b>Quiz passed!</b><br><button id="addRow">Unlock the next tranche →</button>';$('addRow').onclick=addRow;}
-  else{$('prompt').innerHTML='So close — '+g.wrong+' missed. Review a little more, then try again.<br><button class="ghost" id="gquit" style="margin-top:8px">Keep reviewing</button>';$('gquit').onclick=()=>{gate=null;$('prompt').classList.add('hidden');$('card').classList.remove('hidden');next_();};}
+  if(g.strongMiss===0){$('prompt').innerHTML='🎯 <b>Review passed!</b>'+(g.wrong?' <span style="font-size:12px;color:var(--muted)">('+g.wrong+' weak one'+(g.wrong>1?'s':'')+' to revisit)</span>':'')+'<br><button id="addRow">Unlock the next tranche →</button>';$('addRow').onclick=addRow;}
+  else{$('prompt').innerHTML='Missed '+g.strongMiss+' you should know. Review a little more, then try again.<br><button class="ghost" id="gquit" style="margin-top:8px">Keep reviewing</button>';$('gquit').onclick=()=>{gate=null;$('prompt').classList.add('hidden');$('card').classList.remove('hidden');next_();};}
   return;
  }
  const q=g.qs[g.i];
@@ -310,7 +316,7 @@ function renderGate(){
  if(q.type==='stroke'){renderGateStroke(q,head);return;}
  const sub=q.type==='pron'?'Which reading?':'Which meaning?';
  $('prompt').innerHTML=head+'<div style="font-size:12px;color:var(--muted);margin-top:3px">'+sub+'</div><div style="font-size:72px;font-weight:600;margin:6px 0;color:var(--text);font-family:var(--display)">'+q.k+'</div>'+q.opts.map(o=>'<button class="opt" data-r="'+o+'">'+o+'</button>').join('');
- $('prompt').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(b.dataset.done)return;const ok=b.dataset.r===q.a;$('prompt').querySelectorAll('.opt').forEach(x=>{x.dataset.done=1;if(x.dataset.r===q.a)x.classList.add('ok');});if(!ok){b.classList.add('no');g.wrong++;downgrade(q.k);}setTimeout(()=>{g.i++;renderGate();},560);});
+ $('prompt').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(b.dataset.done)return;const ok=b.dataset.r===q.a;$('prompt').querySelectorAll('.opt').forEach(x=>{x.dataset.done=1;if(x.dataset.r===q.a)x.classList.add('ok');});if(!ok){b.classList.add('no');g.wrong++;downgrade(q.k);if(q.strong)g.strongMiss++;}setTimeout(()=>{g.i++;renderGate();},560);});
 }
 function renderGateStroke(q,head){
  $('prompt').innerHTML=head+
@@ -322,19 +328,23 @@ function renderGateStroke(q,head){
  const cv=$('gCanvas');let strokes=null,user=[],drawing=false,ctx=null;
  function setup(){const r=cv.getBoundingClientRect();if(!r.width)return;cv.width=r.width;cv.height=r.height;ctx=cv.getContext('2d');ctx.lineWidth=10;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#E2553B';}
  function gpos(e){const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
- setup();loadStrokes(q.k).then(s=>strokes=s);
+ // load lazily + retry on tap, so a slow/failed load never leaves the buttons dead
+ async function ensure(){if(strokes&&strokes.length)return strokes;try{strokes=await loadStrokes(q.k);}catch(_){strokes=null;}return strokes;}
+ setup();ensure();
  cv.addEventListener('pointerdown',e=>{e.preventDefault();if(!ctx)setup();drawing=true;const p=gpos(e);user.push([p]);ctx.beginPath();ctx.moveTo(p.x,p.y);try{cv.setPointerCapture(e.pointerId);}catch(_){}});
  cv.addEventListener('pointermove',e=>{if(!drawing)return;e.preventDefault();const p=gpos(e);user[user.length-1].push(p);ctx.lineTo(p.x,p.y);ctx.stroke();});
  cv.addEventListener('pointerup',()=>drawing=false);cv.addEventListener('pointercancel',()=>drawing=false);
- $('gWatch').onclick=()=>{if(strokes)watchOn($('gSvg'),strokes);};
+ $('gWatch').onclick=async()=>{const s=await ensure();if(s&&s.length)watchOn($('gSvg'),s);else $('gFb').innerHTML='<span style="color:#C4452E">stroke data unavailable — tap Skip</span>';};
  $('gClear').onclick=()=>{user=[];if(ctx)ctx.clearRect(0,0,cv.width,cv.height);$('gSvg').innerHTML='';$('gFb').innerHTML='';};
- $('gCheck').onclick=()=>{if(!strokes){$('gFb').innerHTML='loading…';return;}if(gradeDrawn(strokes,user,cv.width||300)){$('gFb').innerHTML='<span style="color:#2E7D32;font-weight:800">✓ Correct!</span>';setTimeout(()=>{gate.i++;renderGate();},700);}else{$('gFb').innerHTML='<span style="color:#C4452E;font-weight:700">Not quite — Clear &amp; retry, or ▶ Watch.</span>';}};
- $('gSkip').onclick=()=>{gate.wrong++;downgrade(q.k);gate.i++;renderGate();};
+ $('gCheck').onclick=async()=>{const s=await ensure();if(!s||!s.length){$('gFb').innerHTML='<span style="color:#C4452E">stroke data unavailable — tap Skip</span>';return;}if(gradeDrawn(s,user,cv.width||300)){$('gFb').innerHTML='<span style="color:#2E7D32;font-weight:800">✓ Correct!</span>';setTimeout(()=>{gate.i++;renderGate();},700);}else{$('gFb').innerHTML='<span style="color:#C4452E;font-weight:700">Not quite — Clear &amp; retry, or ▶ Watch.</span>';}};
+ $('gSkip').onclick=()=>{gate.wrong++;downgrade(q.k);if(q.strong)gate.strongMiss++;gate.i++;renderGate();};
 }
 function addRow(){const pp=prog();pp.rows++;pp.phase='forward';pp.pk=[];setProg(pp);seqPtr=0;gate=null;$('prompt').classList.add('hidden');$('card').classList.remove('hidden');next_();}
 
 // ===== chart + decks =====
 function lvlInfo(k){const c=cardState(k);if(!c.seen)return{bg:'#2A3358',t:'#8A90AC'};return[{bg:'#C4452E',t:'#fff'},{bg:'#D9772A',t:'#fff'},{bg:'#C9A227',t:'#1B2233'},{bg:'#2E7D32',t:'#fff'}][c.lvl];}
+// all speakable readings for a kanji (on + kun), cleaned of okurigana markers
+function readingsList(c){const out=[];if(c.on&&c.on!=='—')c.on.split('・').forEach(r=>out.push(r.replace(/[-()（）]/g,'')));if(c.ku&&c.ku!=='—')c.ku.split('・').forEach(r=>out.push(r.replace(/[-()（）]/g,'')));return out.filter(Boolean);}
 function renderChart(){
  const wrap=$('chWrap');wrap.innerHTML='';const p=prog();
  KDATA.forEach((t,ti)=>{
@@ -344,7 +354,7 @@ function renderChart(){
   const row=document.createElement('div');row.className='chrow';
   t.cells.forEach(c=>{
    const d=document.createElement('button');d.className='chcell'+(unlocked?'':' locked');
-   if(unlocked){const inf=lvlInfo(c.k);d.style.background=inf.bg;d.style.color=inf.t;d.onclick=()=>speak(c.k);}
+   if(unlocked){const inf=lvlInfo(c.k);d.style.background=inf.bg;d.style.color=inf.t;d.onclick=()=>{const rs=readingsList(c);if(!rs.length){speak(c.k);return;}d._ri=d._ri||0;speak(rs[d._ri%rs.length]);d._ri++;};}
    else{d.style.background='#2A3358';d.style.color='#8A90AC';}
    d.innerHTML='<span class="chk">'+c.k+'</span>';
    row.appendChild(d);
@@ -392,14 +402,14 @@ document.querySelectorAll('[data-deck]').forEach(b=>b.onclick=()=>startDeck(b.da
 const SVGNS='http://www.w3.org/2000/svg';
 const measSvg=document.createElementNS(SVGNS,'svg');measSvg.setAttribute('viewBox','0 0 109 109');measSvg.setAttribute('width','109');measSvg.setAttribute('height','109');measSvg.style.cssText='position:absolute;left:-9999px;top:0';document.body.appendChild(measSvg);
 const measPath=document.createElementNS(SVGNS,'path');measSvg.appendChild(measPath);
-let stkIdx=0,stkStrokes=null,stkUser=[],stkDraw=false,sctx=null;const strokeCache={};
+let stkIdx=0,stkStrokes=null,stkUser=[],stkDraw=false,sctx=null,stkCell=null;const strokeCache={};
 function cpHex(c){return c.codePointAt(0).toString(16).padStart(5,'0');}
 async function loadStrokes(ch){
  if(strokeCache[ch])return strokeCache[ch];
  const t=await (await fetch('kanjivg/'+cpHex(ch)+'.svg')).text();
  const doc=new DOMParser().parseFromString(t,'image/svg+xml');
  const paths=[...doc.querySelectorAll('path')].filter(p=>p.getAttribute('d'));
- const out=paths.map(p=>{const d=p.getAttribute('d');measPath.setAttribute('d',d);let L=1;try{L=measPath.getTotalLength()||1;}catch(_){}const N=Math.max(6,Math.round(L/4)),pts=[];for(let i=0;i<=N;i++){let q;try{q=measPath.getPointAtLength(L*i/N);}catch(_){q={x:0,y:0};}pts.push({x:q.x/109,y:q.y/109});}return{d,pts,L};});
+ const out=paths.map(p=>{const d=p.getAttribute('d');measPath.setAttribute('d',d);let L=1;try{L=measPath.getTotalLength()||1;}catch(_){}const N=Math.max(6,Math.min(160,Math.round(L/4)||6)),pts=[];for(let i=0;i<=N;i++){let q;try{q=measPath.getPointAtLength(L*i/N);}catch(_){q={x:0,y:0};}pts.push({x:q.x/109,y:q.y/109});}return{d,pts,L};});
  strokeCache[ch]=out;return out;
 }
 function setupStk(){const cv=$('stkCanvas'),r=cv.getBoundingClientRect();if(!r.width)return;cv.width=r.width;cv.height=r.height;sctx=cv.getContext('2d');sctx.lineWidth=10;sctx.lineCap='round';sctx.lineJoin='round';sctx.strokeStyle='#E2553B';}
@@ -407,7 +417,7 @@ function clearStk(){const cv=$('stkCanvas');if(sctx)sctx.clearRect(0,0,cv.width,
 function renderStroke(){
  const cells=activeCells();if(!cells.length){$('stkMeaning').textContent='';$('stkCount').textContent='';return;}
  stkIdx=((stkIdx%cells.length)+cells.length)%cells.length;const c=cells[stkIdx];
- $('stkMeaning').textContent='“'+c.m.split(';')[0]+'”　'+c.k;$('stkGuide').textContent=c.k;$('stkSvg').innerHTML='';$('stkFeedback').innerHTML='';
+ stkCell=c;$('stkMeaning').textContent='Draw:  '+c.k;$('stkGuide').textContent=c.k;$('stkSvg').innerHTML='';$('stkFeedback').innerHTML='';
  setupStk();clearStk();stkStrokes=null;
  loadStrokes(c.k).then(s=>{stkStrokes=s;$('stkCount').textContent=s.length+' stroke'+(s.length>1?'s':'');}).catch(()=>{$('stkCount').textContent='(stroke data unavailable)';});
 }
@@ -443,7 +453,12 @@ function checkStrokes(){
   else{allOk=false;fb.push('Stroke '+(i+1)+': ✗ '+(!startOk?'wrong starting point':'wrong direction'));}
  }
  if(stkUser.length!==stkStrokes.length){allOk=false;fb.push('You drew '+stkUser.length+'; expected '+stkStrokes.length+' stroke(s).');}
- $('stkFeedback').innerHTML='<div style="font-weight:800;color:'+(allOk?'#2E7D32':'#C4452E')+';margin-bottom:4px">'+(allOk?'✓ Correct order & direction!':'Not quite — tap ▶ Watch, then retry.')+'</div>'+fb.map(x=>'<div style="font-size:13px;color:var(--text)">'+x+'</div>').join('');
+ if(allOk){
+  $('stkFeedback').innerHTML='<div class="card" style="min-height:auto;padding:16px;margin-top:4px"><div style="font-weight:800;color:#2E7D32;margin-bottom:10px">✓ Correct order &amp; direction!</div><div class="meaning">'+(stkCell?stkCell.m:'')+'</div><div class="readings" style="margin-top:8px">'+(stkCell?readingsHTML(stkCell):'')+'</div><button class="speak" id="stkSpk" style="margin-top:12px">🔊 Say it</button></div>';
+  if(stkCell){$('stkSpk').onclick=()=>speak(stkCell.k);if(soundOn)speak(stkCell.k);}
+ }else{
+  $('stkFeedback').innerHTML='<div style="font-weight:800;color:#C4452E;margin-bottom:4px">Not quite — tap ▶ Watch, then retry.</div>'+fb.map(x=>'<div style="font-size:13px;color:var(--text)">'+x+'</div>').join('');
+ }
 }
 function spos(e){const cv=$('stkCanvas'),r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
 (function(){const cv=$('stkCanvas');
