@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="theme-color" content="#13182B"/>
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png"/>
+<title>Deeply Connected Learning — Self Introductions</title>
+<style>
+ :root{
+  --ink:#13182B;--ink2:#1E2540;--ink3:#2A3358;--line:#313a5e;
+  --paper:#F7F4EC;--paper2:#FFFFFF;--text:#1B2233;--muted:#7A819A;--muted2:#9AA0B6;
+  --ver:#E2553B;--ver-d:#C4452E;--know:#2E7D32;
+  --display:"Hiragino Mincho ProN","Yu Mincho",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+ }
+ *{box-sizing:border-box}
+ body{margin:0;background:var(--ink);color:#EDEFF8;font:16px/1.55 var(--sans);-webkit-tap-highlight-color:transparent}
+ header{background:var(--ink);color:#EDEFF8;padding:calc(env(safe-area-inset-top) + 10px) 14px 10px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line)}
+ #back{background:var(--ink2);border:1px solid var(--line);color:#cfd4ea;font-size:15px;font-weight:800;border-radius:9px;padding:5px 11px;cursor:pointer;visibility:hidden}
+ .brand-badge{width:30px;height:30px;border-radius:8px;object-fit:cover;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.28);flex:0 0 auto}
+ .brand-wrap{display:flex;flex-direction:column;min-width:0}
+ .brand{font-family:var(--display);font-size:14px;letter-spacing:.3px;line-height:1.12;white-space:nowrap}
+ .brand b{color:var(--ver);font-weight:600}
+ .brand-jp{font-size:9px;color:var(--muted2);letter-spacing:2.5px;margin-top:1px}
+ main{max-width:600px;margin:0 auto;padding:14px}
+ .scr{display:none}.scr.on{display:block}
+ .lead{font-size:13px;color:var(--muted2);text-align:center;margin:2px 0 12px}
+ .title-jp{font-family:var(--display);font-size:22px;text-align:center;margin:6px 0 0}
+ .title-kana{font-size:11px;color:var(--muted2);letter-spacing:2px;text-align:center;margin-top:2px}
+ .tile{display:flex;align-items:center;gap:14px;background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:16px;padding:16px;margin:10px 0;cursor:pointer;transition:transform .08s}
+ .tile:active{transform:scale(.985)}.tile .ic{font-size:28px;width:42px;text-align:center}
+ .tile h2{margin:0;font-size:16px}.tile p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+ .prose{background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:14px;padding:16px;margin:10px 0}
+ .prose h3{margin:0 0 6px;color:var(--ver)}.prose p{margin:6px 0;font-size:14px}
+ .line{background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:14px;padding:14px 16px;margin:10px 0;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+ .line .k{font-family:var(--display);font-size:22px;line-height:1.5}
+ .line .h{font-size:16px;color:#333;margin-top:5px}
+ .line .r{font-size:12.5px;color:var(--muted);font-style:italic;margin-top:4px}
+ .line .e{font-size:13.5px;color:var(--text);margin-top:6px}
+ .line .blank{color:var(--ver);font-weight:700;border-bottom:2px dashed var(--ver);padding:0 4px}
+ .spk{background:var(--paper2);border:1px solid #e3d9c6;color:var(--ver);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:800;cursor:pointer;margin-top:8px}
+ .seg{display:flex;background:var(--ink2);border:1px solid var(--line);border-radius:999px;overflow:hidden;margin:0 auto 12px;max-width:320px}
+ .seg button{flex:1;border:none;background:none;padding:9px;font-weight:700;font-size:13px;color:#aeb4cf;cursor:pointer}
+ .seg button.on{background:var(--ver);color:#fff}
+ label.fld{display:block;background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:12px;padding:12px 14px;margin:9px 0}
+ label.fld .lab{font-size:12px;font-weight:800;color:var(--ver);display:block;margin-bottom:6px}
+ label.fld .hint{font-weight:400;color:var(--muted);font-size:11px}
+ input.fi,select.fi{width:100%;border:1px solid #d8ccb6;border-radius:9px;padding:11px;font-size:16px;background:#fff;color:var(--text);font-family:var(--sans)}
+ .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+ .chip{background:#efe7d6;border:1px solid #e3d9c6;border-radius:999px;padding:5px 11px;font-size:13px;cursor:pointer;color:var(--text)}
+ .chip b{color:var(--ver)}
+ .preview{background:var(--paper);border:2px solid var(--ver);border-radius:16px;padding:16px;margin:12px 0}
+ .preview .pk{font-family:var(--display);font-size:20px;line-height:1.7}
+ .preview .pe{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.5}
+ .btn{display:block;width:100%;background:var(--ver);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;margin:10px 0}
+ .btn.alt{background:var(--paper2);color:var(--ver);border:1px solid #e3d9c6}
+ .ghost{background:var(--paper2);border:1px solid #e3d9c6;color:var(--muted);border-radius:10px;padding:9px 12px;font-size:13px;font-weight:700;cursor:pointer}
+ .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(30px);background:var(--know);color:#fff;padding:11px 18px;border-radius:999px;font-weight:800;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:20}
+ .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+ .perform-card{background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:18px;padding:24px 18px;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 8px 22px rgba(0,0,0,.28)}
+ .perform-card .big{font-family:var(--display);font-size:26px;line-height:1.7}
+ .perform-card .sm{font-size:13px;color:var(--muted);margin-top:14px}
+ .stepnav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}
+ .empty{text-align:center;color:var(--muted2);padding:30px 10px}
+ textarea.fi{width:100%;border:1px solid #d8ccb6;border-radius:9px;padding:11px;font-size:16px;background:#fff;color:var(--text);font-family:var(--sans)}
+ .ja-out{background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:14px;padding:18px 16px;margin:10px 0;font-family:var(--display);font-size:24px;line-height:2.5}
+ .ja-out ruby rt{font-size:11px;color:var(--ver);font-family:var(--sans)}
+ .tok{cursor:pointer;border-radius:6px;padding:0 1px;transition:background .1s}
+ .tok:active,.tok.sel{background:#f6e0d9}
+ .vrow{display:flex;align-items:center;gap:10px;background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:10px;padding:9px 12px;margin:6px 0;cursor:pointer}
+ .vrow .vj{font-family:var(--display);font-size:18px;min-width:64px}
+ .vrow .vr{font-size:12px;color:var(--muted)}
+ .vrow .ve{margin-left:auto;font-size:13px;color:var(--text);text-align:right;max-width:55%}
+ .infobar{background:var(--ink2);color:#EDEFF8;border-radius:12px;padding:12px 14px;margin:10px 0;display:none}
+ .infobar.show{display:block}
+</style>
+</head>
+<body>
+<header>
+ <button id="back">‹</button>
+ <img class="brand-badge" src="icons/icon-192.png" alt="FKTI logo"/>
+ <div class="brand-wrap"><div class="brand">Deeply Connected <b>Learning</b></div><div class="brand-jp">深い関係学び</div></div>
+</header>
+<main>
+
+ <section class="scr on" id="home">
+  <div class="title-jp">日本語の<b style="color:var(--ver)">自己紹介</b></div>
+  <div class="title-kana">にほんご の じこしょうかい · Self Introductions</div>
+  <p class="lead" style="margin-top:12px">Learn the template, make it <b>yours</b>, and save your own script to practice.</p>
+  <div class="tile" data-go="learn"><div class="ic">📖</div><div><h2>Learn the template</h2><p>Line by line — kanji, hiragana, romaji, English &amp; audio.</p></div></div>
+  <div class="tile" data-go="build"><div class="ic">✍️</div><div><h2>Build your intro</h2><p>Fill in the blanks, hear it, and <b>save</b> your personalized script.</p></div></div>
+  <div class="tile" data-go="perform"><div class="ic">🎤</div><div><h2>Practice &amp; perform</h2><p>Your saved script — play it, or rehearse line by line.</p></div></div>
+  <div class="tile" data-go="say"><div class="ic">🗣️</div><div><h2>Say it in Japanese</h2><p>Type any English → clickable Japanese with furigana, audio &amp; a vocab list.</p></div></div>
+ </section>
+
+ <section class="scr" id="learn">
+  <div class="seg" id="learnSeg"><button data-m="k" class="on">漢字 Kanji</button><button data-m="h">ひらがな Kana</button><button data-m="e">English</button></div>
+  <div id="learnLines"></div>
+  <div class="prose">
+   <h3>The blanks — make it your own</h3>
+   <p><span style="color:var(--ver);font-weight:700">名前 / なまえ</span> — your name (foreign names are often written in <b>katakana</b>).</p>
+   <p><span style="color:var(--ver);font-weight:700">学年 / 職業</span> — your grade <b>or</b> occupation: 高校生 (high schooler), 大学生 (college student), 会社員 (office worker), 先生 (teacher)…</p>
+   <p><span style="color:var(--ver);font-weight:700">才 / さい</span> — your age, any number (the app writes the kanji &amp; reading for you).</p>
+   <p><span style="color:var(--ver);font-weight:700">一番好きな事</span> — your <b>favorite thing about Japan</b> so far. Pick something that shows your personality! (Use a dictionary or AI to find the word.)</p>
+   <p style="color:var(--muted);font-size:13px">More vocab: <b>おんがく</b> = music · <b>たべもの</b> = food · <b>アニメ</b> = anime · <b>ゲーム</b> = games · <b>まんが</b> = manga</p>
+   <button class="btn" data-go="build">Build your intro →</button>
+  </div>
+ </section>
+
+ <section class="scr" id="build">
+  <p class="lead">Fill these in. Type names/words in <b>kana</b> if you can (or romaji/English is fine).</p>
+  <label class="fld"><span class="lab">Your name <span class="hint">名前 · e.g. グレッグ / Greg</span></span><input class="fi" id="fName" placeholder="グレッグ" autocomplete="off"></label>
+  <label class="fld"><span class="lab">Grade or occupation <span class="hint">私は___です · type in kana if you can</span></span><input class="fi" id="fRole" placeholder="高校生 / 大学生 / 会社員…" autocomplete="off"><div class="chips" id="roleChips"></div></label>
+  <label class="fld"><span class="lab">Age <span class="hint">才 · さい · any number</span></span><input class="fi" id="fAge" type="number" min="1" max="120" inputmode="numeric" placeholder="16" autocomplete="off"></label>
+  <label class="fld"><span class="lab">Favorite thing about Japan <span class="hint">一番好きな事</span></span><input class="fi" id="fFav" placeholder="おんがく" autocomplete="off">
+   <div class="chips" id="favChips"></div></label>
+  <div class="preview"><div class="pk" id="pvText"></div><div class="pe" id="pvEn"></div><button class="spk" id="pvSpeak">🔊 Hear my intro</button></div>
+  <button class="btn" id="saveBtn">💾 Save my script</button>
+  <button class="btn alt" data-go="perform">Go practice →</button>
+ </section>
+
+ <section class="scr" id="perform">
+  <div id="performBody"></div>
+ </section>
+
+ <section class="scr" id="say">
+  <p class="lead">Type what you want to say in <b>English</b>, then tap ✦. Tap any Japanese word to hear it &amp; see its meaning.</p>
+  <textarea id="sayEn" class="fi" rows="3" placeholder="e.g. I love Japanese music and I want to visit Tokyo someday." style="resize:vertical"></textarea>
+  <button class="btn" id="sayBtn">✦ Translate to Japanese</button>
+  <div id="sayStatus" style="text-align:center;font-size:13px;color:var(--muted2);min-height:1.2em"></div>
+  <div class="infobar" id="sayInfo"></div>
+  <div id="sayOut"></div>
+  <div id="sayVocab"></div>
+  <p style="font-size:11px;color:var(--muted2);text-align:center;margin-top:16px">Free prototype — translation by MyMemory, furigana by kuromoji. Machine translation isn’t perfect; check important phrases with your teacher.</p>
+ </section>
+
+</main>
+<div class="toast" id="toast">Saved! ✓</div>
+<script src="https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/build/kuromoji.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='learn')renderLearn();if(id==='build')renderBuild();if(id==='perform')renderPerform();}
+$('back').onclick=()=>go('home');
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
+
+function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=0.85;const v=(speechSynthesis.getVoices()||[]).find(x=>(x.lang||'').toLowerCase().startsWith('ja'));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(_){}}
+
+const KEY='fkti_selfintro';
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(_){return {};}}
+function save(s){localStorage.setItem(KEY,JSON.stringify(s));}
+let S=load();
+
+function numKana(n){const o=['','いち','に','さん','よん','ご','ろく','なな','はち','きゅう'];if(n<1||n>99)return String(n);if(n<10)return o[n];const t=Math.floor(n/10),u=n%10;return (t===1?'じゅう':o[t]+'じゅう')+(u?o[u]:'');}
+function ageKana(n){let r=numKana(n);const u=n%10;if(u===1)r=r.replace(/いち$/,'いっ');else if(u===8)r=r.replace(/はち$/,'はっ');else if(u===0&&n>=10)r=r.replace(/じゅう$/,'じゅっ');return r;}
+function num2kanji(n){const k=['','一','二','三','四','五','六','七','八','九'];if(n<1||n>99)return String(n);if(n<10)return k[n];const t=Math.floor(n/10),u=n%10;return (t===1?'十':k[t]+'十')+(u?k[u]:'');}
+const ROLECHIPS=[['high schooler','高校生'],['college student','大学生'],['middle schooler','中学生'],['office worker','会社員'],['teacher','先生'],['engineer','エンジニア']];
+const FAVCHIPS=[['music','おんがく'],['food','たべもの'],['anime','アニメ'],['games','ゲーム'],['manga','まんが'],['cherry blossoms','さくら'],['bullet train','しんかんせん']];
+
+// build the 5 lines; if blank=true use dashed placeholders, else fill from S
+function lines(blank){
+ const nm=blank?'____':(S.name||'____');
+ const fv=blank?'____':(S.fav||'____');
+ const role=blank?'____':(S.role||'____');
+ const age=(!blank&&S.age)?parseInt(S.age,10):null;
+ const aK=(blank||!age)?'__':num2kanji(age), aH=(blank||!age)?'__':ageKana(age), aN=(blank||!age)?'__':age;
+ const B=t=>'<span class="blank">'+t+'</span>';
+ return [
+  {k:'今日は、私の名前は'+(blank?B('名前'):nm)+'です。',h:'こんにちは、わたしのなまえは'+(blank?B('なまえ'):nm)+'です。',r:'Konnichiwa, watashi no namae wa '+nm+' desu.',e:'Hello, my name is '+nm+'.'},
+  {k:'はじめまして、どうぞよろしく。',h:'はじめまして、どうぞよろしく。',r:'Hajimemashite, dōzo yoroshiku.',e:'How do you do — pleased to meet you.'},
+  {k:'私は'+(blank?B('学年/職業'):role)+'です。'+(blank?B('才'):aK)+'才です。',h:'わたしは'+(blank?B('がくねん / しょくぎょう'):role)+'です。'+(blank?B('さい'):aH)+'さいです。',r:'Watashi wa '+role+' desu. '+aH+' sai desu.',e:'I’m '+role+'. I’m '+aN+' years old.'},
+  {k:'私は日本に一番好きな事が'+(blank?B('好きな事'):fv)+'です。',h:'わたしは、にほんにいちばんすきなことが、'+(blank?B('すきなこと'):fv)+'です。',r:'Watashi wa Nihon ni ichiban suki na koto ga '+fv+' desu.',e:'My favorite thing about Japan is '+fv+'.'},
+  {k:'ありがとうございます。',h:'ありがとうございます。',r:'Arigatō gozaimasu.',e:'Thank you very much.'}
+ ];
+}
+function scriptText(mode){return lines(false).map(l=>mode==='k'?l.k:l.h).join('');}
+
+// ===== Learn =====
+let learnMode='k';
+function renderLearn(){
+ const L=lines(true);
+ $('learnLines').innerHTML=L.map((l,i)=>
+  '<div class="line"><div class="k">'+l.k+'</div><div class="h">'+l.h+'</div>'+
+  (learnMode==='e'?'<div class="e">'+l.e+'</div>':'<div class="r">'+l.r+'</div>')+
+  '<button class="spk" data-i="'+i+'">🔊 say it</button></div>').join('');
+ $('learnLines').querySelectorAll('.spk').forEach(b=>b.onclick=()=>speak(L[+b.dataset.i].h.replace(/[_＿]+/g,'').replace(/<[^>]+>/g,'')));
+}
+document.querySelectorAll('#learnSeg button').forEach(b=>b.onclick=()=>{learnMode=b.dataset.m;document.querySelectorAll('#learnSeg button').forEach(x=>x.classList.toggle('on',x===b));renderLearn();});
+
+// ===== Build =====
+function renderBuild(){
+ $('fName').value=S.name||'';$('fRole').value=S.role||'';$('fAge').value=S.age||'';$('fFav').value=S.fav||'';
+ $('roleChips').innerHTML=ROLECHIPS.map(c=>'<button class="chip" data-w="'+c[1]+'"><b>'+c[1]+'</b> '+c[0]+'</button>').join('');
+ $('roleChips').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{$('fRole').value=b.dataset.w;syncBuild();});
+ $('favChips').innerHTML=FAVCHIPS.map(c=>'<button class="chip" data-w="'+c[1]+'"><b>'+c[1]+'</b> '+c[0]+'</button>').join('');
+ $('favChips').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{$('fFav').value=b.dataset.w;syncBuild();});
+ syncBuild();
+}
+function syncBuild(){
+ S.name=$('fName').value.trim();S.role=$('fRole').value.trim();S.age=$('fAge').value.trim();S.fav=$('fFav').value.trim();
+ const L=lines(false);
+ $('pvText').innerHTML=L.map(l=>l.h).join('<br>');
+ $('pvEn').innerHTML=L.map(l=>l.e).join(' ');
+}
+['fName','fRole','fAge','fFav'].forEach(id=>$(id).addEventListener('input',syncBuild));
+$('pvSpeak').onclick=()=>speak(scriptText('h'));
+$('saveBtn').onclick=()=>{syncBuild();save(S);const t=$('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400);};
+
+// ===== Perform =====
+let perfMode='h',perfStep=-1; // -1 = full script; >=0 = line-by-line
+function renderPerform(){
+ S=load();
+ const has=S.name||S.grade||S.age||S.fav;
+ if(!has){$('performBody').innerHTML='<div class="empty">No script yet.<br><br><button class="btn" data-go="build">✍️ Build your intro first</button></div>';$('performBody').querySelector('[data-go]').onclick=()=>go('build');return;}
+ const L=lines(false);
+ if(perfStep<0){
+  $('performBody').innerHTML=
+   '<div class="seg" id="perfSeg"><button data-m="h" class="'+(perfMode==='h'?'on':'')+'">ひらがな</button><button data-m="k" class="'+(perfMode==='k'?'on':'')+'">漢字</button></div>'+
+   '<div class="perform-card"><div class="big">'+L.map(l=>perfMode==='k'?l.k:l.h).join('<br>')+'</div></div>'+
+   '<button class="btn" id="playAll">🔊 Play my whole intro</button>'+
+   '<button class="btn alt" id="rehearse">🎬 Rehearse line by line</button>'+
+   '<div style="text-align:center"><button class="ghost" data-go="build">✍️ Edit</button></div>';
+  $('performBody').querySelectorAll('#perfSeg button').forEach(b=>b.onclick=()=>{perfMode=b.dataset.m;renderPerform();});
+  $('playAll').onclick=()=>speak(scriptText(perfMode));
+  $('rehearse').onclick=()=>{perfStep=0;renderPerform();};
+  $('performBody').querySelector('[data-go]').onclick=()=>go('build');
+ }else{
+  const done=perfStep>=L.length;
+  if(done){
+   $('performBody').innerHTML='<div class="perform-card"><div style="font-size:52px">🙇</div><div class="big" style="font-size:22px;margin-top:8px">お疲れさま！</div><div class="sm">Nicely done — that’s your whole self-introduction.</div></div>'+
+    '<button class="btn" id="again">🎬 Rehearse again</button><button class="btn alt" id="back2">← Back to script</button>';
+   $('again').onclick=()=>{perfStep=0;renderPerform();};$('back2').onclick=()=>{perfStep=-1;renderPerform();};
+   return;
+  }
+  const l=L[perfStep];
+  $('performBody').innerHTML=
+   '<div class="sm" style="text-align:center;color:var(--muted2)">Line '+(perfStep+1)+' / '+L.length+'</div>'+
+   '<div class="perform-card"><div class="big">'+(perfMode==='k'?l.k:l.h)+'</div><div class="sm" id="reveal" style="cursor:pointer">tap to reveal English</div></div>'+
+   '<button class="btn" id="sayLine">🔊 Say this line</button>'+
+   '<div class="stepnav"><button class="ghost" id="prev">‹ Prev</button><button class="ghost" id="exit">Exit</button><button class="btn" style="width:auto;margin:0;padding:12px 22px" id="next">Next ›</button></div>';
+  $('sayLine').onclick=()=>speak(l.h);
+  $('reveal').onclick=e=>{e.currentTarget.textContent=l.e;e.currentTarget.style.color='var(--text)';};
+  $('prev').onclick=()=>{if(perfStep>0)perfStep--;renderPerform();};
+  $('next').onclick=()=>{perfStep++;renderPerform();};
+  $('exit').onclick=()=>{perfStep=-1;renderPerform();};
+  speak(l.h);
+ }
+}
+
+// ===== Say it in Japanese (free: MyMemory translate + kuromoji furigana) =====
+function kata2hira(s){return (s||'').replace(/[ァ-ヶ]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60));}
+async function mm(q,pair){const u='https://api.mymemory.translated.net/get?q='+encodeURIComponent(q)+'&langpair='+pair;const r=await fetch(u);if(!r.ok)throw new Error('net');const j=await r.json();const t=j&&j.responseData&&j.responseData.translatedText;if(!t)throw new Error('empty');return t;}
+let tokenizer=null;
+function loadTokenizer(){return new Promise(res=>{if(tokenizer)return res(tokenizer);if(typeof kuromoji==='undefined')return res(null);kuromoji.builder({dicPath:'https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict/'}).build((e,tk)=>{res(e?null:(tokenizer=tk));});});}
+const glossCache={};
+async function gloss(w){if(w in glossCache)return glossCache[w];try{const g=await mm(w,'ja|en');glossCache[w]=g;return g;}catch(_){return '';}}
+const rdOf=t=>kata2hira(t.reading&&t.reading!=='*'?t.reading:'');
+const baseOf=t=>(t.basic_form&&t.basic_form!=='*')?t.basic_form:t.surface_form;
+async function doTranslate(){
+ const en=$('sayEn').value.trim();if(!en)return;
+ $('sayOut').innerHTML='';$('sayVocab').innerHTML='';$('sayInfo').classList.remove('show');
+ $('sayStatus').textContent='Translating…';
+ let ja;try{ja=await mm(en,'en|ja');}catch(_){$('sayStatus').innerHTML='<span style="color:var(--ver)">Translation unavailable right now — try again shortly.</span>';return;}
+ $('sayStatus').textContent='Adding furigana…';
+ const tk=await loadTokenizer();
+ renderJa(ja,tk);
+ $('sayStatus').textContent='';
+}
+function renderJa(ja,tk){
+ const play='<button class="spk" id="sayPlay" style="margin:0 0 6px">🔊 Play whole sentence</button>';
+ if(!tk){$('sayOut').innerHTML=play+'<div class="ja-out">'+ja+'</div>';$('sayPlay').onclick=()=>speak(ja);$('sayVocab').innerHTML='<p style="font-size:12px;color:var(--muted2)">Furigana &amp; word list couldn’t load (dictionary offline) — full-sentence audio still works.</p>';return;}
+ const toks=tk.tokenize(ja);let html=play+'<div class="ja-out">';
+ toks.forEach((t,i)=>{const sf=t.surface_form,rd=rdOf(t),hasKanji=/[一-龯]/.test(sf);const inner=(hasKanji&&rd&&rd!==sf)?'<ruby>'+sf+'<rt>'+rd+'</rt></ruby>':sf;if(/^(記号|補助記号)/.test(t.pos)||!sf.trim())html+=sf;else html+='<span class="tok" data-i="'+i+'">'+inner+'</span>';});
+ html+='</div>';$('sayOut').innerHTML=html;$('sayPlay').onclick=()=>speak(ja);
+ $('sayOut').querySelectorAll('.tok').forEach(sp=>{const t=toks[+sp.dataset.i];sp.onclick=async()=>{$('sayOut').querySelectorAll('.tok').forEach(x=>x.classList.remove('sel'));sp.classList.add('sel');speak(t.surface_form);const ib=$('sayInfo');ib.classList.add('show');ib.innerHTML='<b style="font-size:18px;font-family:var(--display)">'+t.surface_form+'</b> <span style="color:var(--muted2)">'+rdOf(t)+'</span> — <span id="ibE">…</span>';const g=await gloss(baseOf(t));const e=document.getElementById('ibE');if(e)e.textContent=g||'(no translation)';};});
+ const seen=new Set(),vocab=[];toks.forEach(t=>{const base=baseOf(t);if(/^(名詞|動詞|形容詞|副詞)/.test(t.pos)&&!seen.has(base)){seen.add(base);vocab.push({j:base,r:rdOf(t)});}});
+ if(vocab.length){$('sayVocab').innerHTML='<div style="font-size:12px;font-weight:800;color:var(--ver);margin:12px 2px 4px">VOCAB · tap to hear</div>'+vocab.map((v,i)=>'<div class="vrow" data-i="'+i+'"><span class="vj">'+v.j+'</span><span class="vr">'+v.r+'</span><span class="ve" id="ve'+i+'">…</span></div>').join('');$('sayVocab').querySelectorAll('.vrow').forEach(row=>{const v=vocab[+row.dataset.i];row.onclick=()=>speak(v.j);gloss(v.j).then(g=>{const el=document.getElementById('ve'+row.dataset.i);if(el)el.textContent=g||'—';});});}
+}
+$('sayBtn').onclick=doTranslate;
+
+if(window.speechSynthesis)speechSynthesis.onvoiceschanged=()=>{};
+go('home');
+</script>
+</body>
+</html>
