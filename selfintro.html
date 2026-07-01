@@ -38,32 +38,35 @@
  .line .h{font-size:16px;color:#333;margin-top:5px}
  .line .r{font-size:12.5px;color:var(--muted);font-style:italic;margin-top:4px}
  .line .e{font-size:13.5px;color:var(--text);margin-top:6px}
- .line .blank{color:var(--ver);font-weight:700;border-bottom:2px dashed var(--ver);padding:0 4px}
  .spk{background:var(--paper2);border:1px solid #e3d9c6;color:var(--ver);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:800;cursor:pointer;margin-top:8px}
- .seg{display:flex;background:var(--ink2);border:1px solid var(--line);border-radius:999px;overflow:hidden;margin:0 auto 12px;max-width:320px}
+ .seg{display:flex;background:var(--ink2);border:1px solid var(--line);border-radius:999px;overflow:hidden;margin:0 auto 12px;max-width:340px}
  .seg button{flex:1;border:none;background:none;padding:9px;font-weight:700;font-size:13px;color:#aeb4cf;cursor:pointer}
  .seg button.on{background:var(--ver);color:#fff}
- label.fld{display:block;background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:12px;padding:12px 14px;margin:9px 0}
- label.fld .lab{font-size:12px;font-weight:800;color:var(--ver);display:block;margin-bottom:6px}
- label.fld .hint{font-weight:400;color:var(--muted);font-size:11px}
- input.fi,select.fi{width:100%;border:1px solid #d8ccb6;border-radius:9px;padding:11px;font-size:16px;background:#fff;color:var(--text);font-family:var(--sans)}
+ label.fld,div.fld{display:block;background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:12px;padding:12px 14px;margin:9px 0}
+ .fld .lab{font-size:12px;font-weight:800;color:var(--ver);display:block;margin-bottom:6px}
+ .fld .hint{font-weight:400;color:var(--muted);font-size:11px}
+ input.fi,select.fi,textarea.fi{width:100%;border:1px solid #d8ccb6;border-radius:9px;padding:11px;font-size:16px;background:#fff;color:var(--text);font-family:var(--sans)}
  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
- .chip{background:#efe7d6;border:1px solid #e3d9c6;border-radius:999px;padding:5px 11px;font-size:13px;cursor:pointer;color:var(--text)}
- .chip b{color:var(--ver)}
+ .chip{background:#efe7d6;border:1px solid #e3d9c6;border-radius:999px;padding:6px 11px;font-size:13px;cursor:pointer;color:var(--text)}
+ .chip.on{background:var(--ver);color:#fff;border-color:var(--ver)}
+ .gopt{display:block;width:100%;text-align:left;background:var(--paper2);border:1px solid #e3d9c6;border-radius:10px;padding:10px 13px;margin:6px 0;font-family:var(--display);font-size:16px;color:var(--text);cursor:pointer}
+ .gopt.on{border-color:var(--ver);background:#fbeee9}
+ .gopt span{display:block;font-family:var(--sans);font-size:11px;color:var(--muted);margin-top:2px}
  .preview{background:var(--paper);color:var(--text);border:2px solid var(--ver);border-radius:16px;padding:16px;margin:12px 0}
- .preview .pk{font-family:var(--display);font-size:20px;line-height:1.7}
- .preview .pe{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.5}
+ .preview .pk{font-family:var(--display);font-size:19px;line-height:1.6}
+ .preview .pr{font-size:12.5px;color:var(--muted);font-style:italic;margin-top:3px;line-height:1.4}
+ .preview .pe{font-size:12.5px;color:var(--muted2);margin-top:3px;line-height:1.4}
  .btn{display:block;width:100%;background:var(--ver);color:#fff;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;margin:10px 0}
  .btn.alt{background:var(--paper2);color:var(--ver);border:1px solid #e3d9c6}
+ .btn:disabled{opacity:.6}
  .ghost{background:var(--paper2);border:1px solid #e3d9c6;color:var(--muted);border-radius:10px;padding:9px 12px;font-size:13px;font-weight:700;cursor:pointer}
  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(30px);background:var(--know);color:#fff;padding:11px 18px;border-radius:999px;font-weight:800;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:20}
  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
  .perform-card{background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:18px;padding:24px 18px;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 8px 22px rgba(0,0,0,.28)}
- .perform-card .big{font-family:var(--display);font-size:26px;line-height:1.7}
- .perform-card .sm{font-size:13px;color:var(--muted);margin-top:14px}
+ .perform-card .big{font-family:var(--display);font-size:24px;line-height:1.7}
+ .perform-card .sm{font-size:13px;color:var(--muted);margin-top:12px}
  .stepnav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}
  .empty{text-align:center;color:var(--muted2);padding:30px 10px}
- textarea.fi{width:100%;border:1px solid #d8ccb6;border-radius:9px;padding:11px;font-size:16px;background:#fff;color:var(--text);font-family:var(--sans)}
  .ja-out{background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:14px;padding:18px 16px;margin:10px 0;font-family:var(--display);font-size:24px;line-height:2.5}
  .ja-out ruby rt{font-size:11px;color:var(--ver);font-family:var(--sans)}
  .tok{cursor:pointer;border-radius:6px;padding:0 1px;transition:background .1s}
@@ -87,35 +90,30 @@
  <section class="scr on" id="home">
   <div class="title-jp">日本語の<b style="color:var(--ver)">自己紹介</b></div>
   <div class="title-kana">にほんご の じこしょうかい · Self Introductions</div>
-  <p class="lead" style="margin-top:12px">Learn the template, make it <b>yours</b>, and save your own script to practice.</p>
-  <div class="tile" data-go="learn"><div class="ic">📖</div><div><h2>Learn the template</h2><p>Line by line — kanji, hiragana, romaji, English &amp; audio.</p></div></div>
-  <div class="tile" data-go="build"><div class="ic">✍️</div><div><h2>Build your intro</h2><p>Fill in the blanks, hear it, and <b>save</b> your personalized script.</p></div></div>
+  <p class="lead" style="margin-top:12px">Build your own introduction, save it, and practice.</p>
+  <div class="tile" data-go="learn"><div class="ic">📖</div><div><h2>Learn the template</h2><p>The lines everyone says — kanji, hiragana, romaji, English &amp; audio.</p></div></div>
+  <div class="tile" data-go="build"><div class="ic">✍️</div><div><h2>Build your intro</h2><p>Pick a greeting + 3 things about you (in English) — we translate &amp; <b>save</b> it.</p></div></div>
   <div class="tile" data-go="perform"><div class="ic">🎤</div><div><h2>Practice &amp; perform</h2><p>Your saved script — play it, or rehearse line by line.</p></div></div>
   <div class="tile" data-go="say"><div class="ic">🗣️</div><div><h2>Say it in Japanese</h2><p>Type any English → clickable Japanese with furigana, audio &amp; a vocab list.</p></div></div>
  </section>
 
  <section class="scr" id="learn">
-  <div class="seg" id="learnSeg"><button data-m="k" class="on">漢字 Kanji</button><button data-m="h">ひらがな Kana</button><button data-m="e">English</button></div>
+  <p class="lead">Everyone starts and ends the same way. In the middle you pick <b>3</b> things to make it yours.</p>
   <div id="learnLines"></div>
-  <div class="prose">
-   <h3>The blanks — make it your own</h3>
-   <p><span style="color:var(--ver);font-weight:700">名前 / なまえ</span> — your name (foreign names are often written in <b>katakana</b>).</p>
-   <p><span style="color:var(--ver);font-weight:700">学年 / 職業</span> — your grade <b>or</b> occupation: 高校生 (high schooler), 大学生 (college student), 会社員 (office worker), 先生 (teacher)…</p>
-   <p><span style="color:var(--ver);font-weight:700">才 / さい</span> — your age, any number (the app writes the kanji &amp; reading for you).</p>
-   <p><span style="color:var(--ver);font-weight:700">一番好きな事</span> — your <b>favorite thing about Japan</b> so far. Pick something that shows your personality! (Use a dictionary or AI to find the word.)</p>
-   <p style="color:var(--muted);font-size:13px">More vocab: <b>おんがく</b> = music · <b>たべもの</b> = food · <b>アニメ</b> = anime · <b>ゲーム</b> = games · <b>まんが</b> = manga</p>
-   <button class="btn" data-go="build">Build your intro →</button>
-  </div>
+  <div class="prose"><p style="margin:0;color:var(--muted);font-size:13px">Names &amp; foreign words are usually written in <b>katakana</b>. In <b>Build</b>, you write your 3 answers in English and the app translates them to Japanese with readings.</p></div>
+  <button class="btn" data-go="build">Build your intro →</button>
  </section>
 
  <section class="scr" id="build">
-  <p class="lead">Fill these in. Type names/words in <b>kana</b> if you can (or romaji/English is fine).</p>
-  <label class="fld"><span class="lab">Your name <span class="hint">名前 · e.g. グレッグ / Greg</span></span><input class="fi" id="fName" placeholder="グレッグ" autocomplete="off"></label>
-  <label class="fld"><span class="lab">Grade or occupation <span class="hint">私は___です · type in kana if you can</span></span><input class="fi" id="fRole" placeholder="高校生 / 大学生 / 会社員…" autocomplete="off"><div class="chips" id="roleChips"></div></label>
-  <label class="fld"><span class="lab">Age <span class="hint">才 · さい · any number</span></span><input class="fi" id="fAge" type="number" min="1" max="120" inputmode="numeric" placeholder="16" autocomplete="off"></label>
-  <label class="fld"><span class="lab">Favorite thing about Japan <span class="hint">一番好きな事</span></span><input class="fi" id="fFav" placeholder="おんがく" autocomplete="off">
-   <div class="chips" id="favChips"></div></label>
-  <div class="preview"><div class="pk" id="pvText"></div><div class="pe" id="pvEn"></div><button class="spk" id="pvSpeak">🔊 Hear my intro</button></div>
+  <p class="lead">Name yourself, pick a greeting, then choose <b>3 things</b> to say. Write the answers in <b>English</b> — tap ✦ and we translate.</p>
+  <label class="fld"><span class="lab">Your name <span class="hint">名前 · e.g. グレッグ / Greg</span></span><input class="fi" id="fName" placeholder="Greg / グレッグ" autocomplete="off"></label>
+  <div class="fld"><span class="lab">Greeting</span>
+   <button class="gopt on" data-g="a">はじめまして、どうぞよろしく。<span>Hajimemashite, dōzo yoroshiku — “How do you do.”</span></button>
+   <button class="gopt" data-g="b">よろしくおねがいします。<span>Yoroshiku onegaishimasu — “Pleased to meet you.”</span></button></div>
+  <div class="fld"><span class="lab">Pick up to 3 things about yourself <span class="hint" id="pickCount">(0/3)</span></span><div class="chips" id="modPicker"></div></div>
+  <div id="modInputs"></div>
+  <button class="btn" id="genBtn">✦ Translate to Japanese</button>
+  <div class="preview"><div id="pvBox"></div><button class="spk" id="pvSpeak">🔊 Hear my intro</button></div>
   <button class="btn" id="saveBtn">💾 Save my script</button>
   <button class="btn alt" data-go="perform">Go practice →</button>
  </section>
@@ -140,7 +138,7 @@
 <script src="https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/build/kuromoji.js"></script>
 <script>
 const $=id=>document.getElementById(id);
-function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='learn')renderLearn();if(id==='build')renderBuild();if(id==='perform')renderPerform();}
+function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='learn')renderLearn();if(id==='build')renderBuild();if(id==='perform')renderPerform();if(id==='say'||id==='build')loadTokenizer();}
 $('back').onclick=()=>go('home');
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
 
@@ -151,91 +149,149 @@ function load(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(_){r
 function save(s){localStorage.setItem(KEY,JSON.stringify(s));}
 let S=load();
 
+// ---- numbers (for age) ----
 function numKana(n){const o=['','いち','に','さん','よん','ご','ろく','なな','はち','きゅう'];if(n<1||n>99)return String(n);if(n<10)return o[n];const t=Math.floor(n/10),u=n%10;return (t===1?'じゅう':o[t]+'じゅう')+(u?o[u]:'');}
 function ageKana(n){let r=numKana(n);const u=n%10;if(u===1)r=r.replace(/いち$/,'いっ');else if(u===8)r=r.replace(/はち$/,'はっ');else if(u===0&&n>=10)r=r.replace(/じゅう$/,'じゅっ');return r;}
 function num2kanji(n){const k=['','一','二','三','四','五','六','七','八','九'];if(n<1||n>99)return String(n);if(n<10)return k[n];const t=Math.floor(n/10),u=n%10;return (t===1?'十':k[t]+'十')+(u?k[u]:'');}
-const ROLECHIPS=[['high schooler','高校生'],['college student','大学生'],['middle schooler','中学生'],['office worker','会社員'],['teacher','先生'],['engineer','エンジニア']];
-const FAVCHIPS=[['music','おんがく'],['food','たべもの'],['anime','アニメ'],['games','ゲーム'],['manga','まんが'],['cherry blossoms','さくら'],['bullet train','しんかんせん']];
 
-// build the 5 lines; if blank=true use dashed placeholders, else fill from S
-function lines(blank){
- const nm=blank?'____':(S.name||'____');
- const fv=blank?'____':(S.fav||'____');
- const role=blank?'____':(S.role||'____');
- const age=(!blank&&S.age)?parseInt(S.age,10):null;
- const aK=(blank||!age)?'__':num2kanji(age), aH=(blank||!age)?'__':ageKana(age), aN=(blank||!age)?'__':age;
- const B=t=>'<span class="blank">'+t+'</span>';
- return [
-  {k:'今日は、私の名前は'+(blank?B('名前'):nm)+'です。',h:'こんにちは、わたしのなまえは'+(blank?B('なまえ'):nm)+'です。',r:'Konnichiwa, watashi no namae wa '+nm+' desu.',e:'Hello, my name is '+nm+'.'},
-  {k:'はじめまして、どうぞよろしく。',h:'はじめまして、どうぞよろしく。',r:'Hajimemashite, dōzo yoroshiku.',e:'How do you do — pleased to meet you.'},
-  {k:'私は'+(blank?B('学年/職業'):role)+'です。'+(blank?B('才'):aK)+'才です。',h:'わたしは'+(blank?B('がくねん / しょくぎょう'):role)+'です。'+(blank?B('さい'):aH)+'さいです。',r:'Watashi wa '+role+' desu. '+aH+' sai desu.',e:'I’m '+role+'. I’m '+aN+' years old.'},
-  {k:'私は日本に一番好きな事が'+(blank?B('好きな事'):fv)+'です。',h:'わたしは、にほんにいちばんすきなことが、'+(blank?B('すきなこと'):fv)+'です。',r:'Watashi wa Nihon ni ichiban suki na koto ga '+fv+' desu.',e:'My favorite thing about Japan is '+fv+'.'},
-  {k:'ありがとうございます。',h:'ありがとうございます。',r:'Arigatō gozaimasu.',e:'Thank you very much.'}
- ];
+// ---- kana -> romaji (Hepburn-ish) ----
+function kanaRomaji(s){
+ if(!s)return '';
+ s=s.replace(/[ァ-ヶ]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60));
+ const di={'きゃ':'kya','きゅ':'kyu','きょ':'kyo','しゃ':'sha','しゅ':'shu','しょ':'sho','ちゃ':'cha','ちゅ':'chu','ちょ':'cho','にゃ':'nya','にゅ':'nyu','にょ':'nyo','ひゃ':'hya','ひゅ':'hyu','ひょ':'hyo','みゃ':'mya','みゅ':'myu','みょ':'myo','りゃ':'rya','りゅ':'ryu','りょ':'ryo','ぎゃ':'gya','ぎゅ':'gyu','ぎょ':'gyo','じゃ':'ja','じゅ':'ju','じょ':'jo','びゃ':'bya','びゅ':'byu','びょ':'byo','ぴゃ':'pya','ぴゅ':'pyu','ぴょ':'pyo'};
+ const mo={'あ':'a','い':'i','う':'u','え':'e','お':'o','か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko','さ':'sa','し':'shi','す':'su','せ':'se','そ':'so','た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to','な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no','は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho','ま':'ma','み':'mi','む':'mu','め':'me','も':'mo','や':'ya','ゆ':'yu','よ':'yo','ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro','わ':'wa','を':'o','ん':'n','が':'ga','ぎ':'gi','ぐ':'gu','げ':'ge','ご':'go','ざ':'za','じ':'ji','ず':'zu','ぜ':'ze','ぞ':'zo','だ':'da','ぢ':'ji','づ':'zu','で':'de','ど':'do','ば':'ba','び':'bi','ぶ':'bu','べ':'be','ぼ':'bo','ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po','ぁ':'a','ぃ':'i','ぅ':'u','ぇ':'e','ぉ':'o','ゃ':'ya','ゅ':'yu','ょ':'yo'};
+ let o='',i=0;
+ while(i<s.length){
+  const two=s.substr(i,2);
+  if(di[two]){o+=di[two];i+=2;continue;}
+  const c=s[i];
+  if(c==='っ'){const nx=di[s.substr(i+1,2)]||mo[s[i+1]]||'';if(nx)o+=nx[0];i++;continue;}
+  if(c==='ー'){o+=(o.slice(-1)||'');i++;continue;}
+  if(mo[c]!==undefined){o+=mo[c];i++;continue;}
+  o+=c;i++;
+ }
+ return o;
 }
-function scriptText(mode){return lines(false).map(l=>mode==='k'?l.k:l.h).join('');}
+function readingOf(ja){if(!tokenizer)return '';try{return tokenizer.tokenize(ja).map(t=>kata2hira(t.reading&&t.reading!=='*'?t.reading:t.surface_form)).join('');}catch(_){return '';}}
+
+// ---- fixed frame + pick-3 modules ----
+const GREET={
+ a:{k:'今日は。はじめまして、どうぞよろしく。',h:'こんにちは。はじめまして、どうぞよろしく。',r:'Konnichiwa. Hajimemashite, dōzo yoroshiku.',e:'Hello. How do you do — nice to meet you.'},
+ b:{k:'今日は。よろしくお願いします。',h:'こんにちは。よろしくおねがいします。',r:'Konnichiwa. Yoroshiku onegaishimasu.',e:'Hello. Pleased to meet you.'}
+};
+function nameLine(nm){nm=nm||(S.name||'____');return {k:'私の名前は'+nm+'です。',h:'わたしのなまえは'+nm+'です。',r:'Watashi no namae wa '+nm+' desu.',e:'My name is '+nm+'.'};}
+function thankYou(){return {k:'ありがとうございます。',h:'ありがとうございます。',r:'Arigatō gozaimasu.',e:'Thank you very much.'};}
+function ageLine(v){const n=parseInt(v,10)||0;return {k:num2kanji(n)+'才です。',h:ageKana(n)+'さいです。',r:kanaRomaji(ageKana(n))+' sai desu.',e:'I am '+(v||'__')+' years old.'};}
+const MODULES=[
+ {id:'age',label:'My age',num:true,ph:'16'},
+ {id:'hobby',label:'My hobby',ph:'playing soccer',frame:v=>'My hobby is '+v+'.'},
+ {id:'food',label:'Favorite food',ph:'ramen',frame:v=>'My favorite food is '+v+'.'},
+ {id:'anime',label:'Favorite anime',ph:'One Piece',frame:v=>'My favorite anime is '+v+'.'},
+ {id:'music',label:'Music I like',ph:'pop music',frame:v=>'The music I like is '+v+'.'},
+ {id:'song',label:'Favorite song',ph:'(song name)',frame:v=>'My favorite song is '+v+'.'},
+ {id:'japan',label:'Favorite thing about Japan',ph:'the food',frame:v=>'My favorite thing about Japan is '+v+'.'},
+ {id:'seen',label:'Best thing I’ve seen here',ph:'Mount Fuji',frame:v=>'The best thing I have seen in Japan so far is '+v+'.'},
+ {id:'surprised',label:'Something that surprised me',ph:'how clean it is',frame:v=>'Something that surprised me about Japan is '+v+'.'},
+ {id:'unique',label:'A unique fact about me',ph:'I can juggle',frame:v=>'A unique fact about me is '+v+'.'},
+ {id:'homestay',label:'Looking forward to (homestay)',ph:'the home-cooked food',frame:v=>'For my homestay, I am most looking forward to '+v+'.'},
+ {id:'school',label:'How my school differs from KGN',ph:'we don’t wear uniforms',frame:v=>'One way my school is different from KGN is '+v+'.'},
+];
+
+function lines(){
+ const out=[GREET[S.greet||'a'], nameLine()];
+ (S.mods||[]).forEach(id=>{
+  if(S.tr&&S.tr[id]){out.push(S.tr[id]);return;}
+  const m=MODULES.find(x=>x.id===id);
+  out.push({k:'（'+(m?m.label:'')+'）',h:'（'+(m?m.label:'')+' — tap ✦ Translate）',r:'',e:m?m.frame((S.vals&&S.vals[id])||'____'):''});
+ });
+ out.push(thankYou());
+ return out;
+}
+function scriptText(mode){return lines().map(l=>l[mode]||l.h).join('');}
 
 // ===== Learn =====
-let learnMode='k';
+function lineCard(l){return '<div class="line"><div class="k">'+l.k+'</div><div class="h">'+l.h+'</div><div class="r">'+l.r+'</div><div class="e">'+l.e+'</div><button class="spk" data-say="'+l.h.replace(/"/g,'')+'">🔊 say it</button></div>';}
 function renderLearn(){
- const L=lines(true);
- $('learnLines').innerHTML=L.map((l,i)=>
-  '<div class="line"><div class="k">'+l.k+'</div><div class="h">'+l.h+'</div>'+
-  (learnMode==='e'?'<div class="e">'+l.e+'</div>':'<div class="r">'+l.r+'</div>')+
-  '<button class="spk" data-i="'+i+'">🔊 say it</button></div>').join('');
- $('learnLines').querySelectorAll('.spk').forEach(b=>b.onclick=()=>speak(L[+b.dataset.i].h.replace(/[_＿]+/g,'').replace(/<[^>]+>/g,'')));
+ const fr=[GREET.a,GREET.b,nameLine('____'),thankYou()];
+ let html='<div style="font-size:12px;font-weight:800;color:var(--ver);margin:4px 2px">THE FRAME — everyone says this</div>';
+ html+=fr.map(lineCard).join('');
+ html+='<div style="font-size:12px;font-weight:800;color:var(--ver);margin:16px 2px 4px">PICK 3 — write your answer in English, we translate</div>';
+ html+=MODULES.map(m=>'<div class="line"><div class="e" style="margin:0;font-size:14px">'+(m.num?'My age → 私は__才です。':m.frame('___'))+'</div></div>').join('');
+ $('learnLines').innerHTML=html;
+ $('learnLines').querySelectorAll('.spk').forEach(b=>b.onclick=()=>speak(b.dataset.say));
 }
-document.querySelectorAll('#learnSeg button').forEach(b=>b.onclick=()=>{learnMode=b.dataset.m;document.querySelectorAll('#learnSeg button').forEach(x=>x.classList.toggle('on',x===b));renderLearn();});
 
 // ===== Build =====
 function renderBuild(){
- $('fName').value=S.name||'';$('fRole').value=S.role||'';$('fAge').value=S.age||'';$('fFav').value=S.fav||'';
- $('roleChips').innerHTML=ROLECHIPS.map(c=>'<button class="chip" data-w="'+c[1]+'"><b>'+c[1]+'</b> '+c[0]+'</button>').join('');
- $('roleChips').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{$('fRole').value=b.dataset.w;syncBuild();});
- $('favChips').innerHTML=FAVCHIPS.map(c=>'<button class="chip" data-w="'+c[1]+'"><b>'+c[1]+'</b> '+c[0]+'</button>').join('');
- $('favChips').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{$('fFav').value=b.dataset.w;syncBuild();});
+ S.mods=S.mods||[];S.vals=S.vals||{};S.tr=S.tr||{};
+ $('fName').value=S.name||'';
+ document.querySelectorAll('.gopt').forEach(b=>b.classList.toggle('on',b.dataset.g===(S.greet||'a')));
+ $('modPicker').innerHTML=MODULES.map(m=>'<button class="chip'+(S.mods.includes(m.id)?' on':'')+'" data-id="'+m.id+'">'+m.label+'</button>').join('');
+ $('modPicker').querySelectorAll('.chip').forEach(b=>b.onclick=()=>toggleMod(b.dataset.id));
+ $('pickCount').textContent='('+S.mods.length+'/3)';
+ renderModInputs();
  syncBuild();
 }
-function syncBuild(){
- S.name=$('fName').value.trim();S.role=$('fRole').value.trim();S.age=$('fAge').value.trim();S.fav=$('fFav').value.trim();
- const L=lines(false);
- $('pvText').innerHTML=L.map(l=>l.h).join('<br>');
- $('pvEn').innerHTML=L.map(l=>l.e).join(' ');
+function toggleMod(id){S.mods=S.mods||[];if(S.mods.includes(id)){S.mods=S.mods.filter(x=>x!==id);delete (S.tr||{})[id];}else{if(S.mods.length>=3)return;S.mods.push(id);}renderBuild();}
+function renderModInputs(){
+ $('modInputs').innerHTML=(S.mods||[]).map(id=>{const m=MODULES.find(x=>x.id===id);const val=(S.vals[id]||'').replace(/"/g,'&quot;');const hint=m.num?'a number':'in English — “'+m.frame('___')+'”';return '<label class="fld"><span class="lab">'+m.label+' <span class="hint">'+hint+'</span></span><input class="fi mv" data-id="'+id+'" type="'+(m.num?'number':'text')+'" placeholder="'+m.ph+'" value="'+val+'" autocomplete="off"></label>';}).join('');
+ $('modInputs').querySelectorAll('.mv').forEach(inp=>inp.addEventListener('input',()=>{S.vals[inp.dataset.id]=inp.value;delete (S.tr||{})[inp.dataset.id];syncBuild();}));
 }
-['fName','fRole','fAge','fFav'].forEach(id=>$(id).addEventListener('input',syncBuild));
+function syncBuild(){
+ S.name=$('fName').value.trim();
+ const L=lines();
+ $('pvBox').innerHTML=L.map(l=>'<div style="margin-bottom:12px"><div class="pk">'+l.h+'</div>'+(l.r?'<div class="pr">'+l.r+'</div>':'')+'<div class="pe">'+l.e+'</div></div>').join('');
+}
+async function buildJa(){
+ const btn=$('genBtn'),orig=btn.textContent;btn.disabled=true;btn.textContent=tokenizer?'Translating…':'Loading dictionary…';
+ S.tr=S.tr||{};
+ const tk=await loadTokenizer();
+ btn.textContent='Translating…';
+ for(const id of (S.mods||[])){
+  const m=MODULES.find(x=>x.id===id);if(!m)continue;
+  const v=(S.vals&&S.vals[id]||'').trim();
+  if(m.num){S.tr[id]=ageLine(v);continue;}
+  if(!v){delete S.tr[id];continue;}
+  const en=m.frame(v);
+  try{const ja=await mm(en,'en|ja');const rd=tk?readingOf(ja):'';S.tr[id]={k:ja,h:rd||ja,r:rd?kanaRomaji(rd):'',e:en};}
+  catch(_){S.tr[id]={k:ja||'',h:'(translation failed — try again)',r:'',e:en};}
+ }
+ save(S);btn.disabled=false;btn.textContent=orig;syncBuild();
+ const t=$('toast');t.textContent='Translated! ✓';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400);
+}
+document.querySelectorAll('.gopt').forEach(b=>b.onclick=()=>{S.greet=b.dataset.g;document.querySelectorAll('.gopt').forEach(x=>x.classList.toggle('on',x===b));syncBuild();});
+$('fName').addEventListener('input',syncBuild);
+$('genBtn').onclick=buildJa;
 $('pvSpeak').onclick=()=>speak(scriptText('h'));
-$('saveBtn').onclick=()=>{syncBuild();save(S);const t=$('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400);};
+$('saveBtn').onclick=()=>{S.name=$('fName').value.trim();save(S);const t=$('toast');t.textContent='Saved! ✓';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400);};
 
 // ===== Perform =====
-let perfMode='h',perfStep=-1; // -1 = full script; >=0 = line-by-line
+let perfMode='h',perfStep=-1;
 function renderPerform(){
  S=load();
- const has=S.name||S.grade||S.age||S.fav;
+ const has=(S.name)||(S.mods&&S.mods.length);
  if(!has){$('performBody').innerHTML='<div class="empty">No script yet.<br><br><button class="btn" data-go="build">✍️ Build your intro first</button></div>';$('performBody').querySelector('[data-go]').onclick=()=>go('build');return;}
- const L=lines(false);
+ const L=lines();
+ const modeVal=l=>perfMode==='k'?l.k:perfMode==='r'?(l.r||l.h):l.h;
  if(perfStep<0){
   $('performBody').innerHTML=
-   '<div class="seg" id="perfSeg"><button data-m="h" class="'+(perfMode==='h'?'on':'')+'">ひらがな</button><button data-m="k" class="'+(perfMode==='k'?'on':'')+'">漢字</button></div>'+
-   '<div class="perform-card"><div class="big">'+L.map(l=>perfMode==='k'?l.k:l.h).join('<br>')+'</div></div>'+
+   '<div class="seg" id="perfSeg"><button data-m="h" class="'+(perfMode==='h'?'on':'')+'">ひらがな</button><button data-m="k" class="'+(perfMode==='k'?'on':'')+'">漢字</button><button data-m="r" class="'+(perfMode==='r'?'on':'')+'">Rōmaji</button></div>'+
+   '<div class="perform-card"><div class="big">'+L.map(modeVal).join('<br>')+'</div></div>'+
    '<button class="btn" id="playAll">🔊 Play my whole intro</button>'+
    '<button class="btn alt" id="rehearse">🎬 Rehearse line by line</button>'+
    '<div style="text-align:center"><button class="ghost" data-go="build">✍️ Edit</button></div>';
   $('performBody').querySelectorAll('#perfSeg button').forEach(b=>b.onclick=()=>{perfMode=b.dataset.m;renderPerform();});
-  $('playAll').onclick=()=>speak(scriptText(perfMode));
+  $('playAll').onclick=()=>speak(scriptText('h'));
   $('rehearse').onclick=()=>{perfStep=0;renderPerform();};
   $('performBody').querySelector('[data-go]').onclick=()=>go('build');
+ }else if(perfStep>=L.length){
+  $('performBody').innerHTML='<div class="perform-card"><div style="font-size:52px">🙇</div><div class="big" style="font-size:22px;margin-top:8px">お疲れさま！</div><div class="sm">Nicely done — that’s your whole self-introduction.</div></div><button class="btn" id="again">🎬 Rehearse again</button><button class="btn alt" id="back2">← Back to script</button>';
+  $('again').onclick=()=>{perfStep=0;renderPerform();};$('back2').onclick=()=>{perfStep=-1;renderPerform();};
  }else{
-  const done=perfStep>=L.length;
-  if(done){
-   $('performBody').innerHTML='<div class="perform-card"><div style="font-size:52px">🙇</div><div class="big" style="font-size:22px;margin-top:8px">お疲れさま！</div><div class="sm">Nicely done — that’s your whole self-introduction.</div></div>'+
-    '<button class="btn" id="again">🎬 Rehearse again</button><button class="btn alt" id="back2">← Back to script</button>';
-   $('again').onclick=()=>{perfStep=0;renderPerform();};$('back2').onclick=()=>{perfStep=-1;renderPerform();};
-   return;
-  }
   const l=L[perfStep];
   $('performBody').innerHTML=
    '<div class="sm" style="text-align:center;color:var(--muted2)">Line '+(perfStep+1)+' / '+L.length+'</div>'+
-   '<div class="perform-card"><div class="big">'+(perfMode==='k'?l.k:l.h)+'</div><div class="sm" id="reveal" style="cursor:pointer">tap to reveal English</div></div>'+
+   '<div class="perform-card"><div class="big">'+(perfMode==='k'?l.k:l.h)+'</div>'+(l.r?'<div class="sm" style="font-style:italic;margin-top:8px">'+l.r+'</div>':'')+'<div class="sm" id="reveal" style="cursor:pointer;margin-top:6px">tap to reveal English</div></div>'+
    '<button class="btn" id="sayLine">🔊 Say this line</button>'+
    '<div class="stepnav"><button class="ghost" id="prev">‹ Prev</button><button class="ghost" id="exit">Exit</button><button class="btn" style="width:auto;margin:0;padding:12px 22px" id="next">Next ›</button></div>';
   $('sayLine').onclick=()=>speak(l.h);
@@ -250,8 +306,19 @@ function renderPerform(){
 // ===== Say it in Japanese (free: MyMemory translate + kuromoji furigana) =====
 function kata2hira(s){return (s||'').replace(/[ァ-ヶ]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60));}
 async function mm(q,pair){const u='https://api.mymemory.translated.net/get?q='+encodeURIComponent(q)+'&langpair='+pair;const r=await fetch(u);if(!r.ok)throw new Error('net');const j=await r.json();const t=j&&j.responseData&&j.responseData.translatedText;if(!t)throw new Error('empty');return t;}
-let tokenizer=null;
-function loadTokenizer(){return new Promise(res=>{if(tokenizer)return res(tokenizer);if(typeof kuromoji==='undefined')return res(null);kuromoji.builder({dicPath:'https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict/'}).build((e,tk)=>{res(e?null:(tokenizer=tk));});});}
+let tokenizer=null,tkPromise=null;
+function loadTokenizer(){
+ if(tokenizer)return Promise.resolve(tokenizer);
+ if(tkPromise)return tkPromise;
+ if(typeof kuromoji==='undefined')return Promise.resolve(null);
+ tkPromise=new Promise(res=>{
+  let done=false;const finish=v=>{if(done)return;done=true;res(v);};
+  const to=setTimeout(()=>finish(null),30000); // don't hang forever on a slow dict download
+  try{kuromoji.builder({dicPath:'https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict/'}).build((e,tk)=>{clearTimeout(to);if(!e&&tk)tokenizer=tk;finish(tokenizer);});}
+  catch(_){clearTimeout(to);finish(null);}
+ });
+ return tkPromise;
+}
 const glossCache={};
 async function gloss(w){if(w in glossCache)return glossCache[w];try{const g=await mm(w,'ja|en');glossCache[w]=g;return g;}catch(_){return '';}}
 const rdOf=t=>kata2hira(t.reading&&t.reading!=='*'?t.reading:'');
@@ -261,10 +328,10 @@ async function doTranslate(){
  $('sayOut').innerHTML='';$('sayVocab').innerHTML='';$('sayInfo').classList.remove('show');
  $('sayStatus').textContent='Translating…';
  let ja;try{ja=await mm(en,'en|ja');}catch(_){$('sayStatus').innerHTML='<span style="color:var(--ver)">Translation unavailable right now — try again shortly.</span>';return;}
- $('sayStatus').textContent='Adding furigana…';
+ $('sayStatus').textContent=tokenizer?'Adding furigana…':'Loading furigana dictionary (first time only, ~15 MB — please wait)…';
  const tk=await loadTokenizer();
  renderJa(ja,tk);
- $('sayStatus').textContent='';
+ $('sayStatus').textContent=tk?'':'(furigana dictionary didn’t load — showing translation + audio only)';
 }
 function renderJa(ja,tk){
  const play='<button class="spk" id="sayPlay" style="margin:0 0 6px">🔊 Play whole sentence</button>';
