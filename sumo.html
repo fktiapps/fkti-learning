@@ -78,7 +78,14 @@
  .overlay{position:fixed;inset:0;background:rgba(8,11,22,.72);backdrop-filter:blur(3px);z-index:50;display:none;align-items:flex-end;justify-content:center}
  .overlay.on{display:flex}
  .sheet{background:var(--paper);color:var(--text);width:100%;max-width:620px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:18px 18px calc(env(safe-area-inset-bottom) + 22px)}
+ .sheet{position:relative}
  .sheet .grab{width:40px;height:4px;border-radius:2px;background:#d6ccb6;margin:0 auto 12px}
+ .sheetx{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:#ece3cf;border:none;color:#8a7f66;font-size:15px;font-weight:800;line-height:1;cursor:pointer;z-index:3}
+ .sheetx:active{background:#e0d5bd}
+ .biohead .ava{cursor:zoom-in}
+ .lightbox{position:fixed;inset:0;background:rgba(8,11,22,.92);z-index:60;display:none;align-items:center;justify-content:center;padding:18px}
+ .lightbox.on{display:flex}
+ .lightbox img{max-width:100%;max-height:100%;border-radius:12px;box-shadow:0 12px 44px rgba(0,0,0,.6);object-fit:contain}
  .biohead{display:flex;gap:14px;align-items:center}
  .biohead .ava{width:74px;height:74px;border-radius:14px}
  .biohead .en{font-family:var(--display);font-size:21px;font-weight:700;color:var(--ink);line-height:1.1}
@@ -140,6 +147,8 @@
  .gossip{list-style:none;padding:0;margin:2px 0 0}
  .gossip li{position:relative;padding:8px 0 8px 15px;border-bottom:1px solid #ece3cf;font-size:13px;line-height:1.55;color:#3a3f4f}
  .gossip li:before{content:"●";position:absolute;left:0;top:9px;color:#b3402a;font-size:7px}
+ .gossip.social li:before{content:"♥";color:#c85a8a}
+ .gossip.rumor li:before{content:"⚠";color:#c9a227;font-size:10px;top:8px}
  .gossip li:last-child{border-bottom:none}
  .nodoss{font-size:12.5px;color:#9a9078;font-style:italic;margin-top:14px;line-height:1.5}
 </style>
@@ -289,6 +298,7 @@
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeBio()">
  <div class="sheet" id="sheet"></div>
 </div>
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('on')"><img id="lightboxImg" alt=""></div>
 
 <footer>
  深い関係 · Fukai Kankei — Deeply Connected.<br>
@@ -566,7 +576,7 @@ function banSide(r,cls){
 async function openBio(id){
   const ov=document.getElementById('overlay'), sh=document.getElementById('sheet');
   ov.classList.add('on');
-  sh.innerHTML='<div class="grab"></div><div class="empty">Loading…</div>';
+  sh.innerHTML='<div class="grab"></div><button class="sheetx" onclick="closeBio()" aria-label="Close">✕</button><div class="empty">Loading…</div>';
   await bashoReady;
   const [rr, sr, mr] = await Promise.all([ getJSON('/rikishi/'+id+'?measurements=true'), getJSON('/rikishi/'+id+'/stats'), getJSON('/rikishi/'+id+'/matches') ]);
   const r = rr.j, st = sr.j;
@@ -596,6 +606,7 @@ async function openBio(id){
   }
   sh.innerHTML =
    '<div class="grab"></div>'+
+   '<button class="sheetx" onclick="closeBio()" aria-label="Close">✕</button>'+
    '<div class="biohead">'+avaImg(id,r.shikonaEn)+
      '<div><div class="en">'+esc(r.shikonaEn)+'</div>'+
      '<div class="jpn">'+esc(r.shikonaJp||'')+'</div>'+
@@ -682,6 +693,9 @@ function dossierHTML(d){
   if(d.watch) h+='<div class="bsec"><div class="h">How to read his bouts</div><p>'+esc(d.watch)+'</p></div>';
   if(d.signature&&d.signature.length) h+='<div class="bsec"><div class="h">Signature techniques</div><div class="kchips">'+d.signature.map(k=>kchip(k)).join('')+'</div></div>';
   if(d.gossip&&d.gossip.length) h+='<div class="bsec"><div class="h">Recent gossip</div><ul class="gossip">'+d.gossip.map(g=>'<li>'+esc(g)+'</li>').join('')+'</ul></div>';
+  if(d.social&&d.social.length) h+='<div class="bsec"><div class="h">Off the dohyō — social</div><ul class="gossip social">'+d.social.map(g=>'<li>'+esc(g)+'</li>').join('')+'</ul></div>';
+  if(d.rumors&&d.rumors.length) h+='<div class="bsec"><div class="h">The rumor mill</div><p class="nodoss" style="margin:0 0 6px">Unconfirmed tabloid talk &amp; reported allegations — take with a grain of salt.</p><ul class="gossip rumor">'+d.rumors.map(g=>'<li>'+esc(g)+'</li>').join('')+'</ul></div>';
+  h+='<div class="bsec"><div class="h">Sources</div><p class="nodoss" style="margin-top:0">Compiled from public reporting — English Wikipedia, the Japan Sumo Association &amp; the sumo press. Rumor-mill items name the outlet where known and are unproven allegations, not findings. Live stats &amp; records: sumo-api.com; photo credit shown on the card.</p></div>';
   return h;
 }
 function recentStrip(r){
@@ -696,6 +710,7 @@ function bashoLabel(d){
   return (names[mo]||d.slice(4))+' '+d.slice(0,4);
 }
 function closeBio(){ document.getElementById('overlay').classList.remove('on'); }
+document.addEventListener('click',function(e){ const big=e.target.closest('.biohead .ava'); if(big){ const lb=document.getElementById('lightbox'); if(lb){ document.getElementById('lightboxImg').src=big.src; lb.classList.add('on'); } } });
 
 /* ============================================================
    GLOSSARY
