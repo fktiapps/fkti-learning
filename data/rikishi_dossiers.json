@@ -1,16 +1,718 @@
 {
-  "_README": "FKTI rikishi dossiers, keyed by sumo-api rikishiID. Each: tagline, bio, style, watch (how to read his bouts), signature (kimarite romaji keys — must match sumo.html KIM), gossip (dated storylines). Recent form + 'how he wins' are computed LIVE from the API and are NOT stored here. PILOT: only Hoshoryu (19) is written so far.",
-  "19": {
-    "tagline": "The throwing yokozuna — Asashōryū's blood, and his own storm.",
-    "bio": "Sugarragchaagiin Byambasüren was born in Ulaanbaatar in 1999 into Mongolian wrestling royalty: his grandfather was a bökh champion honoured as a “National Elephant,” and his uncle is Asashōryū, the ferocious 68th yokozuna who won 25 championships. He came to Japan as a teenager, joined Tatsunami stable, and made his debut in 2018. He rose fast — komusubi by 2022, then his first championship and promotion to ōzeki in 2023 — and in January 2025, after a second title, he was raised to yokozuna: the 74th in history, and the sixth-fastest ever to reach the rope. He is the sixth Mongolian to wear it.",
-    "style": "A belt man to the core. He fights migi-yotsu — right hand inside, left hand outside on the mawashi — and once he settles that grip, the bout usually becomes his. Where many giants simply push, Hōshōryū throws: he carries the Mongolian tradition of nage (throwing) in his blood, and something of his uncle's speed and ring-sense with it. He is athletic, dangerous on the second effort, and can win even going backwards. His weakness is the flip side of the gift — he can be lured into a throwing exchange he doesn't need, and his hot tachi-ai sometimes draws warnings for false starts.",
-    "watch": "Watch the first grip. If his right arm slips inside and finds the belt, look for him to plant and turn — the underarm throw (shitatenage) is his kill shot, and he'll hunt the outside leg trip (sotogake) if the throw stalls. If a pusher-thruster keeps him off the belt, he is more vulnerable than a yokozuna should be, and will try to slap the charge down or circle back for a grip. And watch his temper at the line: fired up, he explodes off the tachi-ai; over-eager, he jumps it.",
-    "signature": ["shitatenage", "sotogake", "uwatenage", "yorikiri", "kawazugake"],
-    "gossip": [
-      "His reign has been star-crossed by injury — a torn right elbow (Mar 2025), a cracked left toe (Jul 2025), a meniscus he drained daily and wrestled through (Jan 2026), and a hamstring that forced him out on Day 2 in May 2026. Nagoya is a test of whether his body will let him rule.",
-      "Sumo's most famous family drama: his uncle Asashōryū publicly critiques his nephew's sumo in the press — and has even been seen cheering his opponents. Every Hōshōryū bout is fought in that shadow.",
-      "A yokozuna rivalry for the era is forming with Ōnosato — the two met in September 2025 in the first playoff between two grand champions since 2009, and Hōshōryū lost it. Their duels are now the headline of every basho they finish.",
-      "One line on his record still nags him: 0–9 against the now-retired Terunofuji, the one great opponent he said he wished he could face just once more."
-    ]
-  }
+ "2": {
+  "tagline": "The comeback ōzeki — from the President's Cup to the depths and back.",
+  "bio": "Asanoyama (real name Ishibashi Hiroki) was born in 1994 in Toyama Prefecture and wrestles for Takasago stable. In May 2019 he won the first top-division championship of the Reiwa era, receiving the inaugural President's Cup from U.S. President Donald Trump, and rose to ōzeki in 2020. In 2021 he was suspended for six tournaments for breaching the sport's COVID-19 protocols and then lying about it, losing his rank and tumbling out of the salaried ranks. His climb back has been remarkable — reportedly the only man ever to fall from the top division to sandanme and return twice — and after an ACL tear in 2024 he returned to makuuchi in January 2026. He is ranked Maegashira 10 East for Nagoya.",
+  "style": "A powerful yotsu belt-grappler who works from migi-yotsu, right arm inside, left hand outside. His signature is a strong, driving force-out, and he built a left-inside grip earlier in his career for versatility ahead of his ōzeki run. Tall and heavy at around 175 kg, his sumo is straightforward and forceful when his body holds up. Detailed weaknesses aren't well documented, but recent knee and foot injuries have plainly limited him.",
+  "watch": "Watch him bury the right arm inside and clamp the belt — once he is set, he drives with heavy, deliberate force for the yorikiri. His throws come into play when an opponent digs in against the straight-ahead march. The concern is his surgically repaired knee and a 2026 foot injury: if his lower body isn't sound, the same drive that overwhelms opponents can desert him.",
+  "signature": [
+   "yorikiri",
+   "yoritaoshi",
+   "uwatenage",
+   "oshidashi"
+  ],
+  "gossip": [
+   "A genuine redemption story, clawing all the way back to the top division after a career-threatening fall.",
+   "Injuries keep testing him — he withdrew from the May 2026 basho with a foot ligament problem after returning from a 2024 knee reconstruction.",
+   "He remains a marquee name from the Reiwa era's very first champion, and fans are rooting for the comeback to hold."
+  ]
+ },
+ "3": {
+  "tagline": "The Reiwa Monster under a new name — Hakuhō's protégé, all speed and polish.",
+  "bio": "Tetsuya Ochiai was born in Kurayoshi, Tottori in 2003 and entered pro sumo in January 2023, hand-picked and drilled by the great yokozuna Hakuhō — the source of the 伯 in both his old shikona Hakuōhō and the Hakunofuji he adopted in January 2026. He won the makushita title in his very first tournament and rocketed to the top division by July 2023, one of the youngest to do so since 1990. He follows Hakuhō to Isegahama stable, has banked four special prizes and four gold stars — three off yokozuna Ōnosato and one off Hōshōryū — but no championship yet. A career of dazzling starts has been repeatedly stalled by injury, and in July 2026 he sits at Maegashira 3 West, climbing again.",
+  "style": "A belt man at heart, though the Japan Sumo Association credits him with a bit of everything — thrust, push and left-inside grappling. His preferred hold is hidari-yotsu, left hand inside, and he plays it with a low, lightning tachi-ai learned frame-by-frame from Hakuhō's tapes. Around a third of his wins come by frontal force-out, another quarter by push-out, and he owns a sharp overarm throw when a bigger man leans on him. At roughly 181 cm and 159 kg he is undersized, so raw power men can smother him, and the true recurring weakness is his body — shoulder, biceps and toe have all cost him tournaments.",
+  "watch": "Watch the tachi-ai: he wants to slip low and get that left arm inside before you blink. If he seizes the belt early, the force-out comes fast and clean. When a heavier opponent stalls him and turns it into a shoving match, look for the counter — a quick overarm throw or a slap-down as he spins off the pressure. He is in trouble when a stronger yotsu man locks him upright and simply walks him back.",
+  "signature": [
+   "yorikiri",
+   "oshidashi",
+   "uwatenage",
+   "hatakikomi"
+  ],
+  "gossip": [
+   "Reborn as Hakunofuji in January 2026, still carrying Hakuhō's legacy at Isegahama stable.",
+   "A ferocious May 2026 run of 11–4 with a Fighting Spirit prize hauled him back up the banzuke after an injury-hit winter.",
+   "Famous for collecting gold stars in four straight tournaments — a rare feat against the reigning yokozuna.",
+   "Off the dohyō he is a gentle soul who loves enka music, samurai dramas and the Narnia films."
+  ]
+ },
+ "5": {
+  "tagline": "The 110-year miracle — a champion on debut, fighting back from injury.",
+  "bio": "Takerufuji Mikiya was born Mikiya Ishioka in 1999 in Goshogawara, Aomori, and trains at Isegahama stable. His rise was meteoric: debuting in 2022, he blazed through the lower divisions and, in March 2024, won the top-division championship in his very first makuuchi tournament — the first wrestler to do so in 110 years. He swept all three special prizes in the process, a feat unseen in a generation. Injuries have since defined his path — an ankle sprain and a torn bicep in 2025 dropped him down the ranks — but he has fought back to return to the top division at maegashira 13 for Nagoya.",
+  "style": "A tsuki-oshi wrestler built on explosive speed and raw power — he can bench press well over 200 kilograms — who overwhelms opponents with pushing and thrusting from the first step. He blends a lightning tachiai with an adaptable offense, finishing with a decisive push-out or a slap-down when a foe overcommits. His great vulnerability is durability: he wrestles at such intensity that his joints have paid the price, and time on the sidelines has interrupted his momentum again and again.",
+  "watch": "Watch the charge — few in the division fire off the line as fast, and if he lands his hands first the opponent is usually walking backward within a second. Look for a crisp push-out, or a pull-down if his man lunges. He is in trouble when a nagging injury flares mid-bout or when a heavier grappler drags him into a long belt battle that tests the very joints he has hurt.",
+  "signature": [
+   "oshidashi",
+   "tsukidashi",
+   "hatakikomi",
+   "tsukiotoshi"
+  ],
+  "gossip": [
+   "Won the Emperor's Cup on his top-division debut in 2024 — the first man to manage it in 110 years — and swept all three special prizes.",
+   "Torn bicep and ankle injuries knocked him down the banzuke in 2025, but he has battled all the way back to makuuchi.",
+   "Returns at Nagoya alongside stablemate Nishikifuji, keeping Aomori's 'Iron Man' pipeline of tough wrestlers running strong."
+  ]
+ },
+ "7": {
+  "tagline": "The comeback ōzeki — thrown down, and climbed all the way back.",
+  "bio": "Kirishima Tetsuo, born Byambachuluun Lkhagvasuren in Dornod Province, Mongolia in 1996, is one of the most resilient men on the banzuke. He debuted in 2015 as Kiribayama for Michinoku stable, moving to Otowayama stable when Michinoku closed in 2024, and took the ring name Kirishima from his stablemaster, a former ōzeki of the same name. He first reached ōzeki in 2023 on the back of his maiden championship, lost the rank to injury in 2024, then did the rare thing — clawing back from the rank-and-file to win a third title in March 2026 and reclaim ōzeki. Three Emperor's Cups and roughly nine special prizes mark a career defined by perseverance.",
+  "style": "A belt man with a thrower's instincts. He fights hidari-yotsu — left hand inside, right arm outside — and though his bread-and-butter is the straightforward force-out, he is genuinely dangerous with throws, the overarm uwatenage being his signature flourish. Quick feet and a strong forward drive belie his size, and he owns one of the deepest technical arsenals in the division, with dozens of different winning holds on his record. His main vulnerability over the years has been his own body: knee, neck and arm injuries have repeatedly interrupted his best runs.",
+  "watch": "He likes to get that left hand deep and drive, so watch his inside arm at the tachi-ai. Once it's set, he either walks his man out by yorikiri or, if the opponent digs in and leans, he suddenly wheels him over with an uwatenage — the bout flipping from a shoving match to a throw in an instant. He is in trouble when he's kept off the belt and forced to retreat, where he can lapse into a slap-down or pull.",
+  "signature": [
+   "yorikiri",
+   "uwatenage",
+   "oshidashi",
+   "hatakikomi",
+   "okuridashi"
+  ],
+  "gossip": [
+   "His March 2026 title and return to ōzeki made him one of the very few wrestlers in decades to reclaim the rank from the maegashira ranks.",
+   "In May 2026 he tied for the lead but lost the championship playoff to Wakatakakage — a heartbreaker that still had him on 'yokozuna watch.'",
+   "Freshly re-promoted and coming off 12-3, he enters Nagoya as the senior ōzeki with no demotion pressure.",
+   "A humble, homesick teenage recruit turned veteran leader, he is known for lighthearted stable life and a long friendship with Japanese judoka Ryūnosuke Haga."
+  ]
+ },
+ "8": {
+  "tagline": "The patient tower — a maegashira 15 who stunned the world.",
+  "bio": "Kotoshōhō Yoshinari, born Tebakari Toshiki in Kashiwa, Chiba in 1999, is the persistence story of his generation. He joined Sadogatake stable — home of ōzeki Kotozakura — and debuted back in 2017, grinding through the lower divisions with several jūryō titles before his career suddenly caught fire. At the July 2025 Nagoya tournament, ranked all the way down at maegashira 15, he reeled off a 13-2 run to claim a shock first Emperor's Cup, beating a yokozuna and a former ōzeki along the way. That title lifted a perennial mid-ranker into san'yaku, and he reached sekiwake in May 2026. At 1.91 m he is one of the taller men in the sport.",
+  "style": "A yotsu belt-grappler built around his long reach and height, fighting migi-yotsu with the right hand inside. He is technical, composed and patient, using leverage rather than brute pushing, and commentators single out his maturity under pressure. His weakness has historically been consistency — a slow, up-and-down career — and he can be denied his game by fast, thrusting opponents who never let him settle onto the belt.",
+  "watch": "He is a slow-cooker: he wants the belt, and once he has an outside grip he can turn and bundle even bigger men out, as he did to Ōnosato during his title run. Look for the calm yorikiri, but note he also has a sharp hatakikomi slap-down to punish an over-eager charge. Rush his tempo and crowd his chest, and he can be knocked off his rhythm.",
+  "signature": [
+   "yorikiri",
+   "oshidashi",
+   "hatakikomi"
+  ],
+  "gossip": [
+   "His out-of-nowhere July 2025 championship, sealed by a cool final-day win over Aonishiki, remains one of the great recent underdog stories.",
+   "He carried the momentum into 2026, holding sekiwake with a solid 9-6 in his first outing at the rank that May.",
+   "His generational rivalry with the Ukrainian star Aonishiki keeps renewing — the two are now ranking peers.",
+   "Coaches and reporters consistently describe him as calm, mature and quietly determined, a craft-over-flash figure."
+  ]
+ },
+ "9": {
+  "tagline": "The Saitama thunderclap — pure hands, pure forward drive.",
+  "bio": "Daieishō Hayato, born Hayato Takanishi in Asaka, Saitama in 1993, joined Oitekaze stable in 2012 and reached the top division in 2015. A fixture at sekiwake and komusubi for years, he stunned the sport in January 2021 by winning the New Year tournament at 13–2 — the first champion ever from Saitama. He has collected seven special prizes and six gold stars along the way. Now 32 and ranked Maegashira 4 East for the July 2026 Nagoya basho, he is a decorated former titlist treading water in the mid-ranks after an injury-interrupted 2025.",
+  "style": "Daieishō is oshi-zumō distilled: a thrust-and-push specialist who deliberately abandoned belt work when he turned pro. At only 1.83 m and 160 kg he is short and light for the top division, but his tachi-ai is explosive and his hand speed is among the best in sumo. He wins by driving straight forward with a relentless barrage of thrusts. The flip side is fragility of a different kind — when his charge is stopped, side-stepped, or he is pulled off balance, he can be beaten quickly, which is why his card so often lands on 8–7 or 7–8.",
+  "watch": "It is decided in the first two seconds. If his opening charge lands square and his hands find your chest, you are already going backwards — the push-out follows in a heartbeat. Watch him keep his feet churning and his elbows pumping. He is in trouble the instant an opponent survives that first burst and yanks him down or slips aside, because a pusher with no belt game has little to grab when the plan fails.",
+  "signature": [
+   "oshidashi",
+   "tsukidashi",
+   "tsukiotoshi",
+   "hatakikomi"
+  ],
+  "gossip": [
+   "A calf injury forced him out of the July 2025 tournament, and he spent months rehabbing back to full drive.",
+   "A run of narrow 7–8 records through 2026 has him fighting to climb back toward the san'yaku ranks he once ruled.",
+   "Quiet, hard-working and scandal-free, he is one of the most respected craftsmen in the sport."
+  ]
+ },
+ "11": {
+  "tagline": "The tall Hokkaido thrasher — a wall of slaps and a wicked pull.",
+  "bio": "Ichiyamamoto Daiki, born Daiki Yamamoto in Iwanai, Hokkaido in 1993, came up through Chuo University before turning pro in 2017 and winning the jonokuchi title in his debut tournament. He reached the top division in July 2021 and has since banked two Fighting Spirit prizes and a gold star over yokozuna Hōshōryū. Now with Hanaregoma stable, he touched a career-high Maegashira 1 in January 2026 and sits at Maegashira 4 for the July Nagoya basho. He is a durable, dangerous mid-maegashira fixture.",
+  "style": "A classic tsuki/oshi thruster who lives on tsuppari — rapid, heavy hand-thrusts — and steers well clear of belt grappling. At 1.88 m and 160 kg he is tall and rangy, firing down at opponents and using his reach to keep them at arm's length. His signature slap-down is both weapon and vice: leaning back to pull an over-committed rival works often, but when it misses he is left flat-footed and driven out. Consistency is his eternal struggle — brilliant one day, tumbling the next.",
+  "watch": "Expect a storm of thrusts off the line as he tries to knock you upright and backpedaling. If he gets his hands working and his reach dictating range, the thrust-out or push-out arrives fast. The tell for trouble is the pull: watch for the sudden backward slap-down — if it lands he wins, if the opponent reads it and surges, Ichiyamamoto is the one going out. His high-impact bouts are so forceful that opponents have repeatedly been injured tangling with him.",
+  "signature": [
+   "oshidashi",
+   "hatakikomi",
+   "tsukidashi"
+  ],
+  "gossip": [
+   "Reached his career-high Maegashira 1 in January 2026, cracking the sport's elite for the first time.",
+   "Beloved for a running gag in which he declares himself 'Wakatakakage's number one fan' and hoards his rival's merchandise.",
+   "His thunderous thrusting style has left a trail of opponents pulling out injured across 2026."
+  ]
+ },
+ "12": {
+  "tagline": "The technician who came back from a torn knee to win it all again.",
+  "bio": "Wakatakakage Atsushi, born Ōnami Atsushi in Fukushima City in 1994, is the youngest of three sumo brothers — including top-division sekiwake Wakamotoharu — all wrestling for Arashio stable. After a college career at Toyo University he debuted in 2017 and won his first championship in March 2022 as a newly-promoted sekiwake, the first to do so in 86 years. Then disaster: a torn ACL and meniscus in March 2023 dropped him all the way to the makushita division. He rebuilt from the bottom, and in May 2026 completed the arc by winning his second Emperor's Cup from komusubi, beating ōzeki Kirishima in a playoff. He is now, once again, knocking on the door of ōzeki.",
+  "style": "A pure technical belt-grappler and one of the smallest men in the top ranks at roughly 1.83 m and around 135 kg. He fights migi-yotsu, right hand inside, and his trademark is a superb ottsuke arm-block that neutralizes bigger opponents, paired with dazzling lateral movement and a wide catalogue of techniques. His strength is craft and speed; his weakness is his light frame, which can simply be overpowered by heavier men, and durability remains a quiet concern after the knee reconstruction.",
+  "watch": "He is the man to watch for artistry: he sidesteps, blocks the arm, and out-maneuvers rather than out-muscles. When it clicks he wins by yorikiri or spins a charging foe out from behind with okuridashi. But when a much larger opponent gets a solid grip and drives straight, his light body can be marched back — so his danger moments come when he's caught flat and forced to trade power for power.",
+  "signature": [
+   "yorikiri",
+   "oshidashi",
+   "okuridashi"
+  ],
+  "gossip": [
+   "His May 2026 championship — from komusubi, capping a full climb back from ACL surgery and the third division — was one of the feel-good stories of the year.",
+   "That title has him in prime position for an ōzeki bid, with a strong Nagoya potentially sealing it.",
+   "The 2026 Nagoya storyline is 'brother versus brother,' with sibling Wakamotoharu also near the top.",
+   "Portrayed as thoroughly wholesome and family-oriented, he credits his wife and children for powering his comeback from injury."
+  ]
+ },
+ "13": {
+  "tagline": "The tall middle brother — long arms, patient belt, quiet fire.",
+  "bio": "Wakamotoharu (real name Onami Minato) was born in 1993 in Fukushima City and wrestles for Arashio stable, the middle of three sumo brothers alongside Wakatakamoto and champion Wakatakakage, and grandson of former komusubi Wakabayama. Motivated toward the sport after the 2011 Tōhoku earthquake struck his home region, he debuted that year and climbed via jonokuchi and two makushita titles. He first reached sekiwake in May 2023 and has since cycled through the san'yaku ranks, collecting a Technique Prize, an Outstanding Performance Prize, and gold stars over yokozuna including Terunofuji and Hōshōryū. He opened 2026 at komusubi — beating yokozuna Ōnosato — before a poor May dropped him to Maegashira 8 East for Nagoya.",
+  "style": "A pure yotsu belt-grappler, he favors hidari-yotsu — left hand inside, right hand outside — and uses an unusually long reach to control opponents at the mawashi. From there his weapon is a relentless force-out, with overarm and underarm throws when the angle opens. Tall and lean by sumo standards, he is at his best dictating the grip; if he is driven back before settling in, or when stamina fades late in a 15-day grind, his consistency wavers. Reserved and studious in temperament.",
+  "watch": "Watch him reach for the left-inside grip at the tachiai — long arms make it hard to deny. Once he has the belt, he squeezes the space and marches forward for yorikiri, or spins a throw if you resist straight back. His danger moment is the opening charge: a strong thruster who gets underneath and shoves him upright can beat him before his grip locks.",
+  "signature": [
+   "yorikiri",
+   "uwatenage",
+   "shitatenage"
+  ],
+  "gossip": [
+   "One of a remarkable three-brother sumo family, forever measured against younger brother and former champion Wakatakakage.",
+   "He upset yokozuna repeatedly through 2025–26, downing Hōshōryū twice and forcing out Ōnosato at the New Year basho.",
+   "A soft-spoken fan of Ed Sheeran, pro wrestling, and the Kinnikuman manga."
+  ]
+ },
+ "19": {
+  "tagline": "The throwing yokozuna — Asashōryū's blood, and his own storm.",
+  "bio": "Sugarragchaagiin Byambasüren was born in Ulaanbaatar in 1999 into Mongolian wrestling royalty: his grandfather was a bökh champion honoured as a “National Elephant,” and his uncle is Asashōryū, the ferocious 68th yokozuna who won 25 championships. He came to Japan as a teenager, joined Tatsunami stable, and made his debut in 2018. He rose fast — komusubi by 2022, then his first championship and promotion to ōzeki in 2023 — and in January 2025, after a second title, he was raised to yokozuna: the 74th in history, and the sixth-fastest ever to reach the rope. He is the sixth Mongolian to wear it.",
+  "style": "A belt man to the core. He fights migi-yotsu — right hand inside, left hand outside on the mawashi — and once he settles that grip, the bout usually becomes his. Where many giants simply push, Hōshōryū throws: he carries the Mongolian tradition of nage (throwing) in his blood, and something of his uncle's speed and ring-sense with it. He is athletic, dangerous on the second effort, and can win even going backwards. His weakness is the flip side of the gift — he can be lured into a throwing exchange he doesn't need, and his hot tachi-ai sometimes draws warnings for false starts.",
+  "watch": "Watch the first grip. If his right arm slips inside and finds the belt, look for him to plant and turn — the underarm throw (shitatenage) is his kill shot, and he'll hunt the outside leg trip (sotogake) if the throw stalls. If a pusher-thruster keeps him off the belt, he is more vulnerable than a yokozuna should be, and will try to slap the charge down or circle back for a grip. And watch his temper at the line: fired up, he explodes off the tachi-ai; over-eager, he jumps it.",
+  "signature": [
+   "shitatenage",
+   "sotogake",
+   "uwatenage",
+   "yorikiri",
+   "kawazugake"
+  ],
+  "gossip": [
+   "His reign has been star-crossed by injury — a torn right elbow (Mar 2025), a cracked left toe (Jul 2025), a meniscus he drained daily and wrestled through (Jan 2026), and a hamstring that forced him out on Day 2 in May 2026. Nagoya is a test of whether his body will let him rule.",
+   "Sumo's most famous family drama: his uncle Asashōryū publicly critiques his nephew's sumo in the press — and has even been seen cheering his opponents. Every Hōshōryū bout is fought in that shadow.",
+   "A yokozuna rivalry for the era is forming with Ōnosato — the two met in September 2025 in the first playoff between two grand champions since 2009, and Hōshōryū lost it. Their duels are now the headline of every basho they finish.",
+   "One line on his record still nags him: 0–9 against the now-retired Terunofuji, the one great opponent he said he wished he could face just once more."
+  ]
+ },
+ "20": {
+  "tagline": "The grandson of a yokozuna, carrying a legendary name.",
+  "bio": "Kotozakura Masakatsu — born Kamatani Masakatsu in Matsudo, Chiba in 1997 — is sumo royalty. His grandfather was the 53rd yokozuna Kotozakura, and his father, a former sekiwake, now runs Sadogatake stable, where Kotozakura wrestles. He debuted in 2015 and rose as Kotonowaka, honoring his father, before earning promotion to ōzeki in January 2024 and then taking his grandfather's storied name on the May 2024 banzuke — the first to bear it in about fifty years. He captured his first Emperor's Cup at the November 2024 Kyushu tournament. At 1.89 m and roughly 178 kg, he is a big, quiet second-generation star still chasing consistency at the top.",
+  "style": "Primarily a yotsu belt-grappler who can also push, making him a fairly complete two-way wrestler. His preferred hold is migi-yotsu — right hand inside — from which he leans on his size and strong belt technique, and he mixes in genuine throwing skill. Calm and unflappable in temperament, he rarely looks rattled on the dohyō. His weakness is reliability: he has struggled to reproduce his peak, and recurring knee trouble has repeatedly blunted his best form.",
+  "watch": "When he wins, it usually looks unhurried — he secures the right-hand grip, squares up, and grinds his man out by yorikiri, or catches an off-balance opponent with an overarm uwatenage. Watch his knees: when they are sound, he plants and drives; when they aren't, he gets pushed upright and beaten to the belt. A fast tempo that keeps him from settling his grip is his kryptonite.",
+  "signature": [
+   "yorikiri",
+   "oshidashi",
+   "uwatenage",
+   "tsukiotoshi",
+   "uwatedashinage"
+  ],
+  "gossip": [
+   "He enters Nagoya kadoban — needing eight wins to keep his ōzeki rank — after a rough 3-9 May cut short by a Day-11 withdrawal.",
+   "Nagging knee ligament trouble has dogged him since 2025, including his first-ever ōzeki withdrawal that September.",
+   "As a soft-spoken 'second-generation elite,' he carries the weight of one of sumo's most famous family names with quiet grace.",
+   "He shares Sadogatake stable with fellow sekiwake Kotoshoho — all their ring names begin with the 'Koto-' prefix."
+  ]
+ },
+ "21": {
+  "tagline": "The Flying Monkey — the smallest man in the ring and the trickiest.",
+  "bio": "Tobizaru (real name Iwasaki Masaya), whose shikona means “flying monkey,” was born in 1992 in Edogawa, Tokyo, and fights for Oitekaze stable. One of the smallest men in the top division at around 173 cm, he debuted in 2015 and made an instant splash in his September 2020 makuuchi debut, nearly stealing the title at 11–4. He reached a career-high komusubi in November 2022 and owns gold stars over yokozuna Terunofuji plus a pair of special prizes. His older brother Hidenoumi was also a top-division wrestler. After a strong May 2026, he comes into Nagoya at Maegashira 9 West.",
+  "style": "An acrobatic, evasive fighter who thrives on speed and trickery rather than size or belt strength. He mixes slaps, sidesteps, pull-downs, and even leg work — commentators toggle between calling him a “gorilla” when he attacks and a “flying monkey” when he dances, and one official dubbed his approach “circus sumo.” His most common finishes are the slap-down and pull-down. The flip side of his light frame: when a bigger man locks him up on the belt he has little to answer with, and over-reliance on pulling can backfire.",
+  "watch": "Expect the unexpected — a henka sidestep at the tachiai, a slap to spin his opponent, a sudden pull to the clay. When his timing clicks he makes far larger men look silly. But if his first trick fails and a heavyweight gets a solid grip, he is in real trouble; watch whether he stays mobile or gets pinned upright.",
+  "signature": [
+   "hatakikomi",
+   "hikiotoshi",
+   "tsukiotoshi",
+   "katasukashi"
+  ],
+  "gossip": [
+   "A high-energy crowd favorite whose unpredictable, acrobatic style is pure entertainment.",
+   "A hot 7–1 start in May 2026 earned his climb back up the banzuke.",
+   "His older brother Hidenoumi retired after the March 2026 tournament, closing a chapter as one of sumo's sekitori brother pairs."
+  ]
+ },
+ "22": {
+  "tagline": "The double-arm thruster of Shikoroyama — all elbows and forward fury.",
+  "bio": "Abi Masatora was born Kōsuke Horikiri in 1994 in Koshigaya, Saitama, and fights for Shikoroyama stable. He debuted in 2013 and reached the top division in 2018, climbing to sekiwake and collecting five gold stars against yokozuna. In November 2022 he won his first top-division championship at 12–3, sealing it in a rare three-way playoff. Recurring back trouble has dogged him since, including surgery and a partial spine fracture that forced him out of the March 2026 basho. He returns at maegashira 12 for Nagoya.",
+  "style": "The purest tsuki-oshi thruster in the division — his 'Abi-zumō' is a machine-gun of double-arm thrusts to the throat and chest, keeping opponents at arm's length and marching them out. When his tempo is on, few can survive the barrage. His weaknesses are the flip side of that all-forward style: he has little belt game, and he leans in so hard that a well-timed pull or sidestep can send him tumbling. He has also drawn criticism for using the henka sidestep more than fans think fitting.",
+  "watch": "Watch his arms — if both hands find the opponent's throat and neck in that relentless piston rhythm, the bout is usually short and his. He is in trouble when a foe absorbs the first volley and yanks him down, or slips aside and lets his own momentum carry him out. Guard against surprise: he sometimes opens with a sidestep instead of the charge.",
+  "signature": [
+   "oshidashi",
+   "tsukidashi",
+   "hatakikomi",
+   "tsukiotoshi"
+  ],
+  "gossip": [
+   "Won his first Emperor's Cup in November 2022 in a dramatic three-way playoff, the first such finish in decades.",
+   "Has battled serious back problems, including a partial spine fracture that sidelined him in early 2026.",
+   "His breakneck double-arm thrusting style is one of the most recognizable — and most divisive — in sumo."
+  ]
+ },
+ "24": {
+  "tagline": "The island boy from Hirado — a low, tireless engine that never backs down.",
+  "bio": "Hiradoumi Yūki — real name Sakaguchi Yūki — was born in 2000 in Hirado, Nagasaki, and took the name Hiradoumi to honor his island hometown. Wrestling for Sakaigawa stable, he debuted in 2016 and reached the top division in 2022 — the first Nagasaki-born man to do so in eleven years. He climbed to his career-best rank of Komusubi in July 2024 and has collected Technique and Fighting Spirit prizes along with notable wins over ōzeki- and yokozuna-level opponents. He returns at Maegashira 3 for Nagoya 2026.",
+  "style": "A grappling-leaning hybrid, comfortable in both belt (yotsu) and pushing (oshi) sumo, with a preferred migi-yotsu grip — right hand inside. Short and compact, he fights with a low center of gravity, forward pressure and relentless stamina, and he is happy to engage either at the belt or in a pushing battle. The trade-off of his compact frame: the biggest, longest men can out-muscle and out-reach him, and holding a winning record at the sharp end of the banzuke has been his consistency test.",
+  "watch": "Watch him bore in low off the tachi-ai and refuse to give ground; if his right arm gets inside, the frontal force-out (yorikiri) is his most common finish, with the push-out (oshidashi) close behind. When he is dictating the pace and driving forward, he wears opponents down. He is in trouble when a bigger man keeps him upright and at arm's length, denying him that low inside position.",
+  "signature": [
+   "yorikiri",
+   "oshidashi"
+  ],
+  "gossip": [
+   "The local-boy-makes-good story from a small island town — gutsy and tenacious, he never quits a bout.",
+   "Took a Fighting Spirit Prize in early 2026 after a strong run deep into the tournament.",
+   "Owns upset wins over big names including Takakeishō, Kirishima and Ōnosato.",
+   "A reliable mid-division fixture pushing to re-establish himself in the titled ranks after his 2024 Komusubi debut."
+  ]
+ },
+ "26": {
+  "tagline": "The three-time champion from Nagano — an ex-ōzeki fighting home turf.",
+  "bio": "Mitakeumi Hisashi was born Hisashi Ōmichi in 1992 to a Japanese father and Filipino mother, and raised in Agematsu, Nagano. A two-time amateur yokozuna at Toyo University, he joined Dewanoumi stable and debuted in 2015, rising quickly to become a long-serving sekiwake. He won three top-division championships — in 2018, 2019 and 2022 — the last of which finally carried him to ōzeki, the first ōzeki from Nagano in over two centuries. His time at the rank was brief, and after years as a mainstay he was even demoted to jūryō in 2025 before climbing back. He enters Nagoya at maegashira 11.",
+  "style": "A classic oshi pusher-thruster who wins with speed and forward pressure rather than the belt. At his peak he combined a fast tachiai with a strong push-out and a well-timed slap-down that punished opponents who leaned in. His conditioning was legendary — jump-rope and hill sprints — and his sumo is at its best when he keeps things short and explosive. Age and a heavy body of tournaments have blunted the burst that once made him a champion.",
+  "watch": "Watch the first two seconds: if he gets under his opponent and drives, he can still bully men out before they settle. Beware his pull-down — many a foe has been slapped to the clay chasing him. He struggles now when bouts go long and he is forced onto the belt against fresher, heavier grapplers.",
+  "signature": [
+   "oshidashi",
+   "yorikiri",
+   "hatakikomi",
+   "tsukiotoshi"
+  ],
+  "gossip": [
+   "A former ōzeki and three-time champion now fighting in the rank-and-file, still respected as one of the era's big names.",
+   "Was demoted to the second division for the first time in 2025 before battling his way back to the top flight.",
+   "Weathered painful family losses in recent years and keeps competing, a favorite of Nagano fans."
+  ]
+ },
+ "28": {
+  "tagline": "The acrobat of the dohyō — sumo's great improviser and crowd favorite.",
+  "bio": "Ura Kazuki, born in Neyagawa, Osaka in 1992, wrestles under his own family name for Kise stable, which he joined in 2015 after a decorated amateur career at Kwansei Gakuin University. He shot to the top division in 2017, then shattered both knees and plunged all the way to jonidan — before mounting one of the sport's most beloved comebacks, becoming the first ex-top-division man to climb back to san'yaku from so low. He peaked at komusubi in January 2024, owns a Technique prize and two gold stars, and returns from a strong 10–5 to sit at Maegashira 5 East for July 2026. In his bright pink mawashi, he is one of grand sumo's biggest draws.",
+  "style": "Ura has, in the words of one yokozuna, 'no style' — and that is the point. Nominally a pusher, he is really an unorthodox, acrobatic technician who wins with a bag of rare, flashy tricks few others dare attempt. At only 175 cm and 139 kg he is small and light, but astonishingly flexible and low to the ground, an escape artist who turns defense into offense. Bigger men can simply overpower him in a straight fight, and his contortionist style keeps his surgically-repaired knees under constant strain.",
+  "watch": "Never assume a bout is over. Ura invites pressure, drops impossibly low, and when an opponent lunges he vanishes — reappearing with a twist-down, an arm-bar throw, or one of his trademark backward body-drops that the announcers can barely name. Watch his feet and hips: the more precarious he looks, the more likely a reversal is coming. He is in danger only when a powerful rival keeps him square, upright and unable to spin, denying him the angles his whole game depends on.",
+  "signature": [
+   "tsutaezori",
+   "katasukashi",
+   "tottari",
+   "izori",
+   "kekaeshi"
+  ],
+  "gossip": [
+   "His rare reversal finishes, including repeat trick-throw wins over Takayasu, routinely go viral.",
+   "The jonidan-to-san'yaku comeback story remains one of the most inspiring in modern sumo.",
+   "Fans and family alike adore him — the bright-pink belt and cheerful manner make him a stadium favorite.",
+   "The durability of his rebuilt knees is a constant, gentle worry given how acrobatic his style is."
+  ]
+ },
+ "33": {
+  "tagline": "The come-from-behind ōzeki — slow off the line, deadly late.",
+  "bio": "Shōdai Naoya, born in Uto, Kumamoto in 1991, wrestles under his real family name for Tokitsukaze stable after a college career at Tokyo University of Agriculture. He reached the top division in 2016 and enjoyed his crowning moment in September 2020, winning the tournament at 13–2 as the first Kumamoto native ever to take a top-division title — and earning promotion to ōzeki that same day. He held the rank until a run of poor form cost him his ōzeki status in November 2022. Decorated with six Fighting Spirit prizes and two gold stars, he is now a mid-maegashira veteran, ranked Maegashira 6 East for July 2026 and battling to stay in the division's middle tier.",
+  "style": "Shōdai is a belt-and-grapple wrestler who mixes in some pushing, favoring a right-hand-inside grip. His most famous trait is his tachi-ai — notably upright, slow, almost passive, so that he often appears to be shoved backward and beaten at the start. Yet his balance and lower-body recovery are superb, and the whole point of his sumo is winning from a losing position. Once he steadies and finds his belt hold, the force-out is powerful. The obvious weakness is that same soft start: opponents who exploit it can finish him before his comeback ever begins.",
+  "watch": "Do not be fooled by the opening. He will often be driven to the straw bales looking beaten — then plant his feet, absorb the charge, and roar back. Watch for the moment he stops going backward and gets his right arm inside; that is when the force-out or a well-timed thrust-down turns the tide. He is genuinely in trouble when a sharp, aggressive opponent bulls straight through that upright tachi-ai and never lets him settle.",
+  "signature": [
+   "yorikiri",
+   "oshidashi",
+   "tsukiotoshi",
+   "hatakikomi"
+  ],
+  "gossip": [
+   "A former ōzeki now bouncing between Maegashira 5 and 8, hanging on as a beloved veteran.",
+   "An unusually lenient demotion after a rough November 2025 kept him in the division, with results still needed to hold his place.",
+   "Easygoing and resilient, he remains a fan favorite famous for his against-the-odds comebacks."
+  ]
+ },
+ "37": {
+  "tagline": "The gritty veteran pusher — three-time runner-up, Terunofuji's nemesis.",
+  "bio": "Takanoshō — real name Ishii Nobuaki — was born in Kashiwa, Chiba, in 1994 and debuted in 2010, originally as “Masunoshō.” He wrestles for Minatogawa stable, the heya once known as Chiganoura and now led by former ōzeki Takakeishō. He reached sekiwake back in November 2020 and, though he has never won a tournament, he has been runner-up multiple times with strong 12-3 records. A five-time Fighting Spirit Prize winner, he holds three gold stars — all against yokozuna Terunofuji — and sits around Maegashira 1 for Nagoya 2026 as a respected veteran.",
+  "style": "A classic oshi-zumō pusher-thruster who avoids the belt and works at the chest and throat. His engine is a low, driving center of gravity and heavy, powerful shoves, backed by the tenacity that earned all those Fighting Spirit prizes. His weakness is the mirror of his style: when an opponent secures a firm mawashi grip and turns the bout into a yotsu battle, he can be stuck. His results swing hard from tournament to tournament.",
+  "watch": "Look for the relentless forward push — he wins most often by push-out (oshidashi), mixing in thrusts (tsukidashi) and, when a man over-commits, a slap-down (hatakikomi). When he is driving low and straight, he is very hard to stop. He is in trouble when he gets turned side-on or a grappler pins his arms to the belt and walks him back.",
+  "signature": [
+   "oshidashi",
+   "tsukidashi",
+   "oshitaoshi",
+   "hatakikomi"
+  ],
+  "gossip": [
+   "A genuine giant-killer against Terunofuji — all three of his career gold stars came against that yokozuna.",
+   "Perennially close but never quite there: multiple 12-3 runner-up finishes without a title.",
+   "His form is famously up-and-down, alternating strong and losing tournaments.",
+   "A fan of the rock band ONE OK ROCK, he married in 2024."
+  ]
+ },
+ "39": {
+  "tagline": "The Mongolian trickster of Kokonoe — a matador in a mawashi.",
+  "bio": "Chiyoshōma Fujio was born Ganbaatar Munkhsaihan in Ulaanbaatar, Mongolia, in 1991, and joined Kokonoe stable, making his debut in July 2009 as a slight teenager. He climbed steadily, winning a makushita championship by playoff in 2015 and reaching the top division in 2016, with a career-high of maegashira 2. A wily veteran now in his mid-thirties, he took Japanese citizenship in 2024 to keep a coaching future open. His crowning moment came in March 2025, when he toppled newly-promoted yokozuna Hōshōryū for his first career kinboshi. He sits at maegashira 10 for the Nagoya basho.",
+  "style": "A hidari-yotsu belt man at heart — left hand inside, right outside — but he is famous less for grappling than for guile. He is one of the division's great henka artists, sidestepping at the tachiai to steal the advantage before an opponent can set his feet. When it works he finishes with a slap-down or spins a bigger man off balance; when he does grab the belt, his overarm throw is genuinely dangerous. Light and quick rather than powerful, he wins on timing, deception and long experience.",
+  "watch": "Watch his feet at the charge — if he darts to the side, the bout may be over in a heartbeat with a hatakikomi. If he stays square and gets that left hand inside, look for a sudden overarm throw. He is in trouble when a stronger opponent reads the sidestep and drives straight through him, because he cannot win a shoving match toe-to-toe.",
+  "signature": [
+   "hatakikomi",
+   "uwatenage",
+   "yorikiri",
+   "tsukiotoshi"
+  ],
+  "gossip": [
+   "Beat yokozuna Hōshōryū in March 2025 for the first kinboshi of his long career, a huge night for the veteran.",
+   "Took Japanese citizenship in 2024, a sign he is thinking about staying in sumo as a coach after he retires.",
+   "One of the division's cheekiest tacticians — fans either love or groan at his trademark sidesteps."
+  ]
+ },
+ "40": {
+  "tagline": "Isegahama's patient belt man — a technician wrestling through pain.",
+  "bio": "Nishikifuji Ryūsei was born Ryūsei Ogasawara in 1996 in Towada, Aomori, and belongs to Isegahama stable; his shikona borrows kanji from his mentor Aminishiki and the former yokozuna Asahifuji. He worked up through every lower division, winning the jūryō title in 2022 and earning a Fighting Spirit prize on his top-division debut that July. His career high is maegashira 3, reached in 2023. Nagging neck and elbow injuries have repeatedly interrupted him — he withdrew from the January 2026 basho — but he returns to the top division at maegashira 13, keeping Aomori's proud sumo tradition alive.",
+  "style": "A yotsu belt-grappler by preference, favoring a hidari-yotsu grip with the left hand inside and right outside, though he has added pushing and thrusting to round out his game. At a solid 155 kilograms he wrestles a patient, technical style, working for position and forcing his man out once he has the grip. His main obstacle has never really been opponents but his own body, with recurring injuries sapping his consistency.",
+  "watch": "Watch him hunt for that inside left hand — once he locks the belt and gets his hips under, the force-out is methodical and hard to resist. He is at his best in a grinding chest-to-chest battle. He is vulnerable when quicker pushers keep him off the belt entirely, and when an aggravated neck or elbow robs him of his strength.",
+  "signature": [
+   "yorikiri",
+   "oshidashi",
+   "hatakikomi"
+  ],
+  "gossip": [
+   "Earned a Fighting Spirit prize on his very first top-division tournament back in 2022 — a memorable debut.",
+   "Has fought through a string of neck and elbow injuries, most recently withdrawing from the January 2026 basho.",
+   "Became a father to twins, and carries the flag for Aomori's deep sumo heritage alongside his stablemates."
+  ]
+ },
+ "41": {
+  "tagline": "Taihō's grandson — a big, booming pusher chasing a legend's shadow.",
+  "bio": "Ōhō Kōnosuke — born Kōnosuke Naya in Tokyo in 2000 — is the grandson of Taihō, one of the greatest yokozuna in history, and the son of former sekiwake Takatōriki. He debuted in 2018 as “Naya,” taking the Ōhō name (an echo of Taihō) on reaching jūryō, and wrestles out of Ōtake stable. He reached his career-best rank of sekiwake in March 2025 and owns three gold stars — including the first defeat of Ōnosato after that man's yokozuna promotion. For Nagoya 2026 he sits at Komusubi, back in the titled ranks after a rocky start to the year.",
+  "style": "An oshi man, not a belt grappler. At 1.90 m and around 185 kg he is one of the larger men in the division, and he leans on size, reach and raw pushing power (tsuki-oshi) rather than the mawashi. His ceiling is high — he beats yokozuna on his day — but consistency is the puzzle. His notable habit is retreating into pull-downs and slap-downs, a tendency former yokozuna Kitanofuji has publicly flagged as a weakness.",
+  "watch": "When he keeps his feet moving forward and thrusts with that long reach, he bullies opponents out by push-out (oshidashi) or thrust-out (tsukidashi). The warning sign is when he stops driving and reaches for a pull: if the slap-down (hatakikomi) misses, his momentum is gone and a sharper opponent surges in. He is a boom-or-bust wrestler — thrilling in a hot streak, frustrating in a slump.",
+  "signature": [
+   "oshidashi",
+   "yorikiri",
+   "tsukidashi",
+   "hatakikomi"
+  ],
+  "gossip": [
+   "Carries the weight of being Taihō's grandson, with a ring name built to honor the legend.",
+   "Has become a repeat thorn in new superstar yokozuna Ōnosato's side, delivering some of his most memorable upsets.",
+   "His younger brother wrestles as Mudohō in the same stable, setting up a brother-versus-brother storyline for 2026.",
+   "A rough 4-11 at Komusubi in January was answered with a 9-6 in May to climb back to the titled ranks."
+  ]
+ },
+ "44": {
+  "tagline": "The eternal nearly-man — power, heart, and a yūshō that never comes.",
+  "bio": "Takayasu Akira, born 1990 in Tsuchiura, Ibaraki to a Japanese father and Filipina mother, is one of the most beloved veterans in sumo, fighting out of Tagonoura stable since his 2005 debut. He rose to ōzeki in July 2017 and held the rank for over two years before injuries pulled him down. His career's defining ache is that, despite roughly nine top-division runner-up finishes and several agonizing playoff losses — most recently to Ōnosato in March 2025 — he has never won a makuuchi championship. He owns 13 special prizes and six gold stars over yokozuna, and briefly returned to sekiwake in early 2026. For Nagoya he sits at Maegashira 7 West at age 36.",
+  "style": "A big, tall power fighter, primarily an oshi pusher-thruster who is also perfectly capable on the belt. His bread and butter are the force-out and the push-out, with a well-timed slap-down when opponents overcommit. His great enemy is his own body — chronic lower-back trouble repeatedly derails hot starts — and he carries a reputation for tightening up in the decisive bouts that matter most. When healthy and loose, though, few veterans hit harder.",
+  "watch": "Watch his opening week: Takayasu often bursts out to a strong record on raw power and rhythm. The warning sign is his back — once it flares, the losses can pile up in a hurry, as they did in March 2026 when a 5–0 start collapsed to 7–8. In the clinch, feel for the moment he abandons the push and yanks a hatakikomi.",
+  "signature": [
+   "oshidashi",
+   "yorikiri",
+   "hatakikomi",
+   "tsukiotoshi"
+  ],
+  "gossip": [
+   "A perennial fan favorite still hunting the elusive first championship that has slipped away in playoff after playoff.",
+   "Recurring lower-back pain keeps undoing his fast starts, and he withdrew injured from the May 2026 basho after beating a yokozuna.",
+   "Married to enka singer Konomi Mori and a doting father of two, he earned the affectionate nickname “Papayasu.”"
+  ]
+ },
+ "50": {
+  "tagline": "The pioneer from Almaty — Kazakhstan's first man in the top flight, all reach and thrust.",
+  "bio": "Yersin Baltagul was born in Almaty, Kazakhstan in 1997 and wrestles for Kise stable. After amateur success he turned pro in November 2021 and tore through the lower ranks, taking the sandanme and makushita titles almost back-to-back before reaching the top makuuchi division in March 2023 — the first Kazakh ever to do so. He has twice won the Fighting Spirit prize and climbed as high as maegashira 3 in July 2025, and famously started the January 2025 tournament 9–0 before falling to Hōshōryū in a title playoff. Along the way he has toppled ōzeki Takakeishō, Ōnosato and Kotozakura. A devout Muslim, he abstains from pork and alcohol, and enters Nagoya reset at maegashira 14, looking to rebuild.",
+  "style": "Kinbōzan is an oshi man — a pusher-thruster who uses his long reach to keep opponents at arm's length. His bread and butter are oshidashi and tsukidashi, driving foes back with heavy shoves before they can settle, and he will convert to a yorikiri force-out if the bout reaches the belt. His height gives him leverage but can leave him upright and reachable underneath. When his thrusts land clean he looks like a top-ten man; when smaller, lower grapplers duck inside he can be walked back.",
+  "watch": "Watch his first two shoves off the tachiai — if his palms find the throat and chest, he marches opponents out in seconds. Trouble comes when a shorter belt-fighter slips under his long arms and pins him chest-to-chest, where his upright frame gives up the leverage battle. And keep an eye out for the giant-killing upset; he has a taste for beating ōzeki.",
+  "signature": [
+   "oshidashi",
+   "tsukidashi",
+   "yorikiri"
+  ],
+  "gossip": [
+   "Nearly won the January 2025 Emperor's Cup, leading at 9–0 before a playoff loss to Hōshōryū earned him a Fighting Spirit prize.",
+   "As Kazakhstan's first-ever top-division wrestler, he carries a whole country's flag into the ring.",
+   "A devout Muslim, he keeps to a no-pork, no-alcohol diet — a rarity in the sumo world.",
+   "Slid from a career-high maegashira 3 down to 14, so Nagoya is a rebuilding basho for him."
+  ]
+ },
+ "55": {
+  "tagline": "The Wolf of Tuva — Russia's lone standard-bearer on the belt.",
+  "bio": "Rōga (real name Amartuvshin Amarsanaa) was born in 1999 in Kyzyl, Tuva, Russia, of Buryat and Tuvan-Russian heritage, and came to sumo via sambo and judo. He identifies as Russian but took Mongolian citizenship as a teenager, a nationality tangle that has followed him since his 2018 debut. Fighting for Futagoyama stable under former ōzeki Miyabiyama, his shikona means “wolf”; he swept jonokuchi and jonidan titles — beating future yokozuna Terunofuji in a playoff — and reached the top division in November 2023, the first Russian in makuuchi in nearly a decade. His highest rank is Maegashira 8, which he holds again (West) for Nagoya 2026.",
+  "style": "A yotsu belt-grappler who prefers migi-yotsu, right hand inside on the mawashi. The bulk of his wins come by straightforward force-out, but his judo background shows in throws — he once dumped Ōnosato with a scoop-throw. Solidly built at around 160 kg, he is most comfortable grinding at the belt rather than trading thrusts. Detailed weaknesses aren't well documented, but injuries have repeatedly interrupted his momentum.",
+  "watch": "Look for him to close the distance and dig in at the mawashi with the right hand inside, then power forward for yorikiri. If a bout stalls or an opponent tries to spin away, watch for a sudden scoop-throw born of his grappling roots. He is at his most vulnerable coming off injury, when his lower-body drive isn't fully there.",
+  "signature": [
+   "yorikiri",
+   "sukuinage",
+   "uwatenage"
+  ],
+  "gossip": [
+   "The sole Russian-identifying wrestler in the top division, and a proud symbol of sumo's international reach.",
+   "A torn thigh muscle wrecked his January 2025 tournament, and he has bounced between the mid- and lower-maegashira ranks since.",
+   "He has spoken openly about wanting to close the gap on the very best, name-checking a rivalry with yokozuna Hōshōryū."
+  ]
+ },
+ "56": {
+  "tagline": "The law-graduate battering ram — charge straight ahead, don't stop.",
+  "bio": "Gōnoyama Tōki — real name Nishikawa Tōki — was born in Neyagawa, Osaka, in 1998 and captained the sumo club at Chuo University's law faculty before turning pro in 2021. Entering high as a college star, he won a makushita title and a jūryō title on his way up, reaching the top division in July 2023 and taking a Fighting Spirit Prize in his debut basho. He wrestles for Takekuma stable under former ōzeki Gōeidō. His career-best rank is Maegashira 2, where he sits again — Maegashira 2 East — for Nagoya 2026, though he has yet to break into the titled ranks.",
+  "style": "Pure oshi-zumō — a pusher-thruster who tries to avoid the belt entirely, so the yotsu grip question barely applies. Short and stocky at about 1.78 m and 156 kg, he fights like a battering ram: explosive tachi-ai, low center of gravity, and a strong forward drive his stablemaster likens to former ōzeki Dejima. The weakness is familiar for a pure pusher — taller belt-grapplers who latch onto his mawashi, and slippery opponents who sidestep or pull his charge, can undo him.",
+  "watch": "Watch the opening charge: if he lands it and keeps churning forward, the push-out (oshidashi) comes quickly — it is by far his most common finish. He mixes in thrusts (tsukidashi), a thrust-down (tsukiotoshi) and the occasional slap-down (hatakikomi). He is in trouble when his charge is neutralized and the bout turns into a patient belt grapple where his lack of height shows.",
+  "signature": [
+   "oshidashi",
+   "tsukidashi",
+   "tsukiotoshi",
+   "hatakikomi"
+  ],
+  "gossip": [
+   "A disciplined former college team captain and law graduate — a leadership figure with an all-action, crowd-pleasing style.",
+   "His form has been streaky, swinging between the upper maegashira and the low teens.",
+   "Beat ōzeki Kirishima during a winning May 2026 tournament.",
+   "Married a former high-school classmate — a judo competitor — in 2024."
+  ]
+ },
+ "61": {
+  "tagline": "Kotoōshū's first son — a long-limbed Mongolian mover.",
+  "bio": "Ōshōma Degi, born Pürevsürengiin Delgerbayar to a nomadic herding family in Töv Province, Mongolia in 1997, is the flagship success of Naruto stable and the first sekitori raised by its founder, former ōzeki Kotoōshū. A student-yokozuna-level amateur at Nippon Sport Science University, he turned pro in 2021, won the jūryō title in 2022 and reached the top division in May 2024. He climbed to a career-high komusubi in July 2025 and holds one Fighting Spirit prize. After his brief taste of san'yaku he has settled into the mid-maegashira, ranked Maegashira 5 West for July 2026.",
+  "style": "Despite standing a rangy 190 cm, Ōshōma is classed by the Sumo Association as an oshi-and-inashi man — a mobile pusher and deflector rather than a belt grinder. His bread and butter is the push-out, but very characteristically he leans on the slap-down, using his reach and footwork to sidestep and pull a charging rival off balance. When he does get a grip he owns a genuinely good overarm throw, so he is not helpless on the mawashi. That heavy reliance on pulling is his double edge: deadly when it lands, fatal when it misses and he is driven straight out.",
+  "watch": "Watch how he uses his length to stay just out of range, then deflect. If an opponent overcommits, look for the quick sidestep and slap-down, or a big overarm throw if the belt is there. He controls bouts by keeping rivals moving and off-balance rather than bulldozing them. He is in trouble against top-tier power men who refuse to be pulled — his 3–12 komusubi debut showed what happens when the deflection game gets called.",
+  "signature": [
+   "oshidashi",
+   "hatakikomi",
+   "uwatenage"
+  ],
+  "gossip": [
+   "He carries the legacy of mentor Kotoōshū as the very first sekitori produced by the young Naruto stable.",
+   "Married an Aichi-born flight attendant in late 2024 and became a father in January 2025.",
+   "He shares a warm high-school friendship with yokozuna Hōshōryū from their Chiba schooldays.",
+   "A lingering shoulder issue dating to 2022 has occasionally slowed his progress."
+  ]
+ },
+ "71": {
+  "tagline": "Okinawa's beautiful sea — the late-blooming grinder who won't be out-sized.",
+  "bio": "Churanoumi Yoshihisa — real name Shinji Kizaki — hails from Uruma, Okinawa, born in 1993; his shikona uses the Okinawan word “chura” (beautiful), roughly meaning “beautiful sea.” He joined Kise stable as a youth and turned pro in 2016 at nearly 23 — late by sumo standards. A true late bloomer, he won three lower-division titles, reached the top division only in 2023 at age 30, and climbed to his career-best Maegashira 2 in March 2026. He took a Fighting Spirit Prize in March 2025 and returns at Maegashira 2 for Nagoya 2026, still chasing his first title.",
+  "style": "A hybrid — primarily an oshi-zumō pusher, but a capable belt fighter who favors a hidari-yotsu grip, left hand inside. Undersized at about 1.78 m and 151 kg, he gives up size to most opponents and makes up for it with technique, low balance and sheer effort. His challenge is holding ground at the M2 level, where san'yaku-caliber opponents can out-muscle him — his tournaments tend to swing between strong and rough.",
+  "watch": "He both pushes and grapples, so watch which he settles into: a push-out (oshidashi) if he keeps the bout square, or a frontal force-out (yorikiri) once he gets his left arm inside and works the belt. When he is on, he grinds bigger men down with persistence. He is in trouble against the division's heaviest opponents, who can stall his push and drive him back before he sets his grip.",
+  "signature": [
+   "oshidashi",
+   "yorikiri"
+  ],
+  "gossip": [
+   "A proud Okinawan whose top-division breakthrough came in his 30s after years grinding through the lower divisions — a classic perseverance story.",
+   "In March 2026 he upset both eventual champion Kirishima and yokozuna-hopeful ōzeki Aonishiki.",
+   "His younger brother also wrestled at Kise stable before retiring in 2020.",
+   "His results run hot and cold, alternating strong tournaments with rough ones as he tries to establish himself near the top."
+  ]
+ },
+ "74": {
+  "tagline": "Shizuoka's big-hearted giant — the people's runner-up hunting his first cup.",
+  "bio": "Atamifuji Sakutarō, born Takei Sakutarō in 2002 and raised in the hot-spring town of Atami in Shizuoka, is one of sumo's most popular young bruisers. He joined Isegahama stable — the home of former yokozuna Terunofuji — in 2020 and reached the top division by late 2022 after only about a dozen tournaments. In March 2026 he broke through to san'yaku as a komusubi, becoming the first Shizuoka wrestler promoted to the elite ranks in 96 years, and rose to sekiwake that May. He has no Emperor's Cup yet, but a string of runner-up finishes and gold-star upsets marks him as a champion-in-waiting at just 23.",
+  "style": "A powerful yotsu belt-grappler who favors a migi-yotsu grip but is versatile enough to push when he needs to. His weapons are size, raw strength and grip control, all wrapped in a famously determined fighting spirit. At roughly 1.87 m and near 200 kg he is a genuine handful on the mawashi. The knock, natural for his age, is consistency — his results still swing tournament to tournament as he learns to hold the top ranks.",
+  "watch": "Watch him bulldoze forward off the tachi-ai and hunt the belt; once he clamps on with the right hand inside, it's a heavy, relentless yorikiri to the straw. If the grip isn't there he'll simply push you out by oshidashi. He gets into trouble when a craftier opponent uses his forward momentum against him, pulling or slipping aside before he can set his feet.",
+  "signature": [
+   "yorikiri",
+   "oshidashi",
+   "uwatenage"
+  ],
+  "gossip": [
+   "At the January 2026 tournament he went 12-3 and pushed newly-promoted ōzeki Aonishiki to a championship playoff before falling just short.",
+   "In that same run he became the first maegashira in six years to topple two yokozuna on back-to-back days.",
+   "Cheerful, wholesome and beloved by crowds, he is one of the biggest fan draws of the new generation.",
+   "His rivalry with fellow young stars Ōnosato and Aonishiki is shaping up as a defining thread of the era."
+  ]
+ },
+ "82": {
+  "tagline": "The college late bloomer — patient, rangy, all belt.",
+  "bio": "Fujiseiun Tatsuki, born Tatsuki Higashi in Kumamoto City in 1997, took the scholar's road to sumo, wrestling four years at Meiji University and spending time on a corporate team before turning pro with Fujishima stable in 2021. He collected four lower-division titles, reached jūryō in 2023, and broke through with a 10–5 makuuchi debut in March 2026 that earned a Fighting Spirit prize. That vaulted him to a career-high Maegashira 6, where he sits — West side — for the July 2026 Nagoya basho. He is the first Meiji University man to reach the top division since his own stablemaster, the former sekiwake Buyuzan.",
+  "style": "Fujiseiun is a yotsu-zumō grappler through and through, preferring to lock up on the belt rather than trade thrusts. His grip is migi-yotsu — right hand inside, left hand outside — and at a tall, rangy 185 cm and 150 kg he uses reach and leverage to secure a hold and walk opponents out. The force-out is overwhelmingly his finish, with the push-out as backup. His fundamentals are clean and his patience real, but the jump in class at Maegashira 6 is a genuine test, and as a taller, non-bulky belt man he is vulnerable to a henka sidestep or a fast pusher who never lets him settle into his grip.",
+  "watch": "Watch him hunt for the belt from the tachi-ai. Once his right hand is inside and he has his grip, he is patient and hard to stop — he will straighten up and march the force-out. The danger sign is the opening instant: if a crafty opponent sidesteps or a thruster keeps him from ever gripping, his whole game stalls, as a final-day sidestep loss to Hakunofuji showed.",
+  "signature": [
+   "yorikiri",
+   "oshidashi"
+  ],
+  "gossip": [
+   "Announced himself with a 10–5 top-division debut and a Fighting Spirit prize in March 2026.",
+   "A wholesome late-bloomer story: the first Meiji University graduate in the top flight since his own stablemaster.",
+   "Humble and articulate, he says he steps into every bout 'with the mindset of a challenger.'"
+  ]
+ },
+ "86": {
+  "tagline": "Ukraine's trailblazer — a towering belt-man who fights through the pain.",
+  "bio": "Born Serhii Sokolovskyi in Melitopol, Ukraine in 1997, Shishi trained in Japan from 2016 and debuted in March 2020. He climbed steadily to become the first Ukrainian ever to reach sekitori status in July 2023, then the first Ukrainian in the top makuuchi division in November 2024. He won the jūryō championship with a 13–2 record in January 2025 and peaked at maegashira 11 in May 2025. He wrestles for Ikazuchi stable and enters Nagoya at maegashira 14.",
+  "style": "Shishi is a yotsu-zumō grappler at heart, most comfortable with a left-hand-outside grip and finishing with the yorikiri force-out. He is versatile enough to win by push-out (oshidashi) or overarm throw (uwatenage) when the belt isn't there. He idolizes former ōzeki Tochinoshin and studies the giant Baruto, and his own tall, powerful build suits that lift-and-drive style. His main challenge is staying consistent and staying healthy.",
+  "watch": "Look for him to reach for the outside left grip at the tachiai — once he clamps the belt, he tries to march or lift his man straight out. If he can't find the mawashi he falls back on shoves and the occasional big overarm throw. He is dangerous even hurt: in May 2026 his stablemaster revealed he had wrestled the whole tournament on painkillers.",
+  "signature": [
+   "yorikiri",
+   "uwatenage",
+   "oshidashi"
+  ],
+  "gossip": [
+   "Made history as the first Ukrainian wrestler to reach both sekitori status and the top division.",
+   "Fought an entire 2026 tournament on painkillers, his stablemaster later revealed.",
+   "So close with his stable family that he calls the stablemaster's wife 'mama.'",
+   "Looks up to former ōzeki Tochinoshin and the giant Baruto for his belt-and-lift style."
+  ]
+ },
+ "112": {
+  "tagline": "Sadogatake's young belt technician, chasing his brother into the light.",
+  "bio": "Kotoeihō (real name Tebakari Taiki) is a Japanese rikishi born in 2003, raised in the Kashiwa, Chiba junior-sumo scene and schooled at Saitama Sakae before joining Sadogatake stable in 2022. His shikona stitches together his master's “Koto,” his high school, and a character from his elder brother — Sadogatake stablemate and sekiwake-level star Kotoshōhō — making them a rare pair of brothers in the top division. He took jonokuchi and jonidan titles on the way up, reached jūryō in November 2024, and debuted in makuuchi in July 2025. A strong 10–5 in May 2026 lifted him to Maegashira 7 East for Nagoya, his highest rank yet at just 22.",
+  "style": "A yotsu belt-grappler through and through, his declared favorite is migi-yotsu — right hand inside — driving forward into a force-out. Get that inside grip and he walks opponents to the straw with calm, precise technique; his overarm throw is a genuine secondary weapon. On the lean side for the division at around 140 kg, he can be pushed around when the tachiai denies him the belt. He is still building week-to-week consistency, but his sumo is orderly and mature for his age, and his high ceremonial shiko draws the crowd's eye.",
+  "watch": "Watch the first exchange for his right hand: if it slides inside and finds the mawashi, the bout is usually his — a steady yorikiri march. If a thruster keeps him at arm's length and off the belt, he can be walked back and dumped. When he can't grip, look for a quick uwatenage as his escape hatch.",
+  "signature": [
+   "yorikiri",
+   "oshidashi",
+   "uwatenage"
+  ],
+  "gossip": [
+   "At 22 he is on a clear upward curve, following elder brother Kotoshōhō's path through the top division.",
+   "His May 2026 double-digit run — with wins over veterans like Tamawashi — earned the promotion to his career-high M7.",
+   "Fans love his crisp, high ceremonial leg-stomps and tidy, textbook belt sumo."
+  ]
+ },
+ "164": {
+  "tagline": "The undersized Osakan scrapper — small, quick, and all forward gears.",
+  "bio": "Ishizaki Takuma was born in 1998 in Shijōnawate, Osaka, and fights for the historic Takasago stable. He debuted in May 2021 with sandanme tsukedashi status, winning that first tournament 7–0, and worked his way up to jūryō in September 2023 and the top division in September 2024. He reached a career-high maegashira 7 in May 2026 before a right-foot injury forced him to withdraw. He enters the July 2026 Nagoya tournament at maegashira 16. At just 1.78 m and 125 kg, he is one of the smaller men in makuuchi.",
+  "style": "Asakōryū is a versatile fighter comfortable in both oshi pushing and yotsu belt battles, but his primary weapon is the oshidashi push-out, followed by the yorikiri force-out. Undersized for the top division, he relies on speed, a low center of gravity and relentless forward motion rather than raw power. That mobility lets him fluster bigger men, but when a heavier opponent gets a solid grip he can simply be overpowered. Expect plenty of scrambling, momentum-shifting bouts.",
+  "watch": "Watch him fire low and fast off the tachiai, trying to get underneath taller men and keep them moving backward before they can set. Because he gives up size, his best bouts are quick — if it turns into a slow belt grind he is often the one being walked out. His nimbleness also makes him a threat to slap or pull down a lunging opponent.",
+  "signature": [
+   "oshidashi",
+   "yorikiri",
+   "tsukiotoshi"
+  ],
+  "gossip": [
+   "Climbed to a career-high maegashira 7 in May 2026 before a right-foot injury cut his tournament short.",
+   "One of the smallest men in the top division at 1.78 m, he wins on speed and hustle.",
+   "Fights for Takasago, one of sumo's oldest and most storied stables.",
+   "In May 2025 he narrowly missed a Fighting Spirit prize, losing the final-day bout to the retiring veteran Endō."
+  ]
+ },
+ "195": {
+  "tagline": "Minatogawa's first star — a young pusher on the rise.",
+  "bio": "Wakanoshō Eido is a Japanese wrestler from Utsunomiya, Tochigi, born in 2003, who competes for Minatogawa stable. He made his debut in January 2022 and became the first top-division wrestler produced by Minatogawa — the stable now run by former ōzeki Takakeishō. His climb was interrupted in 2025 by a Lisfranc ligament injury in his right foot that knocked him back to makushita, but he answered with a jūryō championship in January 2026 and reached the top division in May 2026. A strong makuuchi debut earned him a jump to maegashira 11 for Nagoya.",
+  "style": "A pure oshi-zumō wrestler, he lives on pushing and thrusting rather than the belt. He fires forward off the tachiai looking to plant his hands in the chest and walk his man out or thrust him down. As a young rikishi he is still filling out physically, and his sumo is at its best when it stays straight-ahead and relentless. His challenge, like many pushers, is what happens if that first burst is stopped.",
+  "watch": "Look for the opening charge — if he gets his palms into the chest and keeps his feet churning, opponents get marched straight back and out. He is dangerous the moment he seizes forward momentum. He is in trouble when a craftier veteran slips to the side or grabs his arm, since a pusher who is turned has little to fall back on.",
+  "signature": [
+   "oshidashi",
+   "tsukidashi",
+   "hatakikomi",
+   "oshitaoshi"
+  ],
+  "gossip": [
+   "Became the very first makuuchi wrestler ever produced by Minatogawa stable, a proud milestone for Takakeishō's young stable.",
+   "Fought back from a nasty Lisfranc foot injury in 2025 to win the jūryō title and earn promotion — a real comeback story.",
+   "At just 22, one of the youngest men in the top division and clearly one to watch."
+  ]
+ },
+ "378": {
+  "tagline": "The tall man from the grasslands — China's second-ever top-division rikishi.",
+  "bio": "Daiseizan Daisuke was born in 2000 in Hohhot, Inner Mongolia, China; his Chinese name is Asihada and his Mongolian name Altan-Ochir Asgakhad. A graduate of Hiryū High School in Shizuoka, he wrestles for Arashio stable — run by former komusubi Sokokurai, the first Chinese wrestler ever to reach the top division. Daiseizan follows in his master's footsteps as only the second Chinese rikishi to make makuuchi, debuting at maegashira 16 for the July 2026 Nagoya tournament. Standing 192 cm, he is one of the taller men on the banzuke.",
+  "style": "Daiseizan is a versatile fighter who blends pushing and belt work, listing his style as oshi with a right-inside (migi-yotsu) grip. His single most common finish is the yorikiri force-out, which accounts for around 40 percent of his wins, backed up by oshidashi and the occasional uwatenage overarm throw. His long, 192 cm frame gives him reach and leverage, and he has vowed to 'use my physique to push forward.' As a rookie he is still proving he can impose that size against top-division opposition.",
+  "watch": "Watch whether he chooses to push or to grab; at his best he uses his height to secure a right-hand grip and force his man out. His length is an asset, but tall wrestlers can be vulnerable underneath, so lower, stronger grapplers will try to get inside his chest. This is his first top-division test, so consistency is the thing to watch.",
+  "signature": [
+   "yorikiri",
+   "oshidashi",
+   "uwatenage"
+  ],
+  "gossip": [
+   "Becomes only the second Chinese wrestler ever to reach the top division, following his own stablemaster Sokokurai.",
+   "Hails from Hohhot in Inner Mongolia and holds both a Chinese and a Mongolian name.",
+   "Supporters of his old high school in Shizuoka surprised him with a blue, Mt. Fuji-themed ceremonial apron.",
+   "Promised reporters he would aim for double-digit wins on his makuuchi debut."
+  ]
+ },
+ "607": {
+  "tagline": "Takasago's fast-rising Mongolian — the newcomer with a champion's stride.",
+  "bio": "Asahakuryū Tarō was born Ragchaagyin Jamiyantogtokh in Ulaanbaatar, Mongolia, in 1999, and wrestles for the historic Takasago stable. Since his debut in January 2023 he has shot up the ranks, collecting divisional championships along the way and recovering from a knee ligament injury in late 2024. He won the jūryō title with a commanding 13–2 in September 2025 and reached the top division in January 2026 — the first Takushoku University man to make makuuchi in nearly three decades. He climbed as high as maegashira 8 in May 2026 and sits at maegashira 12 for Nagoya.",
+  "style": "A big, tall wrestler at around 1.85 m and 150-plus kilograms, he blends forward-driving sumo with a solid frame that lets him push and force opponents back. As a relative newcomer to the top division he is still learning the measure of veteran opponents, so his results have swung with his footing. His size and youth give him real upside as he settles in.",
+  "watch": "Look for him to use his height and reach to keep taller opponents upright and walk them backward. When he moves forward with purpose he is hard to stop, but as a top-division rookie he can be caught by the veterans' tricks and pulls before he finds his rhythm.",
+  "signature": [
+   "yorikiri",
+   "oshidashi",
+   "hatakikomi"
+  ],
+  "gossip": [
+   "Won the jūryō championship with a dominant 13–2 in late 2025 to punch his ticket to the top division.",
+   "Came back strongly from a knee ligament injury suffered in 2024, showing real grit early in his career.",
+   "Part of a rare Takasago 'triple promotion' with his stablemates, and the first Takushoku University wrestler in makuuchi in 29 years."
+  ]
+ },
+ "615": {
+  "tagline": "The 21-year-old giant-killer — light, fast, and fearless.",
+  "bio": "Fujinokawa Seigō — real name Saitō Seigō — is one of the youngest men in the top division, born in 2005 and wrestling for Isenoumi stable, where his father competed as the makuuchi wrestler Ōikari. He debuted in 2023, won the sandanme title with a perfect 7-0, and took the heritage shikona Fujinokawa on his top-division debut in July 2025. In March 2026, still only 20, he stunned the sport by beating two yokozuna — Ōnosato and Hōshōryū — on consecutive days, earning a Technique Prize. He climbed to his career-high Maegashira 1 East for Nagoya 2026, knocking on the door of the titled ranks.",
+  "style": "A tsuki-oshi pusher-thruster rather than a belt man, so there is no fixed grip to watch — he wants to push, thrust and out-maneuver. At around 123 kg he is one of the lightest men up top, and he survives on speed, aggression and clever pull-down timing. The flip side of that lightness: strong yotsu wrestlers who latch onto his belt can drive or throw him, and his pulling style can backfire against a patient opponent.",
+  "watch": "He works fast off the tachi-ai, thrusting to set up a push-out (oshidashi) or spinning a bigger man down with a scoop throw (sukuinage) or thrust-down (tsukiotoshi). Against the biggest men he will bait a charge and drop them with a slap-down (hatakikomi). He is in trouble the moment a heavier grappler gets a solid belt hold and smothers his speed.",
+  "signature": [
+   "oshidashi",
+   "sukuinage",
+   "hatakikomi",
+   "tsukiotoshi"
+  ],
+  "gossip": [
+   "At just 21 he is already among the sport's brightest rising stars, one rung below the titled ranks.",
+   "In a single March 2026 tournament he toppled two reigning yokozuna despite being one of the lightest men in the division.",
+   "A second-generation wrestler, he wore his father's old mawashi at his debut ceremony and carries on the Isenoumi stable's classic Fujinokawa name.",
+   "Injuries have tested him — a ruptured left biceps tendon in early 2025 and a neck problem after his breakout March 2026 basho."
+  ]
+ },
+ "8850": {
+  "tagline": "The blue-mawashi whirlwind — fastest yokozuna in modern history, and only 26.",
+  "bio": "Ōnosato Daiki, born Nakamura Daiki in Tsubata, Ishikawa Prefecture in 2000, is the pride of Japanese sumo — the first native-born yokozuna since his own stablemaster Kisenosato. A two-time amateur yokozuna at Nippon Sport Science University, he turned pro for Nishonoseki stable in 2023 and simply refused to lose, posting a winning record in every single tournament on the way up. He reached ōzeki after just nine tournaments and was raised to the 75th yokozuna in May 2025 at age 24 — the fastest climb since the six-basho era began. He already owns five Emperor's Cups, and at 1.92 m and nearly 190 kg he is one of the largest and most athletic men in the sport.",
+  "style": "A complete wrestler who wins two ways. His base is yotsu-zumō, fighting migi-yotsu — right hand inside, left outside — using his enormous reach to lock opponents onto the belt and march them out. But he also has a ferocious oshi-tsuki pushing game, so a foe who denies him the mawashi simply gets blasted straight backward instead. His strengths are size, forward power and sheer versatility; his temperament is calm and famously humble. If there is a flaw, it is that a shoulder injury has recently tested his durability more than any opponent has.",
+  "watch": "Watch which door he chooses in the first second. If his right hand finds the belt, the bout becomes a slow, unstoppable walk to the edge — yorikiri. If the grip isn't there, his palms go to the chest and he thrusts, and the bout is over in a blink by oshidashi or tsukidashi. He is in trouble only when a quick technician gets underneath his high frame and turns him sideways before that forward drive gets going.",
+  "signature": [
+   "yorikiri",
+   "oshidashi",
+   "tsukidashi",
+   "sukuinage"
+  ],
+  "gossip": [
+   "His duel with Mongolian yokozuna Hōshōryū is sumo's marquee rivalry — the two even met in a September 2025 title playoff, the first yokozuna-versus-yokozuna playoff since 2009.",
+   "A left-shoulder injury wrecked his early 2026, forcing him to withdraw from the May tournament before it even began — his first missed basho.",
+   "He arrives at Nagoya framed as a comeback story, telling reporters after light training that he 'absolutely must win on the first day.'",
+   "Despite the records tumbling around him, he stays strikingly modest, routinely playing down his own achievements in interviews."
+  ]
+ },
+ "8853": {
+  "tagline": "The academic Mongolian — a technical belt-fighter from wrestling country.",
+  "bio": "Batjargal Choijilsüren was born in 2000 in Uvs Province, Mongolia, a region famous for producing wrestlers. A student yokozuna who won the 100th National University Championship in 2022, he turned pro in November 2023 with makushita tsukedashi status and reached sekitori after just three tournaments. He went 13–2 in his first jūryō outing in May 2024 and rose to the top division that July, peaking at maegashira 3 in July 2025. He wrestles for Ōnomatsu stable. A left ankle sprain in March 2026 caused the first absences of his career and dropped him to maegashira 15 for Nagoya.",
+  "style": "Ōnokatsu is a grappler who favors maemitsu — gripping the front of the opponent's mawashi — and takes nearly six of every ten wins by yorikiri force-out. He cites former yokozuna Kakuryū as his model, and like Kakuryū his sumo is technical and belt-oriented rather than a brawler's pushing game. At 185 cm and 167 kg he has a solid, balanced frame. His main weakness right now is the health of that left ankle.",
+  "watch": "Watch him work for the front grip early; once his hands are on the belt he squares up and drives forward for the force-out. He is more craftsman than bulldozer, so if a stronger man denies him the mawashi he has to out-maneuver rather than overpower. The big question in Nagoya is the ankle — if it holds, this is a former maegashira 3 fighting well below his level.",
+  "signature": [
+   "yorikiri",
+   "oshidashi",
+   "uwatenage"
+  ],
+  "gossip": [
+   "A former student yokozuna, he won the 100th National University Championship in 2022 before turning pro.",
+   "A left ankle sprain in early 2026 forced the first tournament withdrawals of his career.",
+   "Teammates and reporters tease that his Japanese sounds 'very academic.'",
+   "Fights out of Ōnomatsu stable and calls the seaside town of Odawara his second hometown."
+  ]
+ },
+ "8854": {
+  "tagline": "The Ukrainian phenom — a refugee who became sumo's fastest-ever ōzeki.",
+  "bio": "Aonishiki Arata, born Danylo Yavhusishyn in Vinnytsia, Ukraine in 2004, is the sport's most remarkable rising star. After Russia's 2022 invasion he fled through Germany to Japan, where a mentor from an amateur tournament — whose given name, Arata, he took as his own — helped him enter the sport. Wrestling for Ajigawa stable, he debuted in 2023 and rose at a blistering pace, reaching ōzeki in November 2025 in just fourteen tournaments, the fastest in the modern era and the first Ukrainian ever to hold the rank. He won back-to-back championships in November 2025 and January 2026, but a toe-and-ankle injury forced him to sit out May, dropping him to sekiwake for Nagoya — where ten wins would restore him to ōzeki.",
+  "style": "A belt-grappling technician far beyond his years, the opposite of a mindless pusher. He fights migi-yotsu, prized for immaculate hand and grip control and an unusual, high-hipped tachi-ai that gives opponents awkward angles. At about 1.82 m and 140 kg he is small and light for the top division, winning on composure and technique rather than mass. His one clear limitation is raw charging power — genuinely stronger men can bully him at the initial clash.",
+  "watch": "Watch how calm he is in the chaos: he rides out the first hit, works his hands to the belt, and grinds forward by yorikiri, but he also has rare, spectacular finishes — an inner-thigh uchimuso twist-down or a twisting kirikaeshi trip — that appear from nowhere. He is in trouble against a bigger, more powerful drive, which is exactly why yokozuna Ōnosato has so far always overwhelmed him.",
+  "signature": [
+   "yorikiri",
+   "uchimuso",
+   "kirikaeshi",
+   "okurinage"
+  ],
+  "gossip": [
+   "His war-refugee-to-champion journey — first Ukrainian ōzeki and Emperor's Cup winner — is one of sumo's great feel-good stories.",
+   "He and yokozuna Ōnosato are cast as the twin faces of a new era 'expected to trade titles for years,' though Aonishiki had yet to beat him as of early 2026.",
+   "A March 2026 injury derailed a shot at a third straight title and yokozuna promotion, and cost him his ōzeki rank.",
+   "He arrives at Nagoya needing ten wins to reclaim ōzeki, with his camp openly aiming even higher — at another championship."
+  ]
+ },
+ "8857": {
+  "tagline": "The student yokozuna turned yokozuna-slayer — Kyushu's rocket on the belt.",
+  "bio": "Yoshinofuji Naoya — real name Kusano Naoya — was born in Uto, Kumamoto, on the island of Kyūshū in 2001. A National Student Sumo champion, he entered Isegahama stable in 2024 at the elite makushita tsukedashi rank, skipping the bottom divisions entirely. He then won back-to-back jūryō titles in early 2025 and, on his very top-division debut in July 2025, finished runner-up. Promoted to Komusubi for the July 2026 Nagoya basho — his first tournament in the titled san'yaku ranks — he already owns three gold stars, including back-to-back upsets of yokozuna Hōshōryū and Ōnosato in January 2026.",
+  "style": "A belt man to the core. He fights migi-yotsu — right hand inside — and once he settles that grip and drives, the bout is usually his. Tall and lean rather than heavy, he wins with a strong lower back, patient technical grip work, and unusual composure against bigger, higher-ranked men. His height gives him long reach to the mawashi. The trade-off: at around 157 kg he is light for the top ranks, so pure oshi bruisers can knock him back before he fastens his grip.",
+  "watch": "Watch the first exchange for his right arm. If it slips inside and finds the belt, look for the frontal force-out (yorikiri), his bread-and-butter finish. He is a slow starter who rallies — a rough opening can flip into a long win streak, so never count him out mid-basho. He is in trouble when a thruster keeps him off the belt and drives him straight back before he can plant those strong hips.",
+  "signature": [
+   "yorikiri",
+   "oshidashi"
+  ],
+  "gossip": [
+   "Rose from student champion to double yokozuna-slayer in under two years, and has openly talked about chasing the Nagoya title on home Kyūshū soil.",
+   "A concussion after a hard slap sent him to hospital in Nagoya in 2024, but he recovered fully.",
+   "Off the clay he loves sauna trips, sushi and reading Detective Conan, and trains beside childhood best friend Kawazoe.",
+   "Collected three gold stars in his first year up top, twice beating reigning yokozuna."
+  ]
+ },
+ "8865": {
+  "tagline": "The 206-kilo wall — the heaviest man in the top division, and he pushes.",
+  "bio": "Kazuma Torakaze is a Japanese wrestler born in Osaka City in 2001, fighting for Kise stable under the given-name shikona Kazuma. Ranked East jūryō 6, he won his first jūryō championship in May 2026, overcoming injury to seal the title on the final day. That earned him promotion to the top makuuchi division for the first time, and he makes his debut at maegashira 15 for the July 2026 Nagoya tournament. At around 206 kg he is the heaviest wrestler in the entire top division.",
+  "style": "Kazuma is an oshi-zumō pusher who wins by sheer mass and forward pressure — more than half his career victories have come by oshidashi, simply shoving opponents out of the ring. When the bout reaches the belt he can finish with a yorikiri force-out, letting his enormous weight do the work. His strength is obvious: almost no one can move all 206 kilos backward. The flip side is mobility and stamina, and quick opponents will try to pull him down or sidestep.",
+  "watch": "The plan is simple and brutal: hit, plant, and push. If Kazuma gets his hands on your chest and starts walking, the bout is nearly over. His danger zone is the pull-down and the sidestep — nimble rikishi who get him leaning forward can send all that weight crashing to the clay. As a top-division rookie, expect him to be tested by craftier veterans.",
+  "signature": [
+   "oshidashi",
+   "yorikiri"
+  ],
+  "gossip": [
+   "Won his first jūryō championship in May 2026 while fighting through injury, sealing his top-division promotion.",
+   "Tips the scales at roughly 206 kg — the heaviest wrestler in all of makuuchi.",
+   "Makes his top-division debut at the 2026 Nagoya tournament, an Osaka native carrying big expectations."
+  ]
+ },
+ "9051": {
+  "tagline": "The rocket from Aichi — a pushing prospect rising fast.",
+  "bio": "Fujiryoga (real name Goshima Masaharu) is a Japanese newcomer born in 2003 in Kasugai, Aichi, and a product of Fujishima stable under former ōzeki Musōyama. A decorated college wrestler who captained Japan to team gold at the 2023 World Championships, he earned a makushita tsukedashi debut in March 2025 and climbed rapidly. In his very first tournament as a salaried wrestler — November 2025 — he went 13–2 and won the jūryō championship outright, adopting the Fujiryoga name. He debuted in the top division in March 2026 and, after a 10–5 in May, sits at Maegashira 9 East for Nagoya at just 23.",
+  "style": "An oshi pusher-thruster who prefers to keep the fight off the belt, driving opponents back with a forward-moving shoving attack. Carrying real mass at around 180 kg, his go-to finish is the frontal push-out, backed by strong amateur fundamentals. He is still adapting to top-division opposition — his shaky 7–8 debut before a 10-win rebound suggests a young man learning the level rather than one with obvious flaws. Style leans on momentum: keep moving forward and he is dangerous.",
+  "watch": "Watch him fire off the line and try to push straight through — when his thrusts land square and he keeps his feet driving, opponents get walked out fast. If a savvier grappler absorbs the charge and locks him to the belt, he is on less certain ground. Expect the odd slap-down too when a foe lunges in.",
+  "signature": [
+   "oshidashi",
+   "tsukidashi",
+   "hatakikomi"
+  ],
+  "gossip": [
+   "A genuine rising prospect: jūryō champion in his very first sekitori tournament and one of the youngest top-division debutants of 2026.",
+   "He bounced back from a losing makuuchi debut to post a confident 10–5 in May, signaling he is adjusting quickly.",
+   "Coverage highlights the tough training regimen at his Fujishima stable as fuel for his rapid climb."
+  ]
+ },
+ "_README": "FKTI rikishi dossiers, keyed by sumo-api rikishiID. Each: tagline, bio, style, watch (how to read his bouts), signature (kimarite romaji keys — must match sumo.html KIM), gossip (dated storylines). Recent form + 'how he wins' are computed LIVE from the API and are NOT stored here. PILOT: only Hoshoryu (19) is written so far."
 }

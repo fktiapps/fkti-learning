@@ -130,8 +130,9 @@
  .kchip{background:#fff;border:1px solid #e3d9c6;border-radius:999px;padding:5px 11px;font-size:12px;color:#5b5444;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;gap:4px}
  .kchip .jp{color:#8a7f66;font-family:var(--display)}
  .kchip .n{background:#efe7d3;color:#9a7b35;border-radius:5px;padding:0 5px;font-size:10.5px;font-weight:800}
- .form{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
- .fbout{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e8dfca;border-radius:8px;padding:4px 8px;font-size:11.5px;color:#5b5444;max-width:100%}
+ .form{display:flex;flex-wrap:nowrap;gap:5px;margin-top:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:5px}
+ .fbout{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e8dfca;border-radius:8px;padding:4px 8px;font-size:11.5px;color:#5b5444;flex:0 0 auto;white-space:nowrap}
+ .formhint{font-size:10.5px;color:#9a9078;font-style:italic;margin:1px 0 3px}
  .fbout .wl{font-weight:800;min-width:15px;text-align:center;border-radius:4px;color:#fff;font-size:10px;padding:1px 0}
  .fbout .wl.w{background:#3c8f4e}.fbout .wl.l{background:#c0473a}
  .fbout .km{color:#9a9078}
@@ -291,7 +292,7 @@
 <footer>
  深い関係 · Fukai Kankei — Deeply Connected.<br>
  Live data: <a href="https://sumo-api.com" class="link">sumo-api.com</a>. Wrestler photos: Wikimedia Commons (CC) &amp; the Japan Sumo Association.
- Technique photos (📷): public domain, Japan pre-1957, via Wikimedia Commons. Other technique diagrams &amp; all text: FKTI (original).
+ Technique photos (📷): public domain, Japan pre-1957, via Wikimedia Commons. Other technique diagrams &amp; all text © Fukai Kankei Taiken, Inc.
 </footer>
 
 <script>
@@ -389,7 +390,7 @@ function avaImg(id,name,cls){
 }
 function photoCredit(id){
   const p = PHOTOMAP[id];
-  if(CARICATURE[id]) return 'Illustration © FKTI.';
+  if(CARICATURE[id]) return 'Illustration © Fukai Kankei Taiken, Inc.';
   if(p && p.source==='wikimedia') return 'Photo: '+(p.credit||'Wikimedia Commons')+' ('+(p.license||'CC')+'), via Wikimedia Commons.';
   if(p && p.source==='jsa') return 'Photo: © Japan Sumo Association.';
   return '';
@@ -582,7 +583,7 @@ function recentFormHTML(recs,id){
     const km=r.kimarite&&r.kimarite!=='fusen'?' <span class="km">('+esc(r.kimarite)+')</span>':(r.kimarite==='fusen'?' <span class="km">(default)</span>':'');
     return '<div class="fbout"><span class="wl '+(win?'w':'l')+'">'+(win?'W':'L')+'</span>'+esc(opp||'?')+km+'</div>';
   }).join('');
-  return '<div class="bsec"><div class="h">Recent form — last '+recent.length+' (live)</div><div class="form">'+chips+'</div></div>';
+  return '<div class="bsec"><div class="h">Recent form (live)</div><div class="formhint">most recent bout at left → older to the right · swipe to see more</div><div class="form">'+chips+'</div></div>';
 }
 function howHeWinsHTML(recs,id){
   const top=winKimBreakdown(recs,id);
