@@ -10,12 +10,17 @@ Sibling project: the Deeply Connected DINING app at C:\Users\FKTI Work\Downloads
 its own HANDOFF.txt). Don't conflate the two.
 
 LIVE: https://fkti-learning.pages.dev  (kana app at /kana.html; sumo app at /sumo.html)
-DEPLOY — GREG DEPLOYS HIMSELF:  cd "C:/Users/FKTI Work/Downloads/fkti-learning" && npm run deploy
-  (npm script = npx wrangler pages deploy .; his Cloudflare account; static, no KV/Functions/secrets.)
-  NOTE: kana.html has NO service worker — changes go live on deploy + a normal refresh.
+DEPLOY — AUTO from GitHub (as of 2026-07): push to `main` on github.com/fktiapps/fkti-learning →
+  Cloudflare Pages builds & deploys automatically. No manual step. (Legacy: was `npm run deploy` /
+  wrangler from a local copy — now superseded.)
+  ⚠ A STALE local copy exists at C:\Users\FKTI Work\Downloads\fkti-learning (pre-2026-07-02, before the
+  Book of Tea / sumo dossiers / caretaker work). Do NOT deploy or work from it; the live clone is at
+  C:\pf\fkti-learning. `git pull` the Downloads copy or delete it to avoid confusion.
+  NOTE: kana.html has NO service worker — changes go live on push + a normal refresh.
 
-STANDING RULES: Greg deploys himself; no paid/unattended tokens; never handle his credentials;
-  bundle only open-licensed assets with attribution.
+STANDING RULES: pushes to main auto-deploy; never handle Greg's credentials; bundle only open-licensed
+  assets with attribution. (The old "no paid/unattended tokens" rule is superseded for ONE thing: Greg
+  authorized the Caretaker agent on 2026-07-02 — see "THE CARETAKER" below.)
 
 DIRECTORY (own git repo)
 - index.html ........ landing hub (Deeply-Connected dark theme + logo). Tiles: Kana, Sumo, (soon) Vocab/Kanji.
