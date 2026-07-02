@@ -86,6 +86,15 @@
  .lightbox{position:fixed;inset:0;background:rgba(8,11,22,.92);z-index:60;display:none;align-items:center;justify-content:center;padding:18px}
  .lightbox.on{display:flex}
  .lightbox img{max-width:100%;max-height:100%;border-radius:12px;box-shadow:0 12px 44px rgba(0,0,0,.6);object-fit:contain}
+ .vs .vptip{display:block;font-size:10px;color:var(--ver);margin-top:2px;line-height:1}
+ .pvhead{display:flex;align-items:center;gap:6px;margin:6px 0 4px}
+ .pvside{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer;min-width:0}
+ .pvside .ava{width:58px;height:58px;border-radius:12px;margin-bottom:5px}
+ .pvside .en{font-family:var(--display);font-weight:700;font-size:14.5px;color:var(--ink);line-height:1.1}
+ .pvside .rk{font-size:11px;color:var(--ver);font-weight:700;margin-top:2px}
+ .pvvs{font-family:var(--display);color:#9a9078;font-size:13px;font-weight:700;flex:0 0 auto}
+ .pvsig{font-size:12px;color:#6b6250;margin-top:7px}
+ .pvsig b{color:#7a5a1e}
  .biohead{display:flex;gap:14px;align-items:center}
  .biohead .ava{width:74px;height:74px;border-radius:14px}
  .biohead .en{font-family:var(--display);font-size:21px;font-weight:700;color:var(--ink);line-height:1.1}
@@ -505,9 +514,64 @@ function boutCard(m){
   const mid = m.kimarite ? esc(m.kimarite) : 'vs';
   return '<div class="bout">'+
     ew(m.eastId, ews, m.eastRank, ewW)+
-    '<div class="vs">'+esc(mid)+'</div>'+
+    '<div class="vs" onclick="openPreview('+m.eastId+','+m.westId+')" style="cursor:pointer" title="Tale of the tape">'+esc(mid)+'<span class="vptip">⚔</span></div>'+
     ew(m.westId, wss, m.westRank, wsW)+
    '</div>';
+}
+/* ---- bout preview: tale of the tape ---- */
+const OSHI_K=new Set(['oshidashi','oshitaoshi','tsukidashi','tsukitaoshi','hatakikomi','tsukiotoshi','hikiotoshi','sokubiotoshi','tsukaminage']);
+const YOTSU_K=new Set(['yorikiri','yoritaoshi','uwatenage','shitatenage','sukuinage','kotenage','kubinage','tsuridashi','uwatedashinage','shitatedashinage','kimedashi','yobimodoshi']);
+function styleType(d){ if(!d||!d.signature||!d.signature.length) return null; let o=0,y=0; d.signature.forEach(k=>{ if(OSHI_K.has(k))o++; else if(YOTSU_K.has(k))y++; }); if(o>y)return 'oshi'; if(y>o)return 'yotsu'; return 'hybrid'; }
+function matchupNarrative(a,b,an,bn){
+  const L={oshi:'a pusher-thruster',yotsu:'a belt-grappler',hybrid:'a two-way fighter'};
+  if(!a&&!b) return 'Watch the tachi-ai — whoever wins the first collision usually gets to fight his own bout.';
+  if(!a||!b){ const k=a||b, n=a?an:bn; return n+' is '+L[k]+'; watch whether the bout becomes '+(k==='oshi'?'a fast shoving match (his game) or gets dragged to the belt':k==='yotsu'?'a grinding belt battle (his game) or a shoving match that keeps him off the mawashi':'a scramble that lets his versatility show')+'.'; }
+  if(a==='oshi'&&b==='oshi') return 'Two pusher-thrusters — expect a fast, explosive slapping battle settled at the charge, won by whoever keeps his feet driving forward.';
+  if(a==='yotsu'&&b==='yotsu') return 'Two belt men — likely a patient mawashi battle; the wrestler who wins the first inside grip usually walks the other out.';
+  if(a!==b){ const push=a==='oshi'?an:bn, belt=a==='yotsu'?an:bn; return 'A contrast of styles: '+push+' wants to keep it a shoving match and drive '+belt+' out before he can grip, while '+belt+' wants to weather the thrusts and lock onto the belt. Whoever imposes his game wins.'; }
+  return an+' and '+bn+' are both adaptable — it could go to the belt or stay a shoving match; watch who grabs control first.';
+}
+function watchLine(aRank,bRank,an,bn){
+  const rk=s=>/Yokozuna/.test(s||'')?4:/Ozeki/.test(s||'')?3:/Sekiwake/.test(s||'')?2:/Komusubi/.test(s||'')?1:0;
+  const ra=rk(aRank), rb=rk(bRank);
+  if((ra===4&&rb===0)||(rb===4&&ra===0)){ const low=ra===0?an:bn; return 'A yokozuna faces a rank-and-filer — a win for '+low+' would be a kinboshi (gold star), and the cushions will fly.'; }
+  if(ra>=3&&rb>=3) return 'A heavyweight clash near the top of the banzuke, with real championship and rank implications.';
+  if((ra>=2&&rb===0)||(rb>=2&&ra===0)) return 'A titled wrestler tested by a maegashira — an upset would rattle the standings.';
+  return 'Watch the tachi-ai: the first collision usually decides who gets to fight his own style.';
+}
+function nameFrom(recs,id){ if(!recs||!recs.length) return ''; const r=recs[0]; return r.eastId===id?r.eastShikona:r.westShikona; }
+function rankFrom(recs,id){ if(!recs||!recs.length) return ''; const r=recs[0]; return r.eastId===id?r.eastRank:r.westRank; }
+function bashoRec(recs,id){ let w=0,l=0; (recs||[]).forEach(r=>{ if(r.bashoId!==BASHO)return; if(r.winnerId===id)w++; else if(r.winnerId)l++; }); return {w,l,n:w+l}; }
+function pvSig(name,d){ if(!d||!d.signature||!d.signature.length) return ''; return '<div class="pvsig"><b>'+esc(name)+':</b> '+d.signature.slice(0,4).map(k=>kchip(k)).join(' ')+'</div>'; }
+function recentH2H(H){ const ms=(H.matches||[]).slice(0,3); if(!ms.length) return ''; return '<div style="font-size:11.5px;color:#6b6250;margin-top:6px">Recent meetings: '+ms.map(m=>{ const wn=m.winnerId===m.eastId?m.eastShikona:m.westShikona; return esc(bashoLabel(m.bashoId))+' — '+esc(wn)+' by '+esc(m.kimarite); }).join('; ')+'.</div>'; }
+async function openPreview(aId,bId){
+  const ov=document.getElementById('overlay'), sh=document.getElementById('sheet');
+  ov.classList.add('on');
+  sh.innerHTML='<div class="grab"></div><button class="sheetx" onclick="closeBio()" aria-label="Close">✕</button><div class="empty">Loading the tale of the tape…</div>';
+  await bashoReady;
+  const [hh,am,bm]=await Promise.all([ getJSON('/rikishi/'+aId+'/matches/'+bId), getJSON('/rikishi/'+aId+'/matches'), getJSON('/rikishi/'+bId+'/matches') ]);
+  const H=hh.j||{}, aRecs=(am.j&&am.j.records)||[], bRecs=(bm.j&&bm.j.records)||[];
+  const aName=nameFrom(aRecs,aId)||('#'+aId), bName=nameFrom(bRecs,bId)||('#'+bId);
+  const aRank=rankFrom(aRecs,aId), bRank=rankFrom(bRecs,bId);
+  const aD=DOSSIERS[aId]||DOSSIERS[String(aId)], bD=DOSSIERS[bId]||DOSSIERS[String(bId)];
+  let h2h;
+  if(!H.total) h2h='First-ever meeting — no history between them.';
+  else if(H.rikishiWins===H.opponentWins) h2h='Dead even — they have split their '+H.total+' meetings '+H.rikishiWins+'–'+H.opponentWins+'.';
+  else { const lead=H.rikishiWins>H.opponentWins?aName:bName, hi=Math.max(H.rikishiWins,H.opponentWins), lo=Math.min(H.rikishiWins,H.opponentWins); h2h=lead+' leads the career series '+hi+'–'+lo+' ('+H.total+' meetings).'; }
+  const narrative=matchupNarrative(styleType(aD),styleType(bD),aName,bName);
+  const ra=bashoRec(aRecs,aId), rb=bashoRec(bRecs,bId);
+  const curLine=(BASHO_STATUS==='live'&&(ra.n||rb.n))?(esc(aName)+' '+ra.w+'–'+ra.l+' · '+esc(bName)+' '+rb.w+'–'+rb.l+' this basho.'):'';
+  const side=(id,nm,rk)=>'<div class="pvside" onclick="openBio('+id+')">'+avaImg(id,nm)+'<div class="en">'+esc(nm)+'</div><div class="rk">'+esc(shortRank(rk))+'</div></div>';
+  sh.innerHTML=
+   '<div class="grab"></div>'+
+   '<button class="sheetx" onclick="closeBio()" aria-label="Close">✕</button>'+
+   '<div class="pvhead">'+side(aId,aName,aRank)+'<div class="pvvs">VS</div>'+side(bId,bName,bRank)+'</div>'+
+   '<div class="bsec"><div class="h">Head to head</div><p>'+esc(h2h)+'</p>'+recentH2H(H)+'</div>'+
+   '<div class="bsec"><div class="h">Style matchup</div><p>'+esc(narrative)+'</p>'+pvSig(aName,aD)+pvSig(bName,bD)+'</div>'+
+   (curLine?'<div class="bsec"><div class="h">This basho</div><p>'+curLine+'</p></div>':'')+
+   '<div class="bsec"><div class="h">What to watch</div><p>'+esc(watchLine(aRank,bRank,aName,bName))+'</p></div>'+
+   '<div class="nodoss" style="margin-top:12px">Records &amp; head-to-head: live via sumo-api.com. Style read: FKTI, from each wrestler\'s signature techniques.</div>'+
+   '<button class="closeb" onclick="closeBio()">Close</button>';
 }
 
 /* ============================================================
