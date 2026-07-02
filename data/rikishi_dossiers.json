@@ -1,0 +1,16 @@
+{
+  "_README": "FKTI rikishi dossiers, keyed by sumo-api rikishiID. Each: tagline, bio, style, watch (how to read his bouts), signature (kimarite romaji keys — must match sumo.html KIM), gossip (dated storylines). Recent form + 'how he wins' are computed LIVE from the API and are NOT stored here. PILOT: only Hoshoryu (19) is written so far.",
+  "19": {
+    "tagline": "The throwing yokozuna — Asashōryū's blood, and his own storm.",
+    "bio": "Sugarragchaagiin Byambasüren was born in Ulaanbaatar in 1999 into Mongolian wrestling royalty: his grandfather was a bökh champion honoured as a “National Elephant,” and his uncle is Asashōryū, the ferocious 68th yokozuna who won 25 championships. He came to Japan as a teenager, joined Tatsunami stable, and made his debut in 2018. He rose fast — komusubi by 2022, then his first championship and promotion to ōzeki in 2023 — and in January 2025, after a second title, he was raised to yokozuna: the 74th in history, and the sixth-fastest ever to reach the rope. He is the sixth Mongolian to wear it.",
+    "style": "A belt man to the core. He fights migi-yotsu — right hand inside, left hand outside on the mawashi — and once he settles that grip, the bout usually becomes his. Where many giants simply push, Hōshōryū throws: he carries the Mongolian tradition of nage (throwing) in his blood, and something of his uncle's speed and ring-sense with it. He is athletic, dangerous on the second effort, and can win even going backwards. His weakness is the flip side of the gift — he can be lured into a throwing exchange he doesn't need, and his hot tachi-ai sometimes draws warnings for false starts.",
+    "watch": "Watch the first grip. If his right arm slips inside and finds the belt, look for him to plant and turn — the underarm throw (shitatenage) is his kill shot, and he'll hunt the outside leg trip (sotogake) if the throw stalls. If a pusher-thruster keeps him off the belt, he is more vulnerable than a yokozuna should be, and will try to slap the charge down or circle back for a grip. And watch his temper at the line: fired up, he explodes off the tachi-ai; over-eager, he jumps it.",
+    "signature": ["shitatenage", "sotogake", "uwatenage", "yorikiri", "kawazugake"],
+    "gossip": [
+      "His reign has been star-crossed by injury — a torn right elbow (Mar 2025), a cracked left toe (Jul 2025), a meniscus he drained daily and wrestled through (Jan 2026), and a hamstring that forced him out on Day 2 in May 2026. Nagoya is a test of whether his body will let him rule.",
+      "Sumo's most famous family drama: his uncle Asashōryū publicly critiques his nephew's sumo in the press — and has even been seen cheering his opponents. Every Hōshōryū bout is fought in that shadow.",
+      "A yokozuna rivalry for the era is forming with Ōnosato — the two met in September 2025 in the first playoff between two grand champions since 2009, and Hōshōryū lost it. Their duels are now the headline of every basho they finish.",
+      "One line on his record still nags him: 0–9 against the now-retired Terunofuji, the one great opponent he said he wished he could face just once more."
+    ]
+  }
+}

@@ -122,6 +122,24 @@
  footer{text-align:center;font-size:11px;color:var(--muted2);margin:24px 0 8px;padding:0 12px;line-height:1.6}
  footer a{color:var(--muted)}
  a.link{color:#9fb6e0}
+ /* rikishi dossier (in bio sheet) */
+ .bsec{margin-top:16px}
+ .bsec .h{font:800 11.5px var(--sans);letter-spacing:.07em;text-transform:uppercase;color:#b3402a;margin-bottom:6px}
+ .bsec p{font-size:13.5px;line-height:1.62;color:#3a3f4f;margin:6px 0}
+ .kchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+ .kchip{background:#fff;border:1px solid #e3d9c6;border-radius:999px;padding:5px 11px;font-size:12px;color:#5b5444;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+ .kchip .jp{color:#8a7f66;font-family:var(--display)}
+ .kchip .n{background:#efe7d3;color:#9a7b35;border-radius:5px;padding:0 5px;font-size:10.5px;font-weight:800}
+ .form{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+ .fbout{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e8dfca;border-radius:8px;padding:4px 8px;font-size:11.5px;color:#5b5444;max-width:100%}
+ .fbout .wl{font-weight:800;min-width:15px;text-align:center;border-radius:4px;color:#fff;font-size:10px;padding:1px 0}
+ .fbout .wl.w{background:#3c8f4e}.fbout .wl.l{background:#c0473a}
+ .fbout .km{color:#9a9078}
+ .gossip{list-style:none;padding:0;margin:2px 0 0}
+ .gossip li{position:relative;padding:8px 0 8px 15px;border-bottom:1px solid #ece3cf;font-size:13px;line-height:1.55;color:#3a3f4f}
+ .gossip li:before{content:"●";position:absolute;left:0;top:9px;color:#b3402a;font-size:7px}
+ .gossip li:last-child{border-bottom:none}
+ .nodoss{font-size:12.5px;color:#9a9078;font-style:italic;margin-top:14px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -346,6 +364,9 @@ fetch('data/sumo_photos.json',{cache:'no-store'}).then(r=>r.ok?r.json():null)
 let KPHOTO = {};              // {romaji: {file, license, credit, page}} — bundled PD bout photos
 fetch('data/kimarite_photos.json',{cache:'no-store'}).then(r=>r.ok?r.json():null)
   .then(m=>{ if(m){ KPHOTO = m; if(document.getElementById('kgrid').childElementCount) renderKim(); } }).catch(()=>{});
+let DOSSIERS = {};            // {rikishiId: {tagline,bio,style,watch,signature[],gossip[]}} — FKTI-authored
+fetch('data/rikishi_dossiers.json',{cache:'no-store'}).then(r=>r.ok?r.json():null)
+  .then(m=>{ if(m) DOSSIERS = m; }).catch(()=>{});
 function placeholderAva(name){
   const ch = (name||'?').trim().charAt(0).toUpperCase();
   const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'+
@@ -488,8 +509,10 @@ async function openBio(id){
   const ov=document.getElementById('overlay'), sh=document.getElementById('sheet');
   ov.classList.add('on');
   sh.innerHTML='<div class="grab"></div><div class="empty">Loading…</div>';
-  const [rr, sr] = await Promise.all([ getJSON('/rikishi/'+id+'?measurements=true'), getJSON('/rikishi/'+id+'/stats') ]);
+  const [rr, sr, mr] = await Promise.all([ getJSON('/rikishi/'+id+'?measurements=true'), getJSON('/rikishi/'+id+'/stats'), getJSON('/rikishi/'+id+'/matches') ]);
   const r = rr.j, st = sr.j;
+  const recs = (mr.j && mr.j.records) ? mr.j.records : [];
+  const dossier = DOSSIERS[id] || DOSSIERS[String(id)];
   if(!r){ sh.innerHTML='<div class="grab"></div><div class="empty">Couldn&rsquo;t load this wrestler.<button class="closeb" onclick="closeBio()">Close</button></div>'; return; }
   const age = r.birthDate ? Math.floor((Date.now()-new Date(r.birthDate))/3.15576e10) : null;
   const ht = r.height ? (r.height/100).toFixed(2)+' m' : '—';
@@ -528,8 +551,54 @@ async function openBio(id){
    '</div>'+
    recentStrip(r)+
    career+
+   recentFormHTML(recs,id)+
+   howHeWinsHTML(recs,id)+
+   dossierHTML(dossier)+
    (cred?'<div class="credit">'+cred+'</div>':'')+
    '<button class="closeb" onclick="closeBio()">Close</button>';
+}
+/* ---- live recent form + FKTI dossier ---- */
+function kimEntry(romaji){ return KIM.find(x=>x[0]===romaji); }
+function kimLabel(romaji){ const k=kimEntry(romaji); return k?k[2]:romaji; }
+function kimJp(romaji){ const k=kimEntry(romaji); return k?k[1]:''; }
+function kchip(romaji, n){
+  const known=!!kimEntry(romaji);
+  return '<span class="kchip"'+(known?' onclick="showKimarite(\''+romaji+'\')"':'')+'>'+esc(kimLabel(romaji))+
+    (kimJp(romaji)?'<span class="jp">'+esc(kimJp(romaji))+'</span>':'')+
+    (n?'<span class="n">'+n+'×</span>':'')+'</span>';
+}
+function showKimarite(romaji){ closeBio(); go('kimarite'); const s=document.getElementById('ksearch'); if(s){ s.value=romaji; renderKim(); } }
+function winKimBreakdown(recs,id){
+  const t={};
+  recs.forEach(r=>{ if(r.winnerId===id && r.kimarite && r.kimarite!=='fusen') t[r.kimarite]=(t[r.kimarite]||0)+1; });
+  return Object.entries(t).sort((a,b)=>b[1]-a[1]).slice(0,5);
+}
+function recentFormHTML(recs,id){
+  const recent=(recs||[]).slice(0,12);
+  if(!recent.length) return '';
+  const chips=recent.map(r=>{
+    const win=r.winnerId===id;
+    const opp=r.eastId===id?r.westShikona:r.eastShikona;
+    const km=r.kimarite&&r.kimarite!=='fusen'?' <span class="km">('+esc(r.kimarite)+')</span>':(r.kimarite==='fusen'?' <span class="km">(default)</span>':'');
+    return '<div class="fbout"><span class="wl '+(win?'w':'l')+'">'+(win?'W':'L')+'</span>'+esc(opp||'?')+km+'</div>';
+  }).join('');
+  return '<div class="bsec"><div class="h">Recent form — last '+recent.length+' (live)</div><div class="form">'+chips+'</div></div>';
+}
+function howHeWinsHTML(recs,id){
+  const top=winKimBreakdown(recs,id);
+  if(!top.length) return '';
+  return '<div class="bsec"><div class="h">How he wins — career (live)</div><div class="kchips">'+top.map(t=>kchip(t[0],t[1])).join('')+'</div></div>';
+}
+function dossierHTML(d){
+  if(!d) return '<div class="nodoss">A full FKTI dossier — biography, style, signature moves &amp; storylines — is being written for this wrestler. The stats and live form above are always current.</div>';
+  let h='';
+  if(d.tagline) h+='<p class="body" style="color:#7a5a1e;font-style:italic;font-size:14px;margin-top:14px">“'+esc(d.tagline)+'”</p>';
+  if(d.bio)   h+='<div class="bsec"><div class="h">Biography</div><p>'+esc(d.bio)+'</p></div>';
+  if(d.style) h+='<div class="bsec"><div class="h">Style &amp; tendencies</div><p>'+esc(d.style)+'</p></div>';
+  if(d.watch) h+='<div class="bsec"><div class="h">How to read his bouts</div><p>'+esc(d.watch)+'</p></div>';
+  if(d.signature&&d.signature.length) h+='<div class="bsec"><div class="h">Signature techniques</div><div class="kchips">'+d.signature.map(k=>kchip(k)).join('')+'</div></div>';
+  if(d.gossip&&d.gossip.length) h+='<div class="bsec"><div class="h">Recent gossip</div><ul class="gossip">'+d.gossip.map(g=>'<li>'+esc(g)+'</li>').join('')+'</ul></div>';
+  return h;
 }
 function recentStrip(r){
   // r.record only present on banzuke objects, not the rikishi endpoint — guard
