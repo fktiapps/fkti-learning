@@ -10,10 +10,10 @@
     },
     {
       "id": "vegan-dining",
-      "active": false,
+      "active": true,
       "cadenceDays": 2,
       "lastChecked": null,
-      "instructions": "NEEDS the dining app repo checked out alongside this one (not yet wired). When enabled: find newly-opened or newly-verified vegan / vegetarian-friendly restaurants near the NEXT itinerary stop and add them to the dining app's data with name, area, what's veg-friendly, and a source URL. Verify each place actually exists and is currently open before adding."
+      "instructions": "DISCOVERY -> REVIEW ONLY. Never publish to the dining app (it is deploy-by-hand and CELIAC SAFETY is rule #1). Pick ONE trip city (kyoto, nara, nagoya, kanazawa, hiroshima, nagano, toba — see https://fkti-dining-app.pages.dev/data/manifest.json). Fetch that city's existing places from https://fkti-dining-app.pages.dev/data/<city>.json so you don't duplicate. Web-search for newly-opened or well-reviewed VEGAN / vegetarian-friendly spots there that are NOT already listed and that you can verify exist and are open. For each, APPEND a candidate to caretaker/dining-candidates.md in the dining place schema {id,name,category,lat,lng, gf_confidence:'ask', gf_label, gf_detail, vegan_status, vegan_label, vegan_detail, hours_raw, source}. SAFETY: never assert a place is 'safe' — default confidence to 'ask' unless a source explicitly confirms; give honest reality; always include a source URL. Do NOT touch the dining app's live data. Greg vets candidates and adds the good ones himself."
     },
     {
       "id": "itinerary-links",

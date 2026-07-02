@@ -122,9 +122,12 @@ doing ONE tiny "beat" per scheduled run.
 
 LIVES IN: caretaker/ + .github/workflows/caretaker.yml (in this repo).
  - caretaker/ledger.json .... rotating checklist of "watches" (id, active, cadenceDays, lastChecked,
-     instructions). Each beat picks the oldest DUE active watch. Active now: `sumo-gossip`. Dormant
-     (need their app repos wired in): `vegan-dining` (Greg's marquee ask — needs the DINING repo),
-     `itinerary-links`, `near-today` (need the TRAVEL repo).
+     instructions). Each beat picks the oldest DUE active watch. Active: `sumo-gossip`; `vegan-dining`
+     (DISCOVERY→REVIEW — finds veg spots for the trip cities via the LIVE fkti-dining-app data at
+     https://fkti-dining-app.pages.dev/data/<city>.json so it doesn't duplicate, stages them in
+     caretaker/dining-candidates.md for Greg to vet + add himself; NEVER auto-published, per celiac-
+     safety-#1 + the dining app's by-hand deploy). Dormant (need the TRAVEL repo): `itinerary-links`,
+     `near-today`. The dining repo is github.com/fktiapps/fkti-dining-app (local: Downloads/dcd).
  - caretaker/BEAT.md ........ the brief the agent runs each beat: pick oldest due watch → verify via web →
      apply FACTUAL updates + cite sources; SENSITIVE items (allegations/rumors about named people) go to
      review-queue, NEVER auto-published; append 1 line to changelog; bump lastChecked; STOP. One watch/run.

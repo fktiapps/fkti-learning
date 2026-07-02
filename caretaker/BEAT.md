@@ -22,4 +22,7 @@ The whole point is to stay fresh for pennies — do the minimum, verify facts, n
   note in the changelog that an item awaits review.
 - **Never fabricate.** If you cannot verify with a real, citable source, make no change.
 - **Cite sources.** For content added to an app, follow that app's existing "Sources" convention.
+- **Food = review-only.** Never publish restaurant or diet info to the live dining app. Stage all food
+  finds in `caretaker/dining-candidates.md` for Greg to vet. Celiac safety is non-negotiable: never call a
+  place "safe" — use honest, hedged reality ("ask" confidence) and always give a source.
 - **Stay cheap.** One watch, a handful of edits, then stop. Do not restructure files or refactor code.
