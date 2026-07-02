@@ -41,6 +41,12 @@
   "license": "CC BY-SA 4.0",
   "page": "https://en.wikipedia.org/wiki/Daieish%C5%8D_Hayato"
  },
+ "11": {
+  "url": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Ichiyamamoto_Daiki20220115-2.jpg",
+  "credit": "TSUBAME98",
+  "license": "CC BY-SA 4.0",
+  "source": "wikimedia"
+ },
  "12": {
   "url": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Wakatakakage_Atsushi20220115.jpg",
   "source": "wikimedia",
@@ -104,6 +110,12 @@
   "license": "CC BY-SA 4.0",
   "page": "https://en.wikipedia.org/wiki/Abi_Masatora"
  },
+ "24": {
+  "url": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Hiradoumi_20230416.jpg",
+  "credit": "TSUBAME98",
+  "license": "CC BY-SA 4.0",
+  "source": "wikimedia"
+ },
  "26": {
   "url": "https://upload.wikimedia.org/wikipedia/commons/1/17/Kisomitakeumi.jpg",
   "source": "wikimedia",
@@ -146,6 +158,12 @@
   "license": "© JSA",
   "page": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/2565/"
  },
+ "37": {
+  "url": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Takanosho_Nobuaki20220115.jpg",
+  "credit": "TSUBAME98",
+  "license": "CC BY-SA 4.0",
+  "source": "wikimedia"
+ },
  "38": {
   "url": "https://upload.wikimedia.org/wikipedia/commons/7/79/Meisei_Chikara_IMG_0818-8_20190518.jpg",
   "source": "wikimedia",
@@ -161,11 +179,10 @@
   "page": "https://en.wikipedia.org/wiki/Chiyosh%C5%8Dma_Fujio"
  },
  "40": {
-  "url": "https://www.sumo.or.jp/img/sumo_data/rikishi/270x474/20160081.jpg",
-  "source": "jsa",
-  "credit": "Japan Sumo Association",
-  "license": "© JSA",
-  "page": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3742/"
+  "url": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Nishikifuji_Ryusei20220115-2.jpg",
+  "credit": "TSUBAME98",
+  "license": "CC BY-SA 4.0",
+  "source": "wikimedia"
  },
  "41": {
   "url": "https://upload.wikimedia.org/wikipedia/commons/5/54/Oho_Konosuke20220115-1.jpg",
@@ -189,11 +206,10 @@
   "page": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3553/"
  },
  "50": {
-  "url": "https://www.sumo.or.jp/img/sumo_data/rikishi/270x474/20210057.jpg",
-  "source": "jsa",
-  "credit": "Japan Sumo Association",
-  "license": "© JSA",
-  "page": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4112/"
+  "url": "https://upload.wikimedia.org/wikipedia/commons/3/32/Kinbozan_20230514-2.jpg",
+  "credit": "TSUBAME98",
+  "license": "CC BY-SA 4.0",
+  "source": "wikimedia"
  },
  "54": {
   "url": "https://www.sumo.or.jp/img/sumo_data/rikishi/270x474/20190059.jpg",

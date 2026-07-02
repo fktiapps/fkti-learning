@@ -146,15 +146,15 @@
 <body>
 <header>
  <img class="brand-badge" src="icons/icon-192.png" alt="FKTI logo"/>
- <div><h1>Deeply Connected <b>Sumo</b></h1><div class="jp">相撲 · 名古屋場所</div></div>
+ <div><h1>Deeply Connected <b>Sumo</b></h1><div class="jp" id="hdrJp">相撲</div></div>
  <button class="back" id="backBtn" style="display:none" onclick="go('home')">‹ Back</button>
 </header>
 <main>
 
 <!-- ===================== HOME ===================== -->
 <section id="home" class="on">
- <p class="lead">Your companion for the <b>Nagoya Grand Tournament</b> — Day 8 (nakabi), Sunday&nbsp;19&nbsp;July&nbsp;2026, IG&nbsp;Arena. Keep it open ringside.</p>
- <button class="tile" onclick="go('today')"><span class="ic">⊕</span><div><h2>Today&rsquo;s Matchups</h2><p>Day 8 (中日) card — every top-division bout.</p></div><span class="tag live" id="todayTag">live</span></button>
+ <p class="lead" id="homeLead">Your ringside companion for grand sumo.</p>
+ <button class="tile" onclick="go('today')"><span class="ic">⊕</span><div><h2>Today&rsquo;s Matchups</h2><p>The current day&rsquo;s card — every top-division bout.</p></div><span class="tag live" id="todayTag">live</span></button>
  <button class="tile" onclick="go('banzuke')"><span class="ic">番</span><div><h2>Banzuke &amp; Rikishi</h2><p>The full ranking sheet — tap any wrestler for their bio.</p></div><span class="tag live" id="banzukeTag">live</span></button>
  <button class="tile" onclick="go('primer')"><span class="ic">道</span><div><h2>Sumo Primer</h2><p>How a bout, a day, and a tournament work.</p></div></button>
  <button class="tile" onclick="go('ranks')"><span class="ic">位</span><div><h2>Ranks &amp; the Banzuke</h2><p>Yokozuna down to jonokuchi — how you climb.</p></div></button>
@@ -164,8 +164,8 @@
 
 <!-- ===================== TODAY (torikumi) ===================== -->
 <section id="today">
- <h3>Day 8 &mdash; 中日 (nakabi)</h3>
- <p class="lead" style="margin-top:0">Sunday 19 July 2026 · the tournament&rsquo;s midpoint. Top-division bouts run ~15:40&ndash;18:00.</p>
+ <h3 id="todayTitle">Today&rsquo;s Matchups</h3>
+ <p class="lead" id="todaySub" style="margin-top:0">Top-division bouts run late afternoon into the evening.</p>
  <div class="seg" id="todayDiv"></div>
  <div class="databar" id="todayBar"></div>
  <div id="todayList"></div>
@@ -174,7 +174,7 @@
 <!-- ===================== BANZUKE ===================== -->
 <section id="banzuke">
  <h3>Banzuke &mdash; 番付</h3>
- <p class="lead" style="margin-top:0">The official ranking sheet for Nagoya 2026. Tap any wrestler for their bio, stats &amp; record.</p>
+ <p class="lead" id="banzukeSub" style="margin-top:0">The official ranking sheet. Tap any wrestler for their bio, stats &amp; record.</p>
  <div class="seg" id="banzukeDiv"></div>
  <div class="databar" id="banzukeBar"></div>
  <div id="banzukeList"></div>
@@ -202,7 +202,7 @@
  </div>
  <div class="card">
   <h4>One tournament (basho)</h4>
-  <p class="body">Six <span class="kbd">honbasho</span> a year, each <b>15 days</b>. A top-division wrestler fights <b>once a day</b> — 15 bouts. Finish with a winning record (<b>8+ wins</b>, <span class="kbd">kachikoshi</span>) and you rise on the next banzuke; a losing record (<span class="kbd">makekoshi</span>) and you fall. The wrestler with the best record wins the <span class="kbd">yūshō</span> (championship); a 15&ndash;0 is a <span class="kbd">zenshō-yūshō</span>. Day 8 — today — is <span class="kbd">nakabi</span>, the symbolic midpoint.</p>
+  <p class="body">Six <span class="kbd">honbasho</span> a year, each <b>15 days</b>. A top-division wrestler fights <b>once a day</b> — 15 bouts. Finish with a winning record (<b>8+ wins</b>, <span class="kbd">kachikoshi</span>) and you rise on the next banzuke; a losing record (<span class="kbd">makekoshi</span>) and you fall. The wrestler with the best record wins the <span class="kbd">yūshō</span> (championship); a 15&ndash;0 is a <span class="kbd">zenshō-yūshō</span>. Day 8 is <span class="kbd">nakabi</span>, the symbolic midpoint.</p>
  </div>
  <button class="tile" onclick="go('ranks')" style="margin-top:14px"><span class="ic">位</span><div><h2>Next: how the ranks work</h2><p>The pyramid from yokozuna to jonokuchi.</p></div></button>
 </section>
@@ -236,7 +236,7 @@
    <li><b>Kinboshi</b> <span class="muted">金星</span> — a &ldquo;gold star&rdquo; a maegashira earns by beating a yokozuna. It pays a bonus for the rest of his career.</li>
   </ul>
  </div>
- <button class="tile" onclick="go('banzuke')" style="margin-top:6px"><span class="ic">番</span><div><h2>See the live Nagoya banzuke</h2><p>Who&rsquo;s ranked where this tournament.</p></div><span class="tag live">live</span></button>
+ <button class="tile" onclick="go('banzuke')" style="margin-top:6px"><span class="ic">番</span><div><h2>See the live banzuke</h2><p>Who&rsquo;s ranked where this tournament.</p></div><span class="tag live">live</span></button>
 </section>
 
 <!-- ===================== KIMARITE ===================== -->
@@ -271,7 +271,7 @@
  <p class="lead" style="margin-top:0">The words the announcers and your neighbours will use.</p>
  <ul class="clean" id="glossList"></ul>
  <div class="card">
-  <h4>What to watch for on Day 8</h4>
+  <h4>What to watch for ringside</h4>
   <ul class="clean">
    <li><b>The salt throws</b> — bigger, showier handfuls get the biggest cheers. Watch a yokozuna&rsquo;s.</li>
    <li><b>The tachiai</b> — don&rsquo;t blink. Watch whose hands hit the clay first and who wins the chest-to-chest.</li>
@@ -299,10 +299,50 @@
 /* ============================================================
    CONFIG
    ============================================================ */
-const BASHO = '202607';      // Nagoya 2026
-const NAKABI_DAY = 8;        // Sun 19 Jul 2026
 const API = 'https://www.sumo-api.com/api';
 const DIVISIONS = ['Makuuchi','Juryo'];
+/* Reusable across trips: the app auto-detects the current (or next) basho from
+   today's date — nothing here is pinned to a specific tournament or day. */
+const BASHO_MONTHS = [1,3,5,7,9,11];   // the six honbasho, by month
+const BASHO_INFO = {                    // name/venue by month (the API has no venue field)
+  '01':{name:'Hatsu Basho',sub:'New Year',city:'Tokyo',venue:'Ryōgoku Kokugikan',jp:'初場所'},
+  '03':{name:'Haru Basho',sub:'Spring',city:'Osaka',venue:'EDION Arena Osaka',jp:'春場所'},
+  '05':{name:'Natsu Basho',sub:'Summer',city:'Tokyo',venue:'Ryōgoku Kokugikan',jp:'夏場所'},
+  '07':{name:'Nagoya Basho',sub:'',city:'Nagoya',venue:'IG Arena',jp:'名古屋場所'},
+  '09':{name:'Aki Basho',sub:'Autumn',city:'Tokyo',venue:'Ryōgoku Kokugikan',jp:'秋場所'},
+  '11':{name:'Kyūshū Basho',sub:'',city:'Fukuoka',venue:'Fukuoka Kokusai Center',jp:'九州場所'}
+};
+let BASHO='', BASHO_STATUS='', BASHO_DAY=0, BASHO_META=null, bashoReady=null;
+function bashoId(y,m){ return String(y)+String(m).padStart(2,'0'); }
+function fmtDate(ms){ if(!ms) return ''; return new Date(ms).toLocaleDateString('en-US',{weekday:'short',day:'numeric',month:'short',year:'numeric'}); }
+function dayLabel(d){ return d===1?'Day 1 · shonichi':d===8?'Day 8 · nakabi (midpoint)':d===15?'Day 15 · senshūraku (finale)':'Day '+d; }
+async function resolveBasho(){
+  const now=Date.now(), y=new Date().getFullYear();
+  let cand=[]; [y-1,y,y+1].forEach(yy=>BASHO_MONTHS.forEach(m=>cand.push(bashoId(yy,m))));
+  cand=cand.filter(id=>{ const mid=Date.UTC(+id.slice(0,4),+id.slice(4)-1,14); return Math.abs(mid-now)<80*864e5; });
+  const infos=[];
+  for(const id of cand){ try{ const res=await getJSON('/basho/'+id); const j=res.j; if(j&&j.startDate){ infos.push({id,start:Date.parse(j.startDate),end:Date.parse(j.endDate)+864e5-1}); } }catch(e){} }
+  infos.sort((a,b)=>a.start-b.start);
+  const live=infos.find(i=>now>=i.start&&now<=i.end);
+  let t=live||infos.find(i=>i.start>now)||infos[infos.length-1];
+  if(!t){ let m=new Date().getMonth()+1; while(BASHO_MONTHS.indexOf(m)<0) m=(m%12)+1; t={id:bashoId(y,m),start:0,end:0}; }
+  BASHO=t.id;
+  BASHO_META=Object.assign({id:BASHO,start:t.start,end:t.end}, BASHO_INFO[BASHO.slice(4)]||{name:'Grand Tournament',sub:'',city:'',venue:'',jp:'場所'});
+  if(live){ BASHO_STATUS='live'; BASHO_DAY=Math.min(15,Math.max(1,Math.floor((now-t.start)/864e5)+1)); }
+  else BASHO_STATUS=(t.start>now)?'upcoming':'recent';
+}
+function fillBashoCopy(){
+  if(!BASHO_META) return;
+  const M=BASHO_META, yr=BASHO.slice(0,4), full=M.name+(M.sub?' ('+M.sub+')':'');
+  let status;
+  if(BASHO_STATUS==='live') status='Live now — '+dayLabel(BASHO_DAY)+' of 15.';
+  else if(BASHO_STATUS==='upcoming') status='Begins '+fmtDate(M.start)+'.';
+  else status='Between tournaments — the next banzuke appears here soon.';
+  const set=(id,html)=>{ const el=document.getElementById(id); if(el) el.innerHTML=html; };
+  set('homeLead','Your ringside companion for the <b>'+esc(full)+'</b>'+(M.city?' — '+esc(M.city)+', '+esc(M.venue):'')+'. '+status);
+  set('hdrJp','相撲 · '+esc(M.jp||'場所'));
+  set('banzukeSub','The official ranking sheet for the '+esc(full)+', '+yr+'. Tap any wrestler for their bio, stats &amp; record.');
+}
 
 /* ============================================================
    NAV
@@ -411,20 +451,35 @@ function shortRank(r){
    TODAY — Day 8 torikumi
    ============================================================ */
 let todayDivSel = 'Makuuchi';
-function loadToday(){
+async function loadToday(){
+  await bashoReady;
   const seg = document.getElementById('todayDiv');
-  seg.innerHTML = DIVISIONS.map(d=>'<button class="'+(d===todayDivSel?'sel':'')+'" onclick="todayDivSel=\''+d+'\';loadToday()">'+d+'</button>').join('');
-  renderTorikumi();
+  const tt=document.getElementById('todayTitle'), ts=document.getElementById('todaySub');
+  if(BASHO_STATUS==='live'){
+    if(tt) tt.textContent = dayLabel(BASHO_DAY);
+    if(ts) ts.innerHTML = fmtDate(BASHO_META.start+(BASHO_DAY-1)*864e5)+' · '+esc(BASHO_META.name)+' · top-division bouts run late afternoon into the evening.';
+    seg.innerHTML = DIVISIONS.map(d=>'<button class="'+(d===todayDivSel?'sel':'')+'" onclick="todayDivSel=\''+d+'\';loadToday()">'+d+'</button>').join('');
+    renderTorikumi();
+  } else {
+    if(tt) tt.textContent = 'Today’s Matchups';
+    if(ts) ts.textContent = '';
+    seg.innerHTML=''; document.getElementById('todayBar').innerHTML='';
+    const M=BASHO_META;
+    document.getElementById('todayList').innerHTML = '<div class="empty"><span class="big">🗓️</span>'+
+      'No tournament is running right now.<br>The next basho — <b>'+esc(M.name)+'</b>'+(M.city?' in '+esc(M.city):'')+' — '+
+      (BASHO_STATUS==='upcoming'?'begins <b>'+fmtDate(M.start)+'</b>':'will appear here when it is scheduled')+
+      '.<br>Each day’s matchups post the evening before. Meanwhile, explore the banzuke and techniques.</div>';
+  }
 }
 async function renderTorikumi(){
   const list = document.getElementById('todayList');
   list.innerHTML = '<div class="empty">Loading the card…</div>';
-  const res = await getJSON('/basho/'+BASHO+'/torikumi/'+todayDivSel+'/'+NAKABI_DAY);
+  const res = await getJSON('/basho/'+BASHO+'/torikumi/'+todayDivSel+'/'+BASHO_DAY);
   bar(document.getElementById('todayBar'), res, loadToday);
   const t = res.j && res.j.torikumi;
   if(!t || !t.length){
     list.innerHTML = '<div class="empty"><span class="big">🗓️</span>'+
-      'The Day 8 card isn&rsquo;t out yet.<br>Each day&rsquo;s matchups are announced the <b>evening before</b> — so this fills in around <b>18 July</b>. Until then, explore the banzuke and techniques.</div>';
+      'The card for '+dayLabel(BASHO_DAY)+' isn’t posted yet.<br>Each day’s matchups go up the <b>evening before</b>. Check back soon.</div>';
     return;
   }
   list.innerHTML = t.map(boutCard).join('');
@@ -448,7 +503,8 @@ function boutCard(m){
    BANZUKE
    ============================================================ */
 let banzukeDivSel = 'Makuuchi';
-function loadBanzuke(){
+async function loadBanzuke(){
+  await bashoReady;
   const seg = document.getElementById('banzukeDiv');
   seg.innerHTML = DIVISIONS.map(d=>'<button class="'+(d===banzukeDivSel?'sel':'')+'" onclick="banzukeDivSel=\''+d+'\';loadBanzuke()">'+d+'</button>').join('');
   renderBanzuke();
@@ -461,7 +517,7 @@ async function renderBanzuke(){
   const j = res.j;
   if(!j || (!j.east && !j.west)){
     list.innerHTML = '<div class="empty"><span class="big">📜</span>'+
-      'The Nagoya banzuke hasn&rsquo;t been published yet.<br>It&rsquo;s released about <b>two weeks before</b> the tournament (late June). Check back — it&rsquo;ll appear here automatically.</div>';
+      'The '+esc(BASHO_META?BASHO_META.name:'')+' banzuke hasn’t been published yet.<br>It’s released about <b>two weeks before</b> the tournament. Check back — it’ll appear here automatically.</div>';
     return;
   }
   // merge east/west, sort by rankValue, pair into rows
@@ -510,6 +566,7 @@ async function openBio(id){
   const ov=document.getElementById('overlay'), sh=document.getElementById('sheet');
   ov.classList.add('on');
   sh.innerHTML='<div class="grab"></div><div class="empty">Loading…</div>';
+  await bashoReady;
   const [rr, sr, mr] = await Promise.all([ getJSON('/rikishi/'+id+'?measurements=true'), getJSON('/rikishi/'+id+'/stats'), getJSON('/rikishi/'+id+'/matches') ]);
   const r = rr.j, st = sr.j;
   const recs = (mr.j && mr.j.records) ? mr.j.records : [];
@@ -552,13 +609,27 @@ async function openBio(id){
    '</div>'+
    recentStrip(r)+
    career+
+   currentBashoHTML(recs,id)+
    recentFormHTML(recs,id)+
    howHeWinsHTML(recs,id)+
    dossierHTML(dossier)+
    (cred?'<div class="credit">'+cred+'</div>':'')+
    '<button class="closeb" onclick="closeBio()">Close</button>';
 }
-/* ---- live recent form + FKTI dossier ---- */
+/* ---- live current-basho record + recent form + FKTI dossier ---- */
+function currentBashoHTML(recs,id){
+  const mine=(recs||[]).filter(r=>r.bashoId===BASHO).sort((a,b)=>(a.day||0)-(b.day||0));
+  if(BASHO_STATUS!=='live' || !mine.length){
+    const nm=BASHO_META?BASHO_META.name:'the next tournament';
+    return '<div class="bsec"><div class="h">Current basho record</div><p class="nodoss" style="margin-top:0">Come back during '+esc(nm)+' to watch this rikishi’s record update live, bout by bout.</p></div>';
+  }
+  let w=0,l=0;
+  const cells=mine.map(r=>{ const win=r.winnerId===id; if(win)w++; else l++;
+    const opp=r.eastId===id?r.westShikona:r.eastShikona;
+    const km=r.kimarite&&r.kimarite!=='fusen'?' — '+r.kimarite:'';
+    return '<span class="'+(win?'rW':'rL')+'" title="Day '+r.day+' vs '+esc(opp||'?')+km+'">'+r.day+'</span>'; }).join('');
+  return '<div class="bsec"><div class="h">Current basho — '+esc(BASHO_META.name)+' · '+w+'–'+l+' (live)</div><div class="recstrip">'+cells+'</div></div>';
+}
 function kimEntry(romaji){ return KIM.find(x=>x[0]===romaji); }
 function kimLabel(romaji){ const k=kimEntry(romaji); return k?k[2]:romaji; }
 function kimJp(romaji){ const k=kimEntry(romaji); return k?k[1]:''; }
@@ -1042,10 +1113,8 @@ function renderKim(){
 }
 
 /* ---------- boot ---------- */
-(function(){
-  const h=location.hash.slice(1);
-  if(h && document.getElementById(h)) go(h);
-})();
+bashoReady = resolveBasho().then(fillBashoCopy).catch(e=>{ console.warn('basho resolve failed', e); });
+bashoReady.then(()=>{ const h=location.hash.slice(1); if(h && document.getElementById(h)) go(h); });
 </script>
 </body>
 </html>
