@@ -261,11 +261,10 @@
   "page": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3939/"
  },
  "71": {
-  "url": "https://www.sumo.or.jp/img/sumo_data/rikishi/270x474/20160048.jpg",
-  "source": "jsa",
-  "credit": "Japan Sumo Association",
-  "license": "© JSA",
-  "page": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3711/"
+  "url": "https://upload.wikimedia.org/wikipedia/commons/0/0e/%E5%9C%9F%E4%BF%B5%E5%85%A5%E3%82%8A%E3%80%81%E7%BE%8E%E3%83%8E%E6%B5%B7_%28cropped%29.jpg",
+  "credit": "A2B48",
+  "license": "CC0",
+  "source": "wikimedia"
  },
  "74": {
   "url": "https://upload.wikimedia.org/wikipedia/commons/8/87/Atamifuji_Sakutaro20220718.jpg",
@@ -296,11 +295,10 @@
   "page": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/3839/"
  },
  "82": {
-  "url": "https://www.sumo.or.jp/img/sumo_data/rikishi/270x474/20210037.jpg",
-  "source": "jsa",
-  "credit": "Japan Sumo Association",
-  "license": "© JSA",
-  "page": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4093/"
+  "url": "https://upload.wikimedia.org/wikipedia/commons/7/72/Fujiseiun_20240916.jpg",
+  "credit": "TSUBAME98",
+  "license": "CC BY-SA 4.0",
+  "source": "wikimedia"
  },
  "83": {
   "url": "https://www.sumo.or.jp/img/sumo_data/rikishi/270x474/20190020.jpg",
@@ -393,6 +391,12 @@
   "license": "© JSA",
   "page": "https://www.sumo.or.jp/EnSumoDataRikishi/profile/4121/"
  },
+ "378": {
+  "url": "https://upload.wikimedia.org/wikipedia/commons/5/54/Daiseizan_20240916.jpg",
+  "credit": "TSUBAME98",
+  "license": "CC BY-SA 4.0",
+  "source": "wikimedia"
+ },
  "607": {
   "url": "https://www.sumo.or.jp/img/sumo_data/rikishi/270x474/20220063.jpg",
   "source": "jsa",
@@ -413,6 +417,12 @@
   "credit": "TSUBAME98",
   "license": "CC BY-SA 4.0",
   "page": "https://en.wikipedia.org/wiki/%C5%8Cnosato_Daiki"
+ },
+ "8853": {
+  "url": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Onokatsu_20240916.jpg",
+  "credit": "TSUBAME98",
+  "license": "CC BY-SA 4.0",
+  "source": "wikimedia"
  },
  "8854": {
   "url": "https://upload.wikimedia.org/wikipedia/commons/5/59/Aonishiki-20250721.jpg",
