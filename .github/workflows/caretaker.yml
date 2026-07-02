@@ -1,0 +1,55 @@
+# FKTI Caretaker — a low-cost, scheduled "one beat" agent that keeps the apps fresh.
+# DORMANT until you add an ANTHROPIC_API_KEY repo secret (Settings → Secrets → Actions).
+# Until then the job is skipped and costs nothing. Set a spend cap in the Anthropic console too.
+# Each run: install Claude Code, do ONE beat per caretaker/BEAT.md (Haiku, cheap), commit any change.
+name: FKTI Caretaker
+
+on:
+  schedule:
+    - cron: "20 19 * * *"   # daily ~04:20 JST (19:20 UTC) — one beat
+  workflow_dispatch: {}       # manual "run a beat now" button in the Actions tab
+
+permissions:
+  contents: write             # lets the default GITHUB_TOKEN commit the beat's changes
+
+concurrency:
+  group: caretaker
+  cancel-in-progress: false
+
+jobs:
+  beat:
+    # Skips cleanly (no failure emails) until the API key is set.
+    if: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run one caretaker beat
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        # NOTE: on the very first live run, confirm these CLI flags against the installed
+        # Claude Code version and tweak if needed. Restricted to read/edit/write + web (no shell).
+        run: |
+          claude -p "$(cat caretaker/BEAT.md)" \
+            --model claude-haiku-4-5-20251001 \
+            --allowedTools Read Edit Write WebSearch WebFetch \
+            --dangerously-skip-permissions \
+            || echo "beat exited non-zero — check logs (expected on first setup)"
+
+      - name: Commit & push any changes
+        run: |
+          git config user.name "FKTI Caretaker"
+          git config user.email "caretaker@fkti.org"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes this beat."
+          else
+            git commit -m "caretaker: beat $(date -u +%Y-%m-%d)"
+            git push
+          fi

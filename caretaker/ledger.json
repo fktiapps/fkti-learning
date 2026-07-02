@@ -1,0 +1,33 @@
+{
+  "_doc": "FKTI Caretaker rotating checklist. Each beat picks the oldest DUE active watch, checks only that, updates its lastChecked. Dates are UTC YYYY-MM-DD. See caretaker/BEAT.md for the rules.",
+  "watches": [
+    {
+      "id": "sumo-gossip",
+      "active": true,
+      "cadenceDays": 3,
+      "lastChecked": "2026-07-02",
+      "instructions": "Check for notable NEW sumo storylines for the CURRENT basho (injuries, withdrawals, big upsets, promotions, milestones) affecting wrestlers already present in data/rikishi_dossiers.json. For a factual storyline update, edit that wrestler's `gossip` array (keep 3-4 items; replace the stalest, don't just grow it). Touch at most ~3 wrestlers per beat. Anything that is an allegation/scandal/negative claim about a named person goes to caretaker/review-queue.md, NOT published. Cite sources."
+    },
+    {
+      "id": "vegan-dining",
+      "active": false,
+      "cadenceDays": 2,
+      "lastChecked": null,
+      "instructions": "NEEDS the dining app repo checked out alongside this one (not yet wired). When enabled: find newly-opened or newly-verified vegan / vegetarian-friendly restaurants near the NEXT itinerary stop and add them to the dining app's data with name, area, what's veg-friendly, and a source URL. Verify each place actually exists and is currently open before adding."
+    },
+    {
+      "id": "itinerary-links",
+      "active": false,
+      "cadenceDays": 7,
+      "lastChecked": null,
+      "instructions": "NEEDS the travel app repo (not yet wired). When enabled: verify the itinerary's external links (Google Doc, booking/venue pages) still resolve; flag any dead links to caretaker/review-queue.md."
+    },
+    {
+      "id": "near-today",
+      "active": false,
+      "cadenceDays": 3,
+      "lastChecked": null,
+      "instructions": "NEEDS the travel itinerary (not yet wired). When enabled: check for events, closures, weather notes, or seasonal happenings near TODAY's itinerary stop that are worth surfacing to the group."
+    }
+  ]
+}

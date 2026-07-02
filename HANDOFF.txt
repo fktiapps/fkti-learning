@@ -112,3 +112,42 @@ ROADMAP / TODO
 
 NEXT: Greg is starting a fresh Claude (this session's context was full). He may decide to work on the
   DINING app next (see that repo's HANDOFF). For the kana app, the cheap win is the Words module.
+
+================================================================
+★ THE CARETAKER — low-cost scheduled agent (BUILT 2026-07-02) ★
+================================================================
+An explicitly Greg-AUTHORIZED exception to the old "no paid/unattended tokens" rule: Greg approved a small
+autonomous maintenance bot (budget ~$10/mo; he's fine ~$3-5). It keeps the FKTI apps fresh & accurate by
+doing ONE tiny "beat" per scheduled run.
+
+LIVES IN: caretaker/ + .github/workflows/caretaker.yml (in this repo).
+ - caretaker/ledger.json .... rotating checklist of "watches" (id, active, cadenceDays, lastChecked,
+     instructions). Each beat picks the oldest DUE active watch. Active now: `sumo-gossip`. Dormant
+     (need their app repos wired in): `vegan-dining` (Greg's marquee ask — needs the DINING repo),
+     `itinerary-links`, `near-today` (need the TRAVEL repo).
+ - caretaker/BEAT.md ........ the brief the agent runs each beat: pick oldest due watch → verify via web →
+     apply FACTUAL updates + cite sources; SENSITIVE items (allegations/rumors about named people) go to
+     review-queue, NEVER auto-published; append 1 line to changelog; bump lastChecked; STOP. One watch/run.
+ - caretaker/changelog.md ... the visible "what changed" log.
+ - caretaker/review-queue.md  human-review holding pen for sensitive finds (nothing here is live).
+ - .github/workflows/caretaker.yml  daily cron (+ manual "run a beat" button). Installs Claude Code,
+     runs `claude -p "$(cat caretaker/BEAT.md)"` on Haiku (cheap), commits any change with the default
+     GITHUB_TOKEN (permissions: contents: write).
+
+HOW IT RUNS / COST: it is DORMANT until an ANTHROPIC_API_KEY repo secret is set (job has
+  `if: secrets.ANTHROPIC_API_KEY != ''` so it skips cleanly and costs $0 until then). Runs in the CLOUD
+  (GitHub Actions) so it does NOT depend on Greg's laptop being on. Est. ~$2-5/mo on Haiku at daily cadence;
+  two dials to tune cost: cadence (cron) and model tier. IMPORTANT: also set a hard SPEND CAP in the
+  Anthropic console as a runaway guard.
+
+TO TURN ON (August, when Greg's Max sub ends — the API is separate billing, the sub can't fuel this):
+  1. Create an Anthropic API key + set a monthly spend cap in console.anthropic.com.
+  2. Add it as repo secret ANTHROPIC_API_KEY (Settings → Secrets and variables → Actions).
+  3. Actions tab → FKTI Caretaker → "Run workflow" to test one beat; confirm the claude CLI flags against
+     the installed version (tweak if the headless flags changed) and that the commit/push works.
+BEFORE AUGUST: Greg's Max subscription can run beats for free INTERACTIVELY (ask Claude Code to
+  "run a caretaker beat" following caretaker/BEAT.md) — same ledger/rules, no API cost.
+TO EXTEND to vegan-dining / itinerary: the Action must also check out the dining/travel repos (add a
+  checkout step with a PAT that has access), then flip those watches `active: true` in the ledger.
+DEPLOY NOTE: confirm the learning site auto-deploys from git pushes (Cloudflare Pages git integration) —
+  if Greg still deploys manually via `npm run deploy`, the caretaker's commits won't go live until a deploy.
