@@ -179,7 +179,12 @@ function hasKanji(s){return /[㐀-鿿豈-﫿々]/.test(s||'');}
 function readingOf(ja){if(!tokenizer)return '';try{return tokenizer.tokenize(ja).map(t=>{if(t.reading&&t.reading!=='*')return kata2hira(t.reading);const sf=t.surface_form||'';return hasKanji(sf)?'':sf;}).join('');}catch(_){return '';}}
 // Romaji with a SPACE between each word (readable + lets long lines wrap). The tokenizer
 // gives correct particle readings too (は→wa, を→o). Punctuation is de-spaced + ascii-ised.
-function toRomaSpaced(ja){if(!tokenizer)return '';try{const parts=tokenizer.tokenize(ja).map(t=>{const rd=(t.reading&&t.reading!=='*')?kata2hira(t.reading):'';if(rd)return kanaRomaji(rd);const sf=t.surface_form||'';return hasKanji(sf)?'':kanaRomaji(sf);}).filter(x=>x!=='');return parts.join(' ').replace(/。/g,'.').replace(/、/g,',').replace(/！/g,'!').replace(/？/g,'?').replace(/[　]/g,' ').replace(/\s+([.,!?])/g,'$1').replace(/\s+/g,' ').trim();}catch(_){return '';}}
+function toRomaSpaced(ja){if(!tokenizer)return '';try{const parts=tokenizer.tokenize(ja).map(t=>{
+  // Use the PRONUNCIATION field, not reading — it renders particles as spoken
+  // (topic は→ワ→"wa", へ→"e", を→"o") and long vowels naturally. Fall back to reading.
+  const p=(t.pronunciation&&t.pronunciation!=='*')?t.pronunciation:((t.reading&&t.reading!=='*')?t.reading:'');
+  const rd=p?kata2hira(p):'';if(rd)return kanaRomaji(rd);const sf=t.surface_form||'';return hasKanji(sf)?'':kanaRomaji(sf);
+ }).filter(x=>x!=='');return parts.join(' ').replace(/。/g,'.').replace(/、/g,',').replace(/！/g,'!').replace(/？/g,'?').replace(/[　]/g,' ').replace(/\s+([.,!?])/g,'$1').replace(/\s+/g,' ').trim();}catch(_){return '';}}
 
 // ---- fixed frame + pick-3 modules ----
 const HELLO={k:'今日は。',h:'こんにちは。',r:'Konnichiwa.',e:'Hello.'};
