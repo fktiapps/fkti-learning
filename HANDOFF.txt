@@ -1,6 +1,6 @@
 ★ FKTI LEARNING · 深い関係学び — HANDOFF (for a new Claude) ★
 ================================================================
-Last updated 2026-06-29. Status: LIVE, in classroom beta.
+Last updated 2026-07-02. Status: LIVE, in classroom beta. Apps live: Kana, Kanji, Self-Intro, Sumo, Book of Tea.
 
 WHAT THIS IS
 Standalone Japanese-learning web apps by FKTI (Fukai Kankei, 深い関係 "deeply connected"; fkti.org).
@@ -9,13 +9,16 @@ Greg is a Japanese teacher; the kana trainer is replacing his workbooks and is i
 Sibling project: the Deeply Connected DINING app at C:\Users\FKTI Work\Downloads\dcd (separate repo —
 its own HANDOFF.txt). Don't conflate the two.
 
-LIVE: https://fkti-learning.pages.dev  (kana app at /kana.html; sumo app at /sumo.html)
+LIVE: https://fkti-learning.pages.dev  (custom domain: learning.fkti.org). Apps: /kana.html /kanji.html
+  /selfintro.html /sumo.html /book-of-tea.html.
 DEPLOY — AUTO from GitHub (as of 2026-07): push to `main` on github.com/fktiapps/fkti-learning →
   Cloudflare Pages builds & deploys automatically. No manual step. (Legacy: was `npm run deploy` /
   wrangler from a local copy — now superseded.)
-  ⚠ A STALE local copy exists at C:\Users\FKTI Work\Downloads\fkti-learning (pre-2026-07-02, before the
-  Book of Tea / sumo dossiers / caretaker work). Do NOT deploy or work from it; the live clone is at
-  C:\pf\fkti-learning. `git pull` the Downloads copy or delete it to avoid confusion.
+  ⚠ TWO local clones exist — C:\Users\FKTI Work\Downloads\fkti-learning and C:\pf\fkti-learning — both of
+  the SAME remote (github.com/fktiapps/fkti-learning). As of 2026-07-02 the Downloads copy pushed the
+  Kanji + Self-Intro + mnemonic-gallery work and is IN SYNC with origin (nothing lost; clean rebase over the
+  Book-of-Tea/sumo/caretaker commits). TO AVOID TWO CLAUDES COLLIDING: pick ONE working copy, `git pull
+  --rebase` before you start, and don't run two sessions against this repo at once.
   NOTE: kana.html has NO service worker — changes go live on push + a normal refresh.
 
 STANDING RULES: pushes to main auto-deploy; never handle Greg's credentials; bundle only open-licensed
@@ -23,19 +26,28 @@ STANDING RULES: pushes to main auto-deploy; never handle Greg's credentials; bun
   authorized the Caretaker agent on 2026-07-02 — see "THE CARETAKER" below.)
 
 DIRECTORY (own git repo)
-- index.html ........ landing hub (Deeply-Connected dark theme + logo). Tiles: Kana, Sumo, (soon) Vocab/Kanji.
-- kana.html ......... ★ the Kana Trainer (all HTML/CSS/JS in one file, ~430 lines).
+- index.html ........ landing hub (Deeply-Connected dark theme + logo). Tiles: Kana, Sumo, Kanji, Self
+    Introductions, Book of Tea, (soon) Vocabulary.
+- kana.html ......... ★ the Kana Trainer (all HTML/CSS/JS in one file, ~440 lines).
+- kanji.html ........ ★ the Kanji Trainer — all 2,136 Jōyō (built 2026-06-30). See KANJI below.
+- selfintro.html .... ★ Self Introductions 自己紹介 (built 2026-07). See SELF-INTRO below.
+- book-of-tea.html + bookoftea-notes.js ... Okakura's 1906 "Book of Tea" full text + tap-to-read notes /
+    two-layer close reading (built by the parallel session; not documented in detail here).
+- mnem-src/ + mnem-gallery.html ... ORIGINAL kana-mnemonic prototype (NOT wired into kana.html). See MNEMONIC below.
 - sumo.html ......... ★ Sumo at Nagoya — tournament companion (single self-contained file, ~900 lines). See SUMO below.
 - sumo-src/ ......... build-time generators for sumo.html (Node, re-runnable; no tokens, only free HTTP):
     photos.js .......... -> data/sumo_photos.json (wrestler photo map: Wikimedia CC -> JSA fallback).
     kimarite-photos.js . -> data/kimarite_photos.json + img/sumo/kimarite/*.jpg (PD bout photos; JPEG-validated).
 - icons/ ............ logo (icon-192 etc.), copied from the dining app — same brand badge.
 - data/kana_assets.json ... {mnem:{hira:{romaji:path},kata:{...}}, credit:{...}} — mnemonic image map.
+- data/kanji_joyo.json .... 215 tranches × 10 kanji {k,m,on,ku}; all 2,136 Jōyō, freq-sorted within grade.
+    From KANJIDIC2 (CC BY-SA 4.0, EDRDG). kanji.html fetch()es it; built-in Grade-1 (80) is an offline fallback.
 - data/sumo_photos.json ... {rikishiId:{url,source,credit,license,page}} — 70 wrestlers (top 2 divisions).
 - data/kimarite_photos.json {romaji:{file,license,credit,page}} — 22 public-domain technique photos.
 - img/kana/mnem/{hira,kata}/ ... mnemonic images (hira CC0, kata CC BY-SA 3.0). Quality is mediocre.
 - img/sumo/kimarite/*.jpg ... 22 PD bout photos (PD-Japan-oldphoto, via Wikimedia Commons).
-- kanjivg/<codepoint>.svg ... 92 KanjiVG stroke files (CC BY-SA 3.0) for stroke-order.
+- kanjivg/<codepoint>.svg ... 2,228 KanjiVG stroke files (CC BY-SA 3.0, Ulrich Apel) — 2,136 Jōyō kanji + 92
+    kana — for stroke-order (kana.html + kanji.html). Filenames = 5-hex-digit zero-padded codepoint.
 
 THEME: dining palette — --ink #13182B navy shell, --paper #F7F4EC cream cards, --ver #E2553B accent,
   Mincho display font. Header: logo + "Deeply Connected Learning" + 深い関係学び.
@@ -90,8 +102,50 @@ SUMO AT NAGOYA — sumo.html (built 2026-06-29 for Greg's class trip to the Nago
    shared — marked no-reuse. Used only as a style/convention target (athletic figures; red-arrow=movement,
    red-ring=hold). All sumo art is original/procedural FKTI. sumo.jpg is intentionally NOT committed.
 
-DEV: edit kana.html directly; validate JS (new Function on each <script>) before committing; commit
-  (author FKTI/gjswork@yahoo.com); GREG deploys. Known gotcha (fixed): the .rate button{color:#fff}
+KANJI TRAINER — kanji.html (built 2026-06-30). ALL 2,136 Jōyō, same engine/feel as the kana trainer.
+  localStorage 'fkti_kanji_v1' {rows,phase,pk,cards:{lvl,streak,seen}}. Home menu → sections:
+   • 🎴 Learn & Write — flashcard: kanji → meaning + 音 on'yomi (katakana) / 訓 kun'yomi (hiragana) + ja-JP TTS;
+     grade yourself (4 confidence levels). WRITE = finger-trace over a faint guide glyph.
+   • ✏️ Stroke order — KanjiVG watch+draw+check (ported from kana; watch speed adapts to stroke count; stroke
+     SVGs load lazily w/ retry). On a CORRECT check the card FLIPS to reveal meaning + readings + audio.
+   • 📊 Progress & decks — grid grouped by tranche, color-coded by confidence (locked tranches greyed); tap a
+     cell to CYCLE through all its readings aloud. 4 confidence-band decks over the unlocked set.
+  SRS + UNLOCK: forward→reverse→random phases per TRANCHE of 10. Unlocking the next tranche runs a MIXED quiz =
+   a balanced review of ≤20 previously-learned kanji (≤5 per confidence band), mixing 3 modes: kanji→meaning
+   (MC), kanji→reading (MC), and DRAW-IT (stroke-order check). Must nail the "strong" (Know-it/Kinda) items to
+   pass; weak ones are review-only. MISSING any quiz item DOWNGRADES that kanji one level — this rule was ALSO
+   added to the KANA quiz gate. Readings: on in katakana, kun in hiragana, KANJIDIC "-" suffix markers KEPT.
+
+SELF-INTRODUCTIONS — selfintro.html (自己紹介, built 2026-07 for the class trip). localStorage 'fkti_selfintro'.
+  4 screens: 📖 Learn (the fixed frame + the 12 option sentences, each kanji·hiragana·romaji·English + TTS),
+  ✍️ Build, 🎤 Practice, 🗣️ Say it in Japanese.
+   • BUILD: name + choose a greeting (はじめまして…どうぞよろしく | よろしくおねがいします) + PICK UP TO 3 of 12 prompts
+     (age, hobby, food, anime, music, song, fav-thing-about-Japan, best-thing-seen, a-surprise, unique-fact,
+     homestay, school-vs-KGN). Student types answers in ENGLISH; ✦ Translate → Japanese (cached in the save).
+     Script order: Hello → My name is ___ → greeting → 3 picks → ありがとうございます. Age is native-computed
+     (kanji + reading); the picks are machine-translated.
+   • SAY IT: free English → Japanese with FURIGANA (ruby); tap a word = speak + English gloss; auto vocab list.
+  TRANSLATION/FURIGANA = FREE PROTOTYPE (explicitly flagged to Greg): translate via MyMemory (keyless, CORS-ok,
+   DAILY CHAR LIMIT — a class could exhaust it); segment+furigana+readings via kuromoji.js from jsDelivr (~15 MB
+   dict, one-time, browser-cached). Loader is preloaded + cached + 30s timeout; readings BACK-FILL onto saved
+   lines once the dict is ready (fixed a bug where picks showed kanji in the hiragana/romaji views); degrades to
+   translation+audio if the dict can't load. THE RELIABLE UPGRADE (Greg's call — needs a key + small cost):
+   a Cloudflare Pages FUNCTION calling the Claude API to translate+segment+furigana+gloss in ONE call. NOT
+   built (it would end the pure-static model; the free path stays until Greg decides).
+
+MNEMONIC ART PROTOTYPE — mnem-src/ + mnem-gallery.html (2026-06-27..30; NOT wired into kana.html; standalone).
+  Answers roadmap #3 (original, licensing-free FKTI kana mnemonics). TWO styles per character: STATIC (a hook
+  drawn INTO the shape) and MOTION ("say it while you draw" — the char draws itself stroke-by-stroke on the real
+  KanjiVG vectors, ONE chant beat per stroke, draw→hold→disappear→redraw loop). Greg art-directed ~あ–た with
+  specifics (な = "na na na na / hey hey hey / 👋 goodbye"; か・た blink a red romaji "Ka/Ta" overlay; と = thorn
+  in the lion's toe). mnem-src/generate.js embeds the per-kana content + emits the gallery from strokes.json;
+  `node mnem-src/generate.js` rebuilds mnem-gallery.html. PRINCIPLE enforced by the build: one stroke = one
+  continuous motion = exactly one chant beat (build errors if a chant's beats ≠ its stroke count). Next step:
+  finish the set (た-row on) + decide whether/how to fold it into the kana app.
+
+DEV: edit the app's single HTML file directly; validate JS (new Function on each <script>) before committing;
+  commit (author FKTI/gjswork@yahoo.com); PUSH TO main AUTO-DEPLOYS (Cloudflare Pages git integration — no
+  manual step). Known gotcha (fixed): the .rate button{color:#fff}
   rule needs a .rate .ghost{color:var(--muted)} override or ghost buttons go white-on-white.
 
 ASSETS/LICENSING: hira mnemonic images CC0; kata CC BY-SA 3.0; KanjiVG CC BY-SA 3.0 (Ulrich Apel).
@@ -111,12 +165,18 @@ ROADMAP / TODO
      REQUIRES Greg's admin steps: Google Cloud project, OAuth client, consent screen, ENABLE APIs, and
      GOOGLE APP-VERIFICATION for read scopes. Materials mostly embed/link, not auto-flashcard. Student
      sign-in pulls personal data (privacy/FERPA flag). Scope with Greg before building.
-3. Original FKTI mnemonic art set (see above).
+3. Original FKTI mnemonic art set — PROTOTYPE built (mnem-src/ + mnem-gallery.html, see MNEMONIC above);
+   finish あ→ん in both styles, then decide whether to wire it into kana.html.
 4. PWA: add manifest + service worker for installable/offline (good for classroom devices).
 5. Polish from class feedback (watch nav, order progression, stroke detection).
+6. Self-Intro RELIABLE TRANSLATION — if the free MyMemory/kuromoji path's daily limit or ~15 MB dict bite in
+   class, swap to a Cloudflare Pages Function → Claude API (translate+furigana+gloss in one call). Greg's call.
 
-NEXT: Greg is starting a fresh Claude (this session's context was full). He may decide to work on the
-  DINING app next (see that repo's HANDOFF). For the kana app, the cheap win is the Words module.
+NEXT (2026-07-02 handoff): one session (the Downloads clone) built Kanji + Self-Intro + the mnemonic prototype
+  and pushed them; a parallel session/agent added Book of Tea + sumo dossiers + the Caretaker. All merged &
+  live. CONSOLIDATE to ONE working copy + one active Claude (see the ⚠ under DEPLOY) so we stop colliding on
+  pushes. Cheapest remaining wins: the Words/Vocabulary module (reuses the kana+kanji SRS/quiz/chart engine)
+  and finishing the mnemonic set. Sibling DINING app is a separate repo (Downloads/dcd) with its own HANDOFF.
 
 ================================================================
 ★ THE CARETAKER — low-cost scheduled agent (BUILT 2026-07-02) ★
