@@ -45,6 +45,10 @@
  .card .note{font-size:13px;color:var(--muted2);margin-top:10px;max-width:360px;line-height:1.45}
  .hint{font-size:12px;color:var(--muted);margin-top:14px}
  .ctrls{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+ .speedrow{display:flex;align-items:center;gap:5px;justify-content:center;flex-wrap:wrap}
+ .speedrow .spdlbl{font-size:11px;color:var(--muted);font-weight:700;margin-right:2px}
+ .spd{background:var(--paper2);border:1px solid #e3d9c6;color:var(--text);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:800;cursor:pointer}
+ .spd.on{background:var(--ver);color:#fff;border-color:var(--ver)}
  .btn{background:var(--paper2);border:1px solid #e3d9c6;color:var(--text);border-radius:999px;padding:9px 16px;font-size:14px;font-weight:700;cursor:pointer}
  .btn.ver{background:var(--ver);color:#fff;border-color:var(--ver)}
  .btn.wide{width:auto;padding:11px 22px}
@@ -152,8 +156,13 @@ const SETS=[
 
 let CUR=null,order=[],idx=0,flipped=false,view='card';
 let soundOn=(localStorage.getItem('fkti_words_sound')!=='0');
+// Playback speed — discrete steps for new learners. Persisted.
+const SPEEDS=[[0.25,'¼×'],[0.5,'½×'],[0.75,'¾×'],[0.9,'0.9×']];
+let wordRate=parseFloat(localStorage.getItem('fkti_words_rate'));if(!(wordRate>0))wordRate=0.9;
+function setRate(r){wordRate=r;try{localStorage.setItem('fkti_words_rate',String(r));}catch(_){}}
+function speedRow(){return '<div class="speedrow"><span class="spdlbl">Speed</span>'+SPEEDS.map(function(s){return '<button class="spd'+(s[0]===wordRate?' on':'')+'" data-r="'+s[0]+'">'+s[1]+'</button>';}).join('')+'</div>';}
 
-function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=0.85;const v=(speechSynthesis.getVoices()||[]).find(x=>(x.lang||'').toLowerCase().startsWith('ja'));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(_){}}
+function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=wordRate;const v=(speechSynthesis.getVoices()||[]).find(x=>(x.lang||'').toLowerCase().startsWith('ja'));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(_){}}
 function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
 function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='home')renderHome();}
@@ -176,10 +185,12 @@ function renderSet(){
  $('setBody').innerHTML=
   '<div class="card" id="wcard">'+face+'</div>'+
   '<div class="ctrls"><button class="btn" id="wsay">'+(soundOn?'🔊 Say it':'🔇 Muted')+'</button></div>'+
+  '<div class="subctrls" style="margin-top:8px">'+speedRow()+'</div>'+
   '<div class="subctrls"><button class="ghost" id="wprev">‹ Prev</button><button class="btn ver wide" id="wnext">Next ›</button></div>'+
   '<div class="subctrls" style="margin-top:10px"><button class="ghost" id="wshuf">🔀 Shuffle</button><button class="ghost" id="wlist">📋 List view</button></div>';
  $('wcard').onclick=()=>{flipped=!flipped;renderSet();};
  $('wsay').onclick=e=>{e.stopPropagation();if(!soundOn){soundOn=true;localStorage.setItem('fkti_words_sound','1');}speak(c.say||c.j);renderKeepSound();};
+ $('setBody').querySelectorAll('.spd').forEach(function(b){b.onclick=function(e){e.stopPropagation();setRate(parseFloat(b.dataset.r));$('setBody').querySelectorAll('.spd').forEach(function(x){x.classList.toggle('on',x===b);});if(soundOn)speak(c.say||c.j);};});
  $('wprev').onclick=()=>{if(idx>0){idx--;flipped=false;renderSet();}};
  $('wnext').onclick=()=>{idx=(idx+1)%order.length;flipped=false;renderSet();};
  $('wshuf').onclick=()=>{order=shuf(order);idx=0;flipped=false;renderSet();};
