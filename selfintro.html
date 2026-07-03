@@ -64,7 +64,7 @@
  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(30px);background:var(--know);color:#fff;padding:11px 18px;border-radius:999px;font-weight:800;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:20}
  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
  .perform-card{background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:18px;padding:24px 18px;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 8px 22px rgba(0,0,0,.28)}
- .perform-card .big{font-family:var(--display);font-size:24px;line-height:1.7}
+ .perform-card .big{font-family:var(--display);font-size:24px;line-height:1.7;overflow-wrap:break-word;word-break:normal;max-width:100%}
  .perform-card .sm{font-size:13px;color:var(--muted);margin-top:12px}
  .stepnav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}
  .empty{text-align:center;color:var(--muted2);padding:30px 10px}
@@ -177,6 +177,9 @@ function hasKanji(s){return /[㐀-鿿豈-﫿々]/.test(s||'');}
 // Build a pure-kana reading. Crucial: when a token has NO reading, do NOT fall back to its
 // surface_form if that surface is kanji — that would leak kanji onto the ひらがな/Rōmaji tabs.
 function readingOf(ja){if(!tokenizer)return '';try{return tokenizer.tokenize(ja).map(t=>{if(t.reading&&t.reading!=='*')return kata2hira(t.reading);const sf=t.surface_form||'';return hasKanji(sf)?'':sf;}).join('');}catch(_){return '';}}
+// Romaji with a SPACE between each word (readable + lets long lines wrap). The tokenizer
+// gives correct particle readings too (は→wa, を→o). Punctuation is de-spaced + ascii-ised.
+function toRomaSpaced(ja){if(!tokenizer)return '';try{const parts=tokenizer.tokenize(ja).map(t=>{const rd=(t.reading&&t.reading!=='*')?kata2hira(t.reading):'';if(rd)return kanaRomaji(rd);const sf=t.surface_form||'';return hasKanji(sf)?'':kanaRomaji(sf);}).filter(x=>x!=='');return parts.join(' ').replace(/。/g,'.').replace(/、/g,',').replace(/！/g,'!').replace(/？/g,'?').replace(/[　]/g,' ').replace(/\s+([.,!?])/g,'$1').replace(/\s+/g,' ').trim();}catch(_){return '';}}
 
 // ---- fixed frame + pick-3 modules ----
 const HELLO={k:'今日は。',h:'こんにちは。',r:'Konnichiwa.',e:'Hello.'};
@@ -215,7 +218,7 @@ function lines(){
 function scriptText(mode){return lines().map(l=>l[mode]||l.h).join('');}
 // Once the dictionary loads, (re)compute hiragana + romaji for any translated line whose
 // saved reading is missing OR still contains kanji (old data, or built before the dict loaded).
-function backfillReadings(){if(!tokenizer||!S.tr)return;let ch=false;for(const id in S.tr){const tr=S.tr[id];if(!tr||!tr.k)continue;if(!tr.h||!tr.r||hasKanji(tr.h)||hasKanji(tr.r)){const rd=readingOf(tr.k);if(rd&&!hasKanji(rd)){tr.h=rd;tr.r=kanaRomaji(rd);ch=true;}}}if(ch)save(S);}
+function backfillReadings(){if(!tokenizer||!S.tr)return;let ch=false;for(const id in S.tr){const tr=S.tr[id];if(!tr||!tr.k)continue;const h=readingOf(tr.k),r=toRomaSpaced(tr.k);if(h&&!hasKanji(h)&&tr.h!==h){tr.h=h;ch=true;}if(r&&!hasKanji(r)&&tr.r!==r){tr.r=r;ch=true;}}if(ch)save(S);}
 function onTkReady(){backfillReadings();const cur=document.querySelector('.scr.on');if(!cur)return;if(cur.id==='build')syncBuild();else if(cur.id==='perform')renderPerform();}
 
 // ===== Learn =====
@@ -264,7 +267,7 @@ async function buildJa(){
   if(m.num){S.tr[id]=ageLine(v);continue;}
   if(!v){delete S.tr[id];continue;}
   const en=m.frame(v);
-  try{const ja=await mm(en,'en|ja');const rd=tk?readingOf(ja):'';S.tr[id]={k:ja,h:rd||ja,r:rd?kanaRomaji(rd):'',e:en};}
+  try{const ja=await mm(en,'en|ja');const rd=tk?readingOf(ja):'';S.tr[id]={k:ja,h:rd||ja,r:tk?toRomaSpaced(ja):'',e:en};}
   catch(_){S.tr[id]={k:ja||'',h:'(translation failed — try again)',r:'',e:en};}
  }
  save(S);btn.disabled=false;btn.textContent=orig;syncBuild();
@@ -293,7 +296,7 @@ function renderPerform(){
  // kanji onto ひらがな or leaving Rōmaji blank; they fill in when the dict finishes.
  const kanaLine=l=>{const h=l.h||'';if(h&&!hasKanji(h))return h;const rd=readingOf(l.k||h);if(rd&&!hasKanji(rd))return rd;return pending?'…':(h||l.k||'');};
  const toRoma=k=>kanaRomaji(k).replace(/。/g,'.').replace(/、/g,', ').replace(/[　]/g,' ').replace(/\s+/g,' ').trim();
- const romaLine=l=>{const r=l.r||'';if(r&&!hasKanji(r))return r;const rd=readingOf(l.k||l.h||'');if(rd&&!hasKanji(rd))return toRoma(rd);const h=kanaLine(l);if(h&&h!=='…'&&!hasKanji(h))return toRoma(h);return pending?'…':'';};
+ const romaLine=l=>{const r=l.r||'';if(r&&!hasKanji(r))return r;const sp=toRomaSpaced(l.k||'');if(sp&&!hasKanji(sp))return sp;const h=kanaLine(l);if(h&&h!=='…'&&!hasKanji(h))return toRoma(h);return pending?'…':'';};
  const modeVal=l=>perfMode==='k'?(l.k||kanaLine(l)):perfMode==='r'?romaLine(l):kanaLine(l);
  if(perfStep<0){
   $('performBody').innerHTML=
