@@ -65,7 +65,12 @@
  .prompt{background:var(--paper);color:var(--text);border:2px solid var(--ver);border-radius:14px;padding:16px;text-align:center;margin-top:14px}
  .prompt button{background:var(--ver);color:#fff;border:none;border-radius:10px;padding:11px 18px;font-weight:800;cursor:pointer;margin-top:10px}
  .ghost{background:var(--paper2);border:1px solid #e3d9c6;color:var(--muted);border-radius:10px;padding:8px 12px;font-size:12px;font-weight:600;cursor:pointer}
- .foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+ /* Pinned to the screen bottom (not under the rate buttons) so it can't be hit while rating cards fast. */
+ .foot{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;align-items:center;gap:14px;padding:8px 14px calc(env(safe-area-inset-bottom) + 8px);background:linear-gradient(transparent,var(--ink) 45%);z-index:4;pointer-events:none}
+ .foot #resetBtn,.foot #doneTag{pointer-events:auto}
+ .foot #resetBtn{font-size:11px;padding:5px 12px;opacity:.55}
+ .foot #resetBtn:hover{opacity:.9}
+ #study{padding-bottom:58px}
  .hidden{display:none!important}
  .trace-wrap{position:relative;width:300px;max-width:86vw;aspect-ratio:1/1;margin:6px auto;background:var(--paper2);border:1px solid #e3d9c6;border-radius:16px;overflow:hidden;touch-action:none;box-shadow:0 8px 22px rgba(0,0,0,.28)}
  .guide-char{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:210px;color:rgba(27,34,51,.13);user-select:none;pointer-events:none}
@@ -88,6 +93,9 @@
  .chlegend span{display:flex;align-items:center;gap:4px}.chlegend i{width:11px;height:11px;border-radius:3px;display:inline-block}
  .deckbtn{display:flex;justify-content:space-between;align-items:center;width:100%;background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:12px;padding:14px;margin:7px 0;font-size:15px;font-weight:700;cursor:pointer}
  .deckbtn span{font-size:11px;font-weight:400;color:var(--muted)}
+ .deckgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:stretch}
+ .dgh{text-align:center;font-size:12px;font-weight:800;color:#EDEFF8;padding:2px 0}
+ .deckgrid .deckbtn{flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:2px;margin:0}
 </style>
 </head>
 <body>
@@ -134,7 +142,7 @@
    </div>
    <p style="font-size:12px;color:var(--muted2);text-align:center;margin-top:8px">Trace the faint character with your finger. (Stroke-order &amp; direction detection coming soon.)</p>
   </div>
-  <div class="foot"><button class="ghost" id="resetBtn">↻ Reset this script</button><span style="font-size:11px;color:var(--muted2)" id="doneTag"></span></div>
+  <div class="foot"><span style="font-size:11px;color:var(--muted2)" id="doneTag"></span><button class="ghost" id="resetBtn">↺ Start over</button></div>
  </section>
 
  <section class="scr" id="sounds"></section>
@@ -159,11 +167,18 @@
   <div id="chGrid" class="chgrid"></div>
   <div id="chStats" style="text-align:center;font-size:12px;color:var(--muted2);margin:8px 0"></div>
   <div class="chlegend"><span><i style="background:#2E7D32"></i>Know it</span><span><i style="background:#C9A227"></i>Kinda</span><span><i style="background:#D9772A"></i>Don't really</span><span><i style="background:#C4452E"></i>No clue</span><span><i style="background:#2A3358"></i>Not started</span></div>
-  <h3 style="color:#EDEFF8;font-size:15px;margin:16px 0 6px">Custom decks</h3>
-  <button class="deckbtn" data-deck="boost">💪 I need a confidence boost <span>only “Know it”</span></button>
-  <button class="deckbtn" data-deck="little">🙂 Give me a little challenge <span>+ “Kinda”</span></button>
-  <button class="deckbtn" data-deck="challenge">😤 Challenge me <span>+ “Don’t really”</span></button>
-  <button class="deckbtn" data-deck="hurt">🔥 Make it hurt <span>everything, incl. “No clue”</span></button>
+  <h3 style="color:#EDEFF8;font-size:15px;margin:16px 0 6px">Custom sets</h3>
+  <div class="deckgrid">
+   <div class="dgh">🎴 Practice</div><div class="dgh">🎯 Quiz</div>
+   <button class="deckbtn" data-deck="boost">💪 Boost<span>only “Know it”</span></button>
+   <button class="deckbtn" data-quiz="boost">💪 Boost<span>only “Know it”</span></button>
+   <button class="deckbtn" data-deck="little">🙂 Little<span>+ “Kinda”</span></button>
+   <button class="deckbtn" data-quiz="little">🙂 Little<span>+ “Kinda”</span></button>
+   <button class="deckbtn" data-deck="challenge">😤 Challenge<span>+ “Don’t really”</span></button>
+   <button class="deckbtn" data-quiz="challenge">😤 Challenge<span>+ “Don’t really”</span></button>
+   <button class="deckbtn" data-deck="hurt">🔥 Hurt<span>everything</span></button>
+   <button class="deckbtn" data-quiz="hurt">🔥 Hurt<span>everything</span></button>
+  </div>
  </section>
 
  <section class="scr" id="deck">
@@ -317,7 +332,7 @@ function rate(b){
 $('card').onclick=()=>{if($('prompt').classList.contains('hidden')){flipped=!flipped;showCard();}};
 document.querySelectorAll('[data-rate]').forEach(b=>b.onclick=()=>rate(b.dataset.rate));
 document.querySelectorAll('#scriptSeg button').forEach(b=>b.onclick=()=>{script=b.dataset.script;document.querySelectorAll('#scriptSeg button').forEach(x=>x.classList.toggle('on',x===b));cur=null;flipped=false;seqPtr=0;lastKey=null;render();});
-$('resetBtn').onclick=()=>{if(confirm('Reset progress for '+(script==='hira'?'Hiragana':'Katakana')+'?')){const s=store();delete s[script];save(s);cur=null;flipped=false;seqPtr=0;render();}};
+$('resetBtn').onclick=()=>{const nm=script==='hira'?'Hiragana':'Katakana';if(confirm('Start '+nm+' over?\n\nThis erases all your '+nm+' ratings and re-locks the rows back to the first one. Your other script is untouched.')){const s=store();delete s[script];save(s);cur=null;flipped=false;seqPtr=0;render();}};
 
 let mode='recognize',wIdx=0,guideOn=true,tctx=null,drawing=false;
 function renderWrite(){
@@ -456,7 +471,7 @@ function renderChart(){
 }
 window.addEventListener('resize',()=>{if($('chart').classList.contains('on'))renderChart();});
 window.addEventListener('orientationchange',()=>{if($('chart').classList.contains('on'))setTimeout(renderChart,180);});
-let deckKey=null,deckQ=[],deckP=0,deckCur=null,deckFlip=false;
+let deckKey=null,deckQ=[],deckP=0,deckCur=null,deckFlip=false,quiz=null;
 const DECKNAME={boost:'💪 Confidence boost',little:'🙂 Little challenge',challenge:'😤 Challenge me',hurt:'🔥 Make it hurt'};
 function bandPool(key){
  const cells=DATA[script].flatMap(r=>r.cells),L=k=>{const c=cardState(k);return c.seen?c.lvl:-1;};
@@ -468,7 +483,7 @@ function bandPool(key){
 function startDeck(key){
  const pool=bandPool(key);
  if(!pool.length){$('chStats').textContent='No cards in “'+DECKNAME[key]+'” yet — learn a little first!';return;}
- deckKey=key;deckQ=shuf(pool.slice());deckP=0;deckCur=null;deckFlip=false;$('deckName').textContent=DECKNAME[key];$('deckDone').classList.add('hidden');go('deck');deckShow();
+ quiz=null;deckKey=key;deckQ=shuf(pool.slice());deckP=0;deckCur=null;deckFlip=false;$('deckName').textContent=DECKNAME[key];$('deckDone').classList.add('hidden');$('deckCard').classList.remove('hidden');go('deck');deckShow();
 }
 function deckShow(){
  if(deckP>=deckQ.length){$('deckCard').classList.add('hidden');$('deckRate').classList.add('hidden');$('deckDone').classList.remove('hidden');$('deckDone').innerHTML='✓ Deck complete — '+deckQ.length+' cards.<br><button id="deckAgain">Go again</button> <button class="ghost" id="deckBack2" style="margin-top:8px">Back to chart</button>';$('deckAgain').onclick=()=>startDeck(deckKey);$('deckBack2').onclick=()=>go('chart');return;}
@@ -487,10 +502,37 @@ function deckShow(){
  }
 }
 function deckRate(b){const p=prog(),c=p.cards[deckCur.k]||{lvl:0,streak:0,seen:0};c.lvl=RATE_VAL[b];c.streak=(b==='know')?c.streak+1:0;c.seen++;p.cards[deckCur.k]=c;setProg(p);deckP++;deckCur=null;deckFlip=false;deckShow();}
-$('deckCard').onclick=()=>{if(deckP<deckQ.length){deckFlip=!deckFlip;deckShow();}};
+$('deckCard').onclick=()=>{if(quiz)return;if(deckP<deckQ.length){deckFlip=!deckFlip;deckShow();}};
+
+// ===== band quizzes (right column of the gojūon chart) — kana → pick the sound =====
+function startQuiz(key){
+ const pool=bandPool(key);
+ if(!pool.length){$('chStats').textContent='No cards in “'+DECKNAME[key]+'” yet — learn a little first!';return;}
+ const allR=[...new Set(DATA[script].flatMap(r=>r.cells).map(c=>c.r))];
+ const qs=shuf(pool.slice()).map(c=>{const opts=[c.r];while(opts.length<4&&opts.length<allR.length){const r=allR[Math.floor(Math.random()*allR.length)];if(!opts.includes(r))opts.push(r);}return{k:c.k,r:c.r,opts:shuf(opts)};});
+ quiz={key,qs,i:0,wrong:0};
+ $('deckName').textContent=DECKNAME[key]+' · Quiz';$('deckProg').textContent='';
+ $('deckDone').classList.add('hidden');$('deckRate').classList.add('hidden');$('deckCard').classList.remove('hidden');
+ go('deck');renderQuiz();
+}
+function renderQuiz(){
+ const q=quiz;$('deckRate').classList.add('hidden');
+ if(q.i>=q.qs.length){
+  const score=q.qs.length-q.wrong;
+  $('deckCard').classList.add('hidden');$('deckDone').classList.remove('hidden');
+  $('deckDone').innerHTML='🎯 <b>'+score+' / '+q.qs.length+'</b> correct.<br><button id="qAgain">Go again</button> <button class="ghost" id="qBack" style="margin-top:8px">Back to chart</button>';
+  $('qAgain').onclick=()=>startQuiz(q.key);$('qBack').onclick=()=>{quiz=null;go('chart');};
+  return;
+ }
+ $('deckProg').textContent=(q.i+1)+' / '+q.qs.length;
+ const it=q.qs[q.i];
+ $('deckCard').innerHTML='<div style="font-size:12px;color:var(--muted)">Which sound?</div><div style="font-size:72px;font-weight:700;margin:6px 0;color:var(--text)">'+it.k+'</div>'+it.opts.map(o=>'<button class="opt" data-r="'+o+'">'+o+'</button>').join('');
+ $('deckCard').querySelectorAll('.opt').forEach(b=>b.onclick=e=>{e.stopPropagation();if(b.dataset.done)return;const ok=b.dataset.r===it.r;$('deckCard').querySelectorAll('.opt').forEach(x=>{x.dataset.done=1;if(x.dataset.r===it.r)x.classList.add('ok');});if(ok){if(soundOn)speak(it.k);}else{b.classList.add('no');q.wrong++;downgrade(it.k);}setTimeout(()=>{q.i++;renderQuiz();},560);});
+}
 document.querySelectorAll('[data-drate]').forEach(b=>b.onclick=()=>deckRate(b.dataset.drate));
 $('deckExit').onclick=()=>go('chart');
 document.querySelectorAll('[data-deck]').forEach(b=>b.onclick=()=>startDeck(b.dataset.deck));
+document.querySelectorAll('[data-quiz]').forEach(b=>b.onclick=()=>startQuiz(b.dataset.quiz));
 document.querySelectorAll('#chScriptSeg button').forEach(b=>b.onclick=()=>{script=b.dataset.script;document.querySelectorAll('#chScriptSeg button').forEach(x=>x.classList.toggle('on',x===b));renderChart();});
 
 if(window.speechSynthesis)speechSynthesis.onvoiceschanged=()=>{};
