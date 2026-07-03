@@ -1,0 +1,2 @@
+# Vendored kuromoji dictionary files are gzipped binaries — never convert line endings.
+*.gz binary

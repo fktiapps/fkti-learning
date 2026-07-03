@@ -136,7 +136,7 @@
 
 </main>
 <div class="toast" id="toast">Saved! ✓</div>
-<script src="https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/build/kuromoji.js"></script>
+<script src="/vendor/kuromoji/build/kuromoji.js"></script>
 <script>
 const $=id=>document.getElementById(id);
 function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='learn')renderLearn();if(id==='build')renderBuild();if(id==='perform')renderPerform();if(id==='say'||id==='build'||id==='perform')loadTokenizer();}
@@ -337,7 +337,7 @@ function loadTokenizer(){
  tkPromise=new Promise(res=>{
   let done=false;const finish=v=>{if(done)return;done=true;res(v);};
   const to=setTimeout(()=>finish(null),30000); // don't hang forever on a slow dict download
-  try{kuromoji.builder({dicPath:'https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict/'}).build((e,tk)=>{clearTimeout(to);if(!e&&tk){tokenizer=tk;onTkReady();}finish(tokenizer);});}
+  try{kuromoji.builder({dicPath:'/vendor/kuromoji/dict/'}).build((e,tk)=>{clearTimeout(to);if(!e&&tk){tokenizer=tk;onTkReady();}finish(tokenizer);});}
   catch(_){clearTimeout(to);finish(null);}
  });
  return tkPromise;
