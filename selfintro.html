@@ -172,7 +172,10 @@ function kanaRomaji(s){
  }
  return o;
 }
-function readingOf(ja){if(!tokenizer)return '';try{return tokenizer.tokenize(ja).map(t=>kata2hira(t.reading&&t.reading!=='*'?t.reading:t.surface_form)).join('');}catch(_){return '';}}
+function hasKanji(s){return /[㐀-鿿豈-﫿々]/.test(s||'');}
+// Build a pure-kana reading. Crucial: when a token has NO reading, do NOT fall back to its
+// surface_form if that surface is kanji — that would leak kanji onto the ひらがな/Rōmaji tabs.
+function readingOf(ja){if(!tokenizer)return '';try{return tokenizer.tokenize(ja).map(t=>{if(t.reading&&t.reading!=='*')return kata2hira(t.reading);const sf=t.surface_form||'';return hasKanji(sf)?'':sf;}).join('');}catch(_){return '';}}
 
 // ---- fixed frame + pick-3 modules ----
 const HELLO={k:'今日は。',h:'こんにちは。',r:'Konnichiwa.',e:'Hello.'};
@@ -279,7 +282,14 @@ function renderPerform(){
  const has=(S.name)||(S.mods&&S.mods.length);
  if(!has){$('performBody').innerHTML='<div class="empty">No script yet.<br><br><button class="btn" data-go="build">✍️ Build your intro first</button></div>';$('performBody').querySelector('[data-go]').onclick=()=>go('build');return;}
  const L=lines();
- const modeVal=l=>perfMode==='k'?l.k:perfMode==='r'?(l.r||l.h):l.h;
+ // Self-heal display: MT-built lines can carry kanji in their h/r fields (or an empty r) if the
+ // furigana dictionary wasn't ready at build time. Recompute pure kana/romaji from the kanji line.
+ // Frame lines already have correct hand-authored h/r (no kanji) so they pass through untouched.
+ if(!tokenizer && L.some(l=>hasKanji(l.h||'')||hasKanji(l.r||'')||!(l.r||'').trim())) loadTokenizer().then(tk=>{if(tk)renderPerform();});
+ const kanaLine=l=>{const h=l.h||'';if(h&&!hasKanji(h))return h;const rd=readingOf(l.k||h);return (rd&&!hasKanji(rd))?rd:(h||l.k||'');};
+ const toRoma=k=>kanaRomaji(k).replace(/。/g,'.').replace(/、/g,', ').replace(/[　]/g,' ').replace(/\s+/g,' ').trim();
+ const romaLine=l=>{const r=l.r||'';if(r&&!hasKanji(r))return r;const rd=readingOf(l.k||l.h||'');if(rd&&!hasKanji(rd))return toRoma(rd);const h=kanaLine(l);return hasKanji(h)?'':toRoma(h);};
+ const modeVal=l=>perfMode==='k'?(l.k||kanaLine(l)):perfMode==='r'?romaLine(l):kanaLine(l);
  if(perfStep<0){
   $('performBody').innerHTML=
    '<div class="seg" id="perfSeg"><button data-m="h" class="'+(perfMode==='h'?'on':'')+'">ひらがな</button><button data-m="k" class="'+(perfMode==='k'?'on':'')+'">漢字</button><button data-m="r" class="'+(perfMode==='r'?'on':'')+'">Rōmaji</button></div>'+
@@ -298,7 +308,7 @@ function renderPerform(){
   const l=L[perfStep];
   $('performBody').innerHTML=
    '<div class="sm" style="text-align:center;color:var(--muted2)">Line '+(perfStep+1)+' / '+L.length+'</div>'+
-   '<div class="perform-card"><div class="big">'+(perfMode==='k'?l.k:l.h)+'</div>'+(l.r?'<div class="sm" style="font-style:italic;margin-top:8px">'+l.r+'</div>':'')+'<div class="sm" id="reveal" style="cursor:pointer;margin-top:6px">tap to reveal English</div></div>'+
+   '<div class="perform-card"><div class="big">'+(perfMode==='k'?(l.k||kanaLine(l)):perfMode==='r'?romaLine(l):kanaLine(l))+'</div>'+((perfMode!=='r'&&romaLine(l))?'<div class="sm" style="font-style:italic;margin-top:8px">'+romaLine(l)+'</div>':'')+'<div class="sm" id="reveal" style="cursor:pointer;margin-top:6px">tap to reveal English</div></div>'+
    '<button class="btn" id="sayLine">🔊 Say this line</button>'+
    '<div class="stepnav"><button class="ghost" id="prev">‹ Prev</button><button class="ghost" id="exit">Exit</button><button class="btn" style="width:auto;margin:0;padding:12px 22px" id="next">Next ›</button></div>';
   $('sayLine').onclick=()=>speak(l.h);
