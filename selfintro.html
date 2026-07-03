@@ -66,6 +66,17 @@
  .perform-card{background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:18px;padding:24px 18px;min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 8px 22px rgba(0,0,0,.28)}
  .perform-card .big{font-family:var(--display);font-size:24px;line-height:1.7;overflow-wrap:break-word;word-break:normal;max-width:100%}
  .perform-card .sm{font-size:13px;color:var(--muted);margin-top:12px}
+ .wtok{border-radius:5px;padding:0 1px;transition:background .12s,color .12s}
+ .wtok.spoken{background:var(--ver);color:#fff}
+ .rate-row{display:flex;align-items:center;gap:10px;justify-content:center;margin:12px auto 2px;max-width:340px;font-size:12px;color:var(--muted)}
+ .rate-row input[type=range]{flex:1;accent-color:var(--ver)}
+ .rate-val{font-weight:800;color:var(--ver);min-width:66px;text-align:right}
+ #playRows{width:100%;text-align:left}
+ .playrow{padding:9px 8px;border-radius:12px;transition:background .15s}
+ .playrow.active{background:#fbeee9}
+ .playrow .pja{font-family:var(--display);font-size:22px;line-height:1.6;overflow-wrap:break-word}
+ .playrow .pen{font-size:13px;color:var(--muted2);margin-top:2px}
+ .playrow.active .pen{color:var(--ver);font-weight:700}
  .stepnav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}
  .empty{text-align:center;color:var(--muted2);padding:30px 10px}
  .ja-out{background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:14px;padding:18px 16px;margin:10px 0;font-family:var(--display);font-size:24px;line-height:2.5}
@@ -143,7 +154,9 @@ function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle(
 $('back').onclick=()=>go('home');
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
 
-function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=0.85;const v=(speechSynthesis.getVoices()||[]).find(x=>(x.lang||'').toLowerCase().startsWith('ja'));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(_){}}
+function curRate(){const v=parseFloat(localStorage.getItem('fkti_si_rate'));return (v>=0.4&&v<=1.2)?v:0.85;}
+function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=curRate();const v=(speechSynthesis.getVoices()||[]).find(x=>(x.lang||'').toLowerCase().startsWith('ja'));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(_){}}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
 const KEY='fkti_selfintro';
 function load(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(_){return {};}}
@@ -284,9 +297,68 @@ $('genBtn').onclick=buildJa;
 $('pvSpeak').onclick=()=>speak(scriptText('h'));
 $('saveBtn').onclick=()=>{S.name=$('fName').value.trim();save(S);const t=$('toast');t.textContent='Saved! ✓';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400);};
 
+// ===== spoken playback with word highlighting =====
+let hlTimers=[], hlActive=false;
+function stopPlayback(){hlActive=false;hlTimers.forEach(clearTimeout);hlTimers=[];try{speechSynthesis.cancel();}catch(_){}}
+// Split a line into aligned word pieces {k(anji), h(iragana), r(omaji)} using the tokenizer.
+function lineTokens(l){
+ const src=l.k||l.h||'';
+ if(tokenizer){try{return tokenizer.tokenize(src).map(t=>{
+   const sf=t.surface_form||'';
+   const rd=(t.reading&&t.reading!=='*')?kata2hira(t.reading):'';
+   const pr=(t.pronunciation&&t.pronunciation!=='*')?kata2hira(t.pronunciation):rd;
+   const h=rd||(hasKanji(sf)?'':sf);
+   const r=pr?kanaRomaji(pr):(hasKanji(sf)?'':kanaRomaji(sf));
+   return {k:sf||h, h:h||sf, r:(r||'').replace(/[。、！？　]/g,'').trim()};
+ });}catch(_){}}
+ return [{k:l.k||l.h||'', h:l.h||l.k||'', r:l.r||''}];
+}
+function tokPiece(t,mode){return mode==='k'?(t.k||t.h):mode==='r'?(t.r||''):(t.h||'');}
+function renderTokenSpans(toks,mode){return toks.map((t,i)=>{const p=tokPiece(t,mode);return p?('<span class="wtok" data-i="'+i+'">'+esc(p)+'</span>'):'';}).filter(Boolean).join(mode==='r'?' ':'');}
+// Speak one line (its hiragana) and step the word highlight across `spans`. Timed by default
+// (ja voices rarely fire boundary events); if onboundary DOES fire, it takes over. onDone at speech end.
+function speakLineHL(l,spans,onDone){
+ const toks=lineTokens(l);
+ const w=toks.map(t=>Math.max(1,(t.h||'').length)), total=w.reduce((a,b)=>a+b,0)||1;
+ const morae=total, dur=Math.max(700, morae/(7.2*curRate())*1000);
+ const hi=i=>spans.forEach(s=>s.classList.toggle('spoken',(+s.dataset.i)===i));
+ let acc=0;const steps=[];
+ toks.forEach((t,i)=>{const id=setTimeout(()=>{if(hlActive)hi(i);},acc);steps.push(id);hlTimers.push(id);acc+=dur*w[i]/total;});
+ const spoken=l.h||l.k||'';
+ try{
+  const u=new SpeechSynthesisUtterance(spoken);u.lang='ja-JP';u.rate=curRate();
+  const v=(speechSynthesis.getVoices()||[]).find(x=>(x.lang||'').toLowerCase().startsWith('ja'));if(v)u.voice=v;
+  let took=false;
+  u.onboundary=e=>{if(!hlActive)return;if(!took){took=true;steps.forEach(clearTimeout);}let a=0,idx=toks.length-1;for(let i=0;i<toks.length;i++){a+=(toks[i].h||'').length;if(e.charIndex<a){idx=i;break;}}hi(idx);};
+  u.onend=u.onerror=()=>{steps.forEach(clearTimeout);spans.forEach(s=>s.classList.remove('spoken'));if(hlActive&&onDone)onDone();};
+  speechSynthesis.cancel();speechSynthesis.speak(u);
+ }catch(_){hlTimers.push(setTimeout(()=>{if(onDone)onDone();},acc+150));}
+}
+// Play the whole intro: step line by line, highlighting each line's English + its Japanese words.
+function playWholeIntro(){
+ const L=lines();stopPlayback();hlActive=true;
+ const rows=L.map((l,i)=>'<div class="playrow" data-li="'+i+'"><div class="pja">'+renderTokenSpans(lineTokens(l),perfMode)+'</div><div class="pen">'+esc(l.e||'')+'</div></div>').join('');
+ $('performBody').innerHTML='<div class="perform-card" style="align-items:stretch"><div id="playRows">'+rows+'</div></div>'+rateRow()+'<button class="btn" id="playStop">⏹ Stop</button>';
+ wireRate();
+ $('playStop').onclick=()=>{stopPlayback();renderPerform();};
+ const rowEls=[...$('performBody').querySelectorAll('.playrow')];let i=0;
+ (function next(){
+  if(!hlActive||i>=L.length){stopPlayback();renderPerform();return;}
+  rowEls.forEach((r,k)=>r.classList.toggle('active',k===i));
+  try{rowEls[i].scrollIntoView({block:'center',behavior:'smooth'});}catch(_){}
+  const spans=[...rowEls[i].querySelectorAll('.wtok')];
+  speakLineHL(L[i],spans,()=>{i++;hlTimers.push(setTimeout(next,320));});
+ })();
+}
+// Speed slider markup + wiring (shared by the script view, rehearse view, and play view).
+function rateRow(){const r=curRate();return '<div class="rate-row">🐢 <input type="range" id="rateSl" min="0.5" max="1.1" step="0.05" value="'+r+'"> 🐇 <span class="rate-val" id="rateVal">'+rateLabel(r)+'</span></div>';}
+function rateLabel(r){return r<=0.6?'Slowest':r<=0.75?'Slow':r<=0.9?'Normal':'Fast';}
+function wireRate(){const sl=$('rateSl');if(!sl)return;sl.oninput=e=>{const v=parseFloat(e.target.value);localStorage.setItem('fkti_si_rate',v);const lab=$('rateVal');if(lab)lab.textContent=rateLabel(v);};}
+
 // ===== Perform =====
 let perfMode='h',perfStep=-1;
 function renderPerform(){
+ stopPlayback();
  S=load();
  backfillReadings();
  const has=(S.name)||(S.mods&&S.mods.length);
@@ -308,11 +380,13 @@ function renderPerform(){
    '<div class="seg" id="perfSeg"><button data-m="h" class="'+(perfMode==='h'?'on':'')+'">ひらがな</button><button data-m="k" class="'+(perfMode==='k'?'on':'')+'">漢字</button><button data-m="r" class="'+(perfMode==='r'?'on':'')+'">Rōmaji</button></div>'+
    '<div class="perform-card"><div class="big">'+L.map(modeVal).join('<br>')+'</div></div>'+
    (pending?'<div class="sm" style="text-align:center;color:var(--muted2);margin:8px 0 0">Loading the reading dictionary — the ひらがな &amp; Rōmaji for your picked lines will fill in shortly…</div>':'')+
+   rateRow()+
    '<button class="btn" id="playAll">🔊 Play my whole intro</button>'+
    '<button class="btn alt" id="rehearse">🎬 Rehearse line by line</button>'+
    '<div style="text-align:center"><button class="ghost" data-go="build">✍️ Edit</button></div>';
+  wireRate();
   $('performBody').querySelectorAll('#perfSeg button').forEach(b=>b.onclick=()=>{perfMode=b.dataset.m;renderPerform();});
-  $('playAll').onclick=()=>speak(scriptText('h'));
+  $('playAll').onclick=()=>playWholeIntro();
   $('rehearse').onclick=()=>{perfStep=0;renderPerform();};
   $('performBody').querySelector('[data-go]').onclick=()=>go('build');
  }else if(perfStep>=L.length){
@@ -322,15 +396,18 @@ function renderPerform(){
   const l=L[perfStep];
   $('performBody').innerHTML=
    '<div class="sm" style="text-align:center;color:var(--muted2)">Line '+(perfStep+1)+' / '+L.length+'</div>'+
-   '<div class="perform-card"><div class="big">'+(perfMode==='k'?(l.k||kanaLine(l)):perfMode==='r'?romaLine(l):kanaLine(l))+'</div>'+((perfMode!=='r'&&romaLine(l))?'<div class="sm" style="font-style:italic;margin-top:8px">'+romaLine(l)+'</div>':'')+'<div class="sm" id="reveal" style="cursor:pointer;margin-top:6px">tap to reveal English</div></div>'+
+   '<div class="perform-card"><div class="big" id="perfBig">'+(perfMode==='k'?(l.k||kanaLine(l)):perfMode==='r'?romaLine(l):kanaLine(l))+'</div>'+((perfMode!=='r'&&romaLine(l))?'<div class="sm" style="font-style:italic;margin-top:8px">'+romaLine(l)+'</div>':'')+'<div class="sm" id="reveal" style="cursor:pointer;margin-top:6px">tap to reveal English</div></div>'+
+   rateRow()+
    '<button class="btn" id="sayLine">🔊 Say this line</button>'+
    '<div class="stepnav"><button class="ghost" id="prev">‹ Prev</button><button class="ghost" id="exit">Exit</button><button class="btn" style="width:auto;margin:0;padding:12px 22px" id="next">Next ›</button></div>';
-  $('sayLine').onclick=()=>speak(l.h);
+  wireRate();
+  const sayThis=()=>{stopPlayback();hlActive=true;const big=$('perfBig');if(!big)return;big.innerHTML=renderTokenSpans(lineTokens(l),perfMode);speakLineHL(l,[...big.querySelectorAll('.wtok')],()=>{hlActive=false;});};
+  $('sayLine').onclick=sayThis;
   $('reveal').onclick=e=>{e.currentTarget.textContent=l.e;e.currentTarget.style.color='var(--text)';};
   $('prev').onclick=()=>{if(perfStep>0)perfStep--;renderPerform();};
   $('next').onclick=()=>{perfStep++;renderPerform();};
   $('exit').onclick=()=>{perfStep=-1;renderPerform();};
-  speak(l.h);
+  sayThis();
  }
 }
 
