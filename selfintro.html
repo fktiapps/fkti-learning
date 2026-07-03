@@ -138,7 +138,7 @@
 <script src="https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/build/kuromoji.js"></script>
 <script>
 const $=id=>document.getElementById(id);
-function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='learn')renderLearn();if(id==='build')renderBuild();if(id==='perform')renderPerform();if(id==='say'||id==='build')loadTokenizer();}
+function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='learn')renderLearn();if(id==='build')renderBuild();if(id==='perform')renderPerform();if(id==='say'||id==='build'||id==='perform')loadTokenizer();}
 $('back').onclick=()=>go('home');
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
 
@@ -175,9 +175,10 @@ function kanaRomaji(s){
 function readingOf(ja){if(!tokenizer)return '';try{return tokenizer.tokenize(ja).map(t=>kata2hira(t.reading&&t.reading!=='*'?t.reading:t.surface_form)).join('');}catch(_){return '';}}
 
 // ---- fixed frame + pick-3 modules ----
+const HELLO={k:'今日は。',h:'こんにちは。',r:'Konnichiwa.',e:'Hello.'};
 const GREET={
- a:{k:'今日は。はじめまして、どうぞよろしく。',h:'こんにちは。はじめまして、どうぞよろしく。',r:'Konnichiwa. Hajimemashite, dōzo yoroshiku.',e:'Hello. How do you do — nice to meet you.'},
- b:{k:'今日は。よろしくお願いします。',h:'こんにちは。よろしくおねがいします。',r:'Konnichiwa. Yoroshiku onegaishimasu.',e:'Hello. Pleased to meet you.'}
+ a:{k:'はじめまして、どうぞよろしく。',h:'はじめまして、どうぞよろしく。',r:'Hajimemashite, dōzo yoroshiku.',e:'How do you do — nice to meet you.'},
+ b:{k:'よろしくお願いします。',h:'よろしくおねがいします。',r:'Yoroshiku onegaishimasu.',e:'Pleased to meet you.'}
 };
 function nameLine(nm){nm=nm||(S.name||'____');return {k:'私の名前は'+nm+'です。',h:'わたしのなまえは'+nm+'です。',r:'Watashi no namae wa '+nm+' desu.',e:'My name is '+nm+'.'};}
 function thankYou(){return {k:'ありがとうございます。',h:'ありがとうございます。',r:'Arigatō gozaimasu.',e:'Thank you very much.'};}
@@ -198,7 +199,7 @@ const MODULES=[
 ];
 
 function lines(){
- const out=[GREET[S.greet||'a'], nameLine()];
+ const out=[HELLO, nameLine(), GREET[S.greet||'a']];
  (S.mods||[]).forEach(id=>{
   if(S.tr&&S.tr[id]){out.push(S.tr[id]);return;}
   const m=MODULES.find(x=>x.id===id);
@@ -208,11 +209,14 @@ function lines(){
  return out;
 }
 function scriptText(mode){return lines().map(l=>l[mode]||l.h).join('');}
+// once the dictionary loads, compute hiragana + romaji for any translated line that was saved kanji-only
+function backfillReadings(){if(!tokenizer||!S.tr)return;let ch=false;for(const id in S.tr){const tr=S.tr[id];if(tr&&tr.k&&!tr.r){const rd=readingOf(tr.k);if(rd){tr.h=rd;tr.r=kanaRomaji(rd);ch=true;}}}if(ch)save(S);}
+function onTkReady(){backfillReadings();const cur=document.querySelector('.scr.on');if(!cur)return;if(cur.id==='build')syncBuild();else if(cur.id==='perform')renderPerform();}
 
 // ===== Learn =====
 function lineCard(l){return '<div class="line"><div class="k">'+l.k+'</div><div class="h">'+l.h+'</div><div class="r">'+l.r+'</div><div class="e">'+l.e+'</div><button class="spk" data-say="'+l.h.replace(/"/g,'')+'">🔊 say it</button></div>';}
 function renderLearn(){
- const fr=[GREET.a,GREET.b,nameLine('____'),thankYou()];
+ const fr=[HELLO,nameLine('____'),GREET.a,GREET.b,thankYou()];
  let html='<div style="font-size:12px;font-weight:800;color:var(--ver);margin:4px 2px">THE FRAME — everyone says this</div>';
  html+=fr.map(lineCard).join('');
  html+='<div style="font-size:12px;font-weight:800;color:var(--ver);margin:16px 2px 4px">PICK 3 — write your answer in English, we translate</div>';
@@ -239,8 +243,10 @@ function renderModInputs(){
 }
 function syncBuild(){
  S.name=$('fName').value.trim();
+ backfillReadings();
  const L=lines();
- $('pvBox').innerHTML=L.map(l=>'<div style="margin-bottom:12px"><div class="pk">'+l.h+'</div>'+(l.r?'<div class="pr">'+l.r+'</div>':'')+'<div class="pe">'+l.e+'</div></div>').join('');
+ const pending=!tokenizer&&(S.mods||[]).some(id=>S.tr&&S.tr[id]&&!S.tr[id].r);
+ $('pvBox').innerHTML=L.map(l=>'<div style="margin-bottom:12px"><div class="pk">'+l.h+'</div>'+(l.r?'<div class="pr">'+l.r+'</div>':'')+'<div class="pe">'+l.e+'</div></div>').join('')+(pending?'<div style="font-size:11px;color:var(--muted2);margin-top:2px">Hiragana &amp; romaji for your picked lines fill in once the dictionary finishes loading.</div>':'');
 }
 async function buildJa(){
  const btn=$('genBtn'),orig=btn.textContent;btn.disabled=true;btn.textContent=tokenizer?'Translating…':'Loading dictionary…';
@@ -269,6 +275,7 @@ $('saveBtn').onclick=()=>{S.name=$('fName').value.trim();save(S);const t=$('toas
 let perfMode='h',perfStep=-1;
 function renderPerform(){
  S=load();
+ backfillReadings();
  const has=(S.name)||(S.mods&&S.mods.length);
  if(!has){$('performBody').innerHTML='<div class="empty">No script yet.<br><br><button class="btn" data-go="build">✍️ Build your intro first</button></div>';$('performBody').querySelector('[data-go]').onclick=()=>go('build');return;}
  const L=lines();
@@ -314,7 +321,7 @@ function loadTokenizer(){
  tkPromise=new Promise(res=>{
   let done=false;const finish=v=>{if(done)return;done=true;res(v);};
   const to=setTimeout(()=>finish(null),30000); // don't hang forever on a slow dict download
-  try{kuromoji.builder({dicPath:'https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict/'}).build((e,tk)=>{clearTimeout(to);if(!e&&tk)tokenizer=tk;finish(tokenizer);});}
+  try{kuromoji.builder({dicPath:'https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict/'}).build((e,tk)=>{clearTimeout(to);if(!e&&tk){tokenizer=tk;onTkReady();}finish(tokenizer);});}
   catch(_){clearTimeout(to);finish(null);}
  });
  return tkPromise;
