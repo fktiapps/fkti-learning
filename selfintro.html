@@ -213,8 +213,9 @@ function lines(){
  return out;
 }
 function scriptText(mode){return lines().map(l=>l[mode]||l.h).join('');}
-// once the dictionary loads, compute hiragana + romaji for any translated line that was saved kanji-only
-function backfillReadings(){if(!tokenizer||!S.tr)return;let ch=false;for(const id in S.tr){const tr=S.tr[id];if(tr&&tr.k&&!tr.r){const rd=readingOf(tr.k);if(rd){tr.h=rd;tr.r=kanaRomaji(rd);ch=true;}}}if(ch)save(S);}
+// Once the dictionary loads, (re)compute hiragana + romaji for any translated line whose
+// saved reading is missing OR still contains kanji (old data, or built before the dict loaded).
+function backfillReadings(){if(!tokenizer||!S.tr)return;let ch=false;for(const id in S.tr){const tr=S.tr[id];if(!tr||!tr.k)continue;if(!tr.h||!tr.r||hasKanji(tr.h)||hasKanji(tr.r)){const rd=readingOf(tr.k);if(rd&&!hasKanji(rd)){tr.h=rd;tr.r=kanaRomaji(rd);ch=true;}}}if(ch)save(S);}
 function onTkReady(){backfillReadings();const cur=document.querySelector('.scr.on');if(!cur)return;if(cur.id==='build')syncBuild();else if(cur.id==='perform')renderPerform();}
 
 // ===== Learn =====
@@ -286,15 +287,19 @@ function renderPerform(){
  // Self-heal display: MT-built lines can carry kanji in their h/r fields (or an empty r) if the
  // furigana dictionary wasn't ready at build time. Recompute pure kana/romaji from the kanji line.
  // Frame lines already have correct hand-authored h/r (no kanji) so they pass through untouched.
- if(!tokenizer && L.some(l=>hasKanji(l.h||'')||hasKanji(l.r||'')||!(l.r||'').trim())) loadTokenizer().then(tk=>{if(tk)renderPerform();});
- const kanaLine=l=>{const h=l.h||'';if(h&&!hasKanji(h))return h;const rd=readingOf(l.k||h);return (rd&&!hasKanji(rd))?rd:(h||l.k||'');};
+ const pending=!tokenizer && L.some(l=>hasKanji(l.h||'')||hasKanji(l.r||'')||!(l.r||'').trim());
+ if(pending) loadTokenizer().then(tk=>{if(tk)renderPerform();});
+ // While the dictionary is still loading, show '…' for the picked lines rather than leaking
+ // kanji onto ひらがな or leaving Rōmaji blank; they fill in when the dict finishes.
+ const kanaLine=l=>{const h=l.h||'';if(h&&!hasKanji(h))return h;const rd=readingOf(l.k||h);if(rd&&!hasKanji(rd))return rd;return pending?'…':(h||l.k||'');};
  const toRoma=k=>kanaRomaji(k).replace(/。/g,'.').replace(/、/g,', ').replace(/[　]/g,' ').replace(/\s+/g,' ').trim();
- const romaLine=l=>{const r=l.r||'';if(r&&!hasKanji(r))return r;const rd=readingOf(l.k||l.h||'');if(rd&&!hasKanji(rd))return toRoma(rd);const h=kanaLine(l);return hasKanji(h)?'':toRoma(h);};
+ const romaLine=l=>{const r=l.r||'';if(r&&!hasKanji(r))return r;const rd=readingOf(l.k||l.h||'');if(rd&&!hasKanji(rd))return toRoma(rd);const h=kanaLine(l);if(h&&h!=='…'&&!hasKanji(h))return toRoma(h);return pending?'…':'';};
  const modeVal=l=>perfMode==='k'?(l.k||kanaLine(l)):perfMode==='r'?romaLine(l):kanaLine(l);
  if(perfStep<0){
   $('performBody').innerHTML=
    '<div class="seg" id="perfSeg"><button data-m="h" class="'+(perfMode==='h'?'on':'')+'">ひらがな</button><button data-m="k" class="'+(perfMode==='k'?'on':'')+'">漢字</button><button data-m="r" class="'+(perfMode==='r'?'on':'')+'">Rōmaji</button></div>'+
    '<div class="perform-card"><div class="big">'+L.map(modeVal).join('<br>')+'</div></div>'+
+   (pending?'<div class="sm" style="text-align:center;color:var(--muted2);margin:8px 0 0">Loading the reading dictionary — the ひらがな &amp; Rōmaji for your picked lines will fill in shortly…</div>':'')+
    '<button class="btn" id="playAll">🔊 Play my whole intro</button>'+
    '<button class="btn alt" id="rehearse">🎬 Rehearse line by line</button>'+
    '<div style="text-align:center"><button class="ghost" data-go="build">✍️ Edit</button></div>';
