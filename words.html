@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="theme-color" content="#13182B"/>
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png"/>
+<title>Deeply Connected Learning — Vocabulary</title>
+<style>
+ :root{
+  --ink:#13182B;--ink2:#1E2540;--line:#313a5e;
+  --paper:#F7F4EC;--paper2:#FFFFFF;--text:#1B2233;--muted:#7A819A;--muted2:#9AA0B6;
+  --ver:#E2553B;--know:#2E7D32;
+  --display:"Hiragino Mincho ProN","Yu Mincho",Georgia,"Times New Roman",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+ }
+ *{box-sizing:border-box}
+ body{margin:0;background:var(--ink);color:#EDEFF8;font:16px/1.55 var(--sans);-webkit-tap-highlight-color:transparent}
+ header{background:var(--ink);padding:calc(env(safe-area-inset-top) + 10px) 14px 10px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line)}
+ #back{background:var(--ink2);border:1px solid var(--line);color:#cfd4ea;font-size:15px;font-weight:800;border-radius:9px;padding:5px 11px;cursor:pointer;visibility:hidden}
+ .brand-badge{width:30px;height:30px;border-radius:8px;object-fit:cover;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.28);flex:0 0 auto}
+ .brand{font-family:var(--display);font-size:14px;line-height:1.12;white-space:nowrap}
+ .brand b{color:var(--ver);font-weight:600}
+ .brand-jp{font-size:9px;color:var(--muted2);letter-spacing:2.5px;margin-top:1px}
+ main{max-width:600px;margin:0 auto;padding:14px}
+ .scr{display:none}.scr.on{display:block}
+ .title-jp{font-family:var(--display);font-size:22px;text-align:center;margin:6px 0 0}
+ .title-jp b{color:var(--ver)}
+ .lead{font-size:13px;color:var(--muted2);text-align:center;margin:6px 0 14px}
+ .tile{display:flex;align-items:center;gap:14px;background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:16px;padding:15px;margin:10px 0;cursor:pointer;transition:transform .08s;width:100%;text-align:left}
+ .tile:active{transform:scale(.985)}
+ .tile .ic{font-size:26px;width:42px;text-align:center}
+ .tile h2{margin:0;font-size:16px}.tile p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+ .tile .cnt{margin-left:auto;font-size:11px;font-weight:800;color:var(--ver);background:#f6e0d9;border-radius:999px;padding:3px 9px}
+ .meta{display:flex;justify-content:space-between;align-items:center;margin:2px 2px 10px}
+ .meta .nm{font-weight:800;color:var(--ver);font-size:15px}
+ .meta .pr{font-size:12px;color:var(--muted2)}
+ .card{background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:18px;padding:26px 18px;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 8px 22px rgba(0,0,0,.28);cursor:pointer}
+ .card .jp{font-family:var(--display);font-size:40px;line-height:1.35;color:var(--text)}
+ .card .jp.small{font-size:28px}
+ .card .kanji{font-family:var(--display);font-size:16px;color:var(--muted);margin-top:8px}
+ .card .en{font-size:22px;font-weight:700;color:var(--text)}
+ .card .rom{font-size:14px;color:var(--muted);font-style:italic;margin-top:8px}
+ .card .note{font-size:13px;color:var(--muted2);margin-top:10px;max-width:360px;line-height:1.45}
+ .hint{font-size:12px;color:var(--muted);margin-top:14px}
+ .ctrls{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+ .btn{background:var(--paper2);border:1px solid #e3d9c6;color:var(--text);border-radius:999px;padding:9px 16px;font-size:14px;font-weight:700;cursor:pointer}
+ .btn.ver{background:var(--ver);color:#fff;border-color:var(--ver)}
+ .btn.wide{width:auto;padding:11px 22px}
+ .subctrls{display:flex;gap:8px;justify-content:center;margin-top:14px}
+ .ghost{background:var(--ink2);border:1px solid var(--line);color:#cfd4ea;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer}
+ .list{margin-top:6px}
+ .lrow{display:flex;align-items:baseline;gap:10px;background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:10px;padding:10px 12px;margin:6px 0;cursor:pointer}
+ .lrow .lj{font-family:var(--display);font-size:19px;min-width:96px}
+ .lrow .lr{font-size:12px;color:var(--muted);font-style:italic;min-width:74px}
+ .lrow .le{font-size:13.5px;color:var(--text);margin-left:auto;text-align:right}
+</style>
+</head>
+<body>
+<header>
+ <button id="back">‹</button>
+ <img class="brand-badge" src="icons/icon-192.png" alt="FKTI logo"/>
+ <div><div class="brand">Deeply Connected <b>Learning</b></div><div class="brand-jp">深い関係学び</div></div>
+</header>
+<main>
+ <section class="scr on" id="home">
+  <div class="title-jp">はじめの<b>ことば</b></div>
+  <div class="lead">First words &amp; phrases · tap a set to practice</div>
+  <div id="setList"></div>
+ </section>
+
+ <section class="scr" id="set">
+  <div class="meta"><span class="nm" id="setNm"></span><span class="pr" id="setPr"></span></div>
+  <div id="setBody"></div>
+ </section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+// ---- vocab, grouped into sensible card sets ----
+const SETS=[
+ {id:'greet',icon:'👋',name:'Greetings & farewells',desc:'Hello, good night, see ya',cards:[
+  {j:'おはようございます',r:'ohayō gozaimasu',e:'Good morning'},
+  {j:'こんにちは',r:'konnichiwa',e:'Good day / hello'},
+  {j:'こんばんは',r:'konbanwa',e:'Good evening'},
+  {j:'おやすみなさい',r:'oyasuminasai',e:'Good night'},
+  {j:'じゃあ また',r:'jā mata',e:'See ya! (Well, later!)'},
+  {j:'さよなら',r:'sayonara',e:'Good-bye'},
+  {j:'はじめまして、どうぞよろしく',r:'hajimemashite, dōzo yoroshiku',e:'Nice to meet you',n:'Said when you meet someone for the first time.'},
+ ]},
+ {id:'polite',icon:'🙏',name:'Yes, no & courtesy',desc:'Please, thanks, sorry',cards:[
+  {j:'はい',r:'hai',e:'Yes'},
+  {j:'いいえ',r:'iie',e:'No'},
+  {j:'だめ',r:'dame',e:'No! / Forbidden / Wrong!'},
+  {j:'ごめんなさい',r:'gomen nasai',e:'(I’m) sorry'},
+  {j:'すみません',r:'sumimasen',e:'Excuse me',n:'Also “sorry,” or to get someone’s attention.'},
+  {j:'どうも',r:'dōmo',e:'Thanks (casual)'},
+  {j:'どうぞ',r:'dōzo',e:'Please / go ahead',n:'When offering something.'},
+  {j:'ありがとうございます',r:'arigatō gozaimasu',e:'Thank you very much'},
+  {j:'がんばって',r:'ganbatte',e:'Do your best! / Fight hard!'},
+ ]},
+ {id:'intro',icon:'🙂',name:'Introducing yourself',desc:'Me, you, name — and the key sentence',cards:[
+  {j:'わたし',r:'watashi',e:'I / me'},
+  {j:'わたしの',r:'watashi no',e:'my'},
+  {j:'あなた',r:'anata',e:'you'},
+  {j:'あなたの',r:'anata no',e:'your'},
+  {j:'なまえ',r:'namae',e:'name'},
+  {j:'です',r:'desu',e:'to be (is / am / are)'},
+  {j:'は',r:'wa',e:'topic particle',say:'わ',n:'Marks the topic of the sentence. Written は but said “wa.”'},
+  {j:'か',r:'ka',e:'question particle',n:'Add it to the end of a sentence to make a question.'},
+  {j:'あなたのなまえはなんですか。',r:'anata no namae wa nan desu ka?',e:'What is your name?'},
+  {j:'わたしのなまえは＿＿です。',r:'watashi no namae wa ＿＿ desu',e:'My name is ＿＿.',say:'わたしのなまえは○○です',n:'Fill the blank with your own name.'},
+ ]},
+ {id:'questions',icon:'❓',name:'Question words',desc:'Who, what, why, when',cards:[
+  {j:'なに・なん',r:'nani / nan',e:'what',say:'なに',n:'なん before です／か; otherwise なに.'},
+  {j:'だれ',r:'dare',e:'who'},
+  {j:'なぜ',r:'naze',e:'why'},
+  {j:'いつ',r:'itsu',e:'when'},
+ ]},
+ {id:'point1',icon:'👉',name:'Pointing: things & places',desc:'これ・それ・あれ · ここ・そこ・あそこ',cards:[
+  {j:'これ',r:'kore',e:'this (near me)'},
+  {j:'それ',r:'sore',e:'that (near you)'},
+  {j:'あれ',r:'are',e:'that over there'},
+  {j:'どれ',r:'dore',e:'which one?'},
+  {j:'ここ',r:'koko',e:'here'},
+  {j:'そこ',r:'soko',e:'there'},
+  {j:'あそこ',r:'asoko',e:'over there'},
+  {j:'どこ',r:'doko',e:'where?'},
+ ]},
+ {id:'point2',icon:'📎',name:'Pointing: with a noun & kinds',desc:'この・その・あの · こんな・そんな',cards:[
+  {j:'この',r:'kono',e:'this ___'},
+  {j:'その',r:'sono',e:'that ___'},
+  {j:'あの',r:'ano',e:'that ___ over there'},
+  {j:'どの',r:'dono',e:'which ___?'},
+  {j:'こんな',r:'konna',e:'this kind of'},
+  {j:'そんな',r:'sonna',e:'that kind of'},
+  {j:'あんな',r:'anna',e:'that kind of (over there)'},
+  {j:'どんな',r:'donna',e:'what kind of?'},
+ ]},
+ {id:'people',icon:'👥',name:'People & things',desc:'Woman, man, object, idea',cards:[
+  {j:'おんな',k:'女',r:'onna',e:'woman'},
+  {j:'おとこ',k:'男',r:'otoko',e:'man'},
+  {j:'もの',r:'mono',e:'thing (an object)'},
+  {j:'こと',r:'koto',e:'thing (an idea / matter)'},
+ ]},
+ {id:'toilet',icon:'🚻',name:'Toilet — three ways',desc:'From everyday to blunt',cards:[
+  {j:'トイレ',r:'toire',e:'toilet',n:'The everyday word (from English).'},
+  {j:'おてあらい',k:'お手洗い',r:'otearai',e:'restroom',n:'Polite — literally “honorable hand-wash.”'},
+  {j:'べんじょ',k:'便所',r:'benjo',e:'toilet',n:'Blunt / old-fashioned — literally “useful place.”'},
+ ]},
+];
+
+let CUR=null,order=[],idx=0,flipped=false,view='card';
+let soundOn=(localStorage.getItem('fkti_words_sound')!=='0');
+
+function speak(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=0.85;const v=(speechSynthesis.getVoices()||[]).find(x=>(x.lang||'').toLowerCase().startsWith('ja'));if(v)u.voice=v;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(_){}}
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='home')renderHome();}
+$('back').onclick=()=>go('home');
+
+function renderHome(){
+ $('setList').innerHTML=SETS.map(s=>'<button class="tile" data-set="'+s.id+'"><div class="ic">'+s.icon+'</div><div><h2>'+s.name+'</h2><p>'+s.desc+'</p></div><span class="cnt">'+s.cards.length+'</span></button>').join('');
+ $('setList').querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>openSet(b.dataset.set));
+}
+function openSet(id){CUR=SETS.find(s=>s.id===id);if(!CUR)return;order=CUR.cards.map((_,i)=>i);idx=0;flipped=false;view='card';$('setNm').textContent=CUR.icon+' '+CUR.name;go('set');renderSet();}
+
+function card(){return CUR.cards[order[idx]];}
+function renderSet(){
+ if(view==='list'){renderList();return;}
+ const c=card();
+ $('setPr').textContent=(idx+1)+' / '+order.length;
+ const face = !flipped
+  ? '<div class="jp'+(c.j.length>8?' small':'')+'">'+c.j+'</div>'+(c.k?'<div class="kanji">'+c.k+'</div>':'')+'<div class="hint">tap to flip</div>'
+  : '<div class="en">'+c.e+'</div><div class="rom">'+c.r+'</div>'+(c.n?'<div class="note">'+c.n+'</div>':'')+'<div class="hint">tap to flip back</div>';
+ $('setBody').innerHTML=
+  '<div class="card" id="wcard">'+face+'</div>'+
+  '<div class="ctrls"><button class="btn" id="wsay">'+(soundOn?'🔊 Say it':'🔇 Muted')+'</button></div>'+
+  '<div class="subctrls"><button class="ghost" id="wprev">‹ Prev</button><button class="btn ver wide" id="wnext">Next ›</button></div>'+
+  '<div class="subctrls" style="margin-top:10px"><button class="ghost" id="wshuf">🔀 Shuffle</button><button class="ghost" id="wlist">📋 List view</button></div>';
+ $('wcard').onclick=()=>{flipped=!flipped;renderSet();};
+ $('wsay').onclick=e=>{e.stopPropagation();if(!soundOn){soundOn=true;localStorage.setItem('fkti_words_sound','1');}speak(c.say||c.j);renderKeepSound();};
+ $('wprev').onclick=()=>{if(idx>0){idx--;flipped=false;renderSet();}};
+ $('wnext').onclick=()=>{idx=(idx+1)%order.length;flipped=false;renderSet();};
+ $('wshuf').onclick=()=>{order=shuf(order);idx=0;flipped=false;renderSet();};
+ $('wlist').onclick=()=>{view='list';renderSet();};
+ if(soundOn)speak(c.say||c.j);
+}
+// re-render the say button label without re-speaking (used after unmuting)
+function renderKeepSound(){$('wsay').textContent=soundOn?'🔊 Say it':'🔇 Muted';}
+
+function renderList(){
+ $('setPr').textContent=CUR.cards.length+' words';
+ $('setBody').innerHTML='<div class="list">'+CUR.cards.map((c,i)=>'<div class="lrow" data-i="'+i+'"><span class="lj">'+c.j+(c.k?' <span style="color:var(--muted2);font-size:13px">'+c.k+'</span>':'')+'</span><span class="lr">'+c.r+'</span><span class="le">'+c.e+'</span></div>').join('')+'</div>'+
+  '<div class="subctrls" style="margin-top:12px"><button class="btn ver wide" id="wcards">🎴 Back to cards</button></div>';
+ $('setBody').querySelectorAll('.lrow').forEach(row=>{const c=CUR.cards[+row.dataset.i];row.onclick=()=>speak(c.say||c.j);});
+ $('wcards').onclick=()=>{view='card';idx=0;flipped=false;renderSet();};
+}
+
+if(window.speechSynthesis)speechSynthesis.onvoiceschanged=()=>{};
+renderHome();
+</script>
+</body>
+</html>
