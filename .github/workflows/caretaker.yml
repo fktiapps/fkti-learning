@@ -5,8 +5,13 @@
 name: FKTI Caretaker
 
 on:
-  schedule:
-    - cron: "20 19 * * *"   # daily ~04:20 JST (19:20 UTC) — one beat
+  # ⏸ PAUSED until August 2026 (Greg's call — it was emailing failures pre-launch).
+  # The daily schedule is disabled so nothing auto-runs. To resume in August:
+  #   1. uncomment the `schedule` block below,
+  #   2. re-enable the workflow (Actions tab → FKTI Caretaker → Enable, or `gh workflow enable`),
+  #   3. set the ANTHROPIC_API_KEY secret + a spend cap, and re-check the beat step's CLI flags.
+  # schedule:
+  #   - cron: "20 19 * * *"   # daily ~04:20 JST (19:20 UTC) — one beat
   workflow_dispatch: {}       # manual "run a beat now" button in the Actions tab
 
 permissions:
