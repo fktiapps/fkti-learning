@@ -235,3 +235,24 @@ ${blocks}
 
 fs.writeFileSync(path.join(__dirname, '..', 'mnem-gallery.html'), html);
 console.log('Wrote mnem-gallery.html');
+
+// ---- also emit a data file kana.html can render directly (static + motion per kana) ----
+// Ready-to-inject inner SVG markup so the trainer needs no strokes.json / no per-kana logic.
+const mnem = {};
+for (const r of ORDER) {
+  const d = D[r], s = strokes[r];
+  const hasArt = d.artBack || d.artFront;
+  const sPaths0 = s.strokes.map(p => `<path class="sstroke" d="${p}"/>`).join('');
+  const sPaths = d.sShift ? `<g transform="translate(${d.sShift},0)">${sPaths0}</g>` : sPaths0;
+  const back = hasArt ? (d.artBack || '')
+    : `<text class="mnem-emoji" x="54" y="74" text-anchor="middle" font-size="58" opacity="0.92">${d.e}</text>`;
+  const mPaths = s.strokes.map((p, k) => `<path class="mstroke" data-i="${k}" pathLength="1" d="${p}"/>`).join('');
+  mnem[r] = {
+    kana: s.kana, k: d.k, h: d.h,
+    static: back + sPaths + (d.artFront || ''),
+    motion: mPaths + (d.mFront || ''),
+    beats: normBeats(d.b)
+  };
+}
+fs.writeFileSync(path.join(__dirname, '..', 'data', 'mnem_hira.json'), JSON.stringify(mnem));
+console.log('Wrote data/mnem_hira.json (' + Object.keys(mnem).length + ' kana)');

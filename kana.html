@@ -40,6 +40,22 @@
  .kana{font-size:118px;line-height:1;font-weight:600;color:var(--text)}.flip-hint{font-size:12px;color:var(--muted);margin-top:16px}
  .romaji{font-size:38px;font-weight:800;color:var(--ver)}.mnem{font-size:14px;margin-top:10px;max-width:380px;line-height:1.5;color:var(--text)}
  .mnem-img{max-width:170px;max-height:140px;margin-top:12px;border-radius:10px;border:1px solid #e3d9c6}
+ /* FKTI original mnemonics (hiragana): static hook + motion "say & draw" */
+ .mnem-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:320px;margin:12px auto 0}
+ .mmini{background:var(--paper2);color:var(--text);border:1px solid #e3d9c6;border-radius:12px;padding:8px 6px 9px;text-align:center}
+ .msty{font-family:var(--sans);font-size:9px;letter-spacing:.12em;color:var(--ver);font-weight:800;margin-bottom:2px}
+ .mart{width:100%;max-width:128px;aspect-ratio:1/1;display:block;margin:0 auto}
+ .motionwrap .mart{cursor:pointer}
+ .sstroke{fill:none;stroke:var(--ink);stroke-width:5.4;stroke-linecap:round;stroke-linejoin:round}
+ .mstroke{fill:none;stroke:var(--ink);stroke-width:5.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 2;stroke-dashoffset:1;transition:stroke-dashoffset .6s linear,stroke .25s}
+ .mstroke.active{stroke:var(--ver)}
+ .blink{animation:mnemblink 1.1s steps(1,end) infinite}
+ @keyframes mnemblink{0%,49%{opacity:1}50%,100%{opacity:0}}
+ .chant{display:flex;flex-wrap:wrap;justify-content:center;gap:3px;margin-top:5px;font-family:var(--sans)}
+ .beat{font-size:10px;padding:2px 6px;border-radius:999px;background:#ece5d8;color:var(--muted);transition:all .2s}
+ .beat.on{background:var(--ver);color:#fff;transform:scale(1.06)}
+ .mnem-key{font-size:14px;font-weight:800;color:var(--text);margin:8px 0 1px}
+ .mnem-hook{font-size:11.5px;color:var(--muted);line-height:1.35;font-family:var(--sans);max-width:320px;margin:0 auto}
  .card-btns{margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
  .speak{background:var(--paper2);border:1px solid #e3d9c6;color:var(--text);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer}
  .rate{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
@@ -191,6 +207,46 @@ const DATA={
  ],
 };
 let ASSETS=null;fetch('data/kana_assets.json').then(r=>r.json()).then(j=>ASSETS=j).catch(()=>{});
+// FKTI original hiragana mnemonics (static hook + motion "say & draw"). Kata falls back to ASSETS images.
+let MNEM=null;fetch('data/mnem_hira.json').then(r=>r.json()).then(j=>MNEM=j).catch(()=>{});
+function mesc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function mescAttr(s){return mesc(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+// Build the mnemonic block body for a card. Hiragana → FKTI static+motion; else the ASSETS image (kata).
+function mnemBody(rom){
+ const m=(script==='hira'&&MNEM)?MNEM[rom]:null;
+ if(m){
+  return '<div class="mnem-pair">'
+   +'<div class="mmini"><div class="msty">DRAW IT IN</div><svg class="mart" viewBox="0 0 109 109">'+m.static+'</svg></div>'
+   +'<div class="mmini motionwrap" data-beats="'+mescAttr(JSON.stringify(m.beats))+'"><div class="msty">SAY &amp; DRAW · tap</div><svg class="mart mn" viewBox="0 0 109 109">'+m.motion+'</svg><div class="chant">'+m.beats.map(b=>'<span class="beat">'+mesc(b.text)+'</span>').join('')+'</div></div>'
+   +'</div><div class="mnem-key">'+mesc(m.k)+'</div><div class="mnem-hook">'+mesc(m.h)+'</div>';
+ }
+ const img=ASSETS&&ASSETS.mnem&&ASSETS.mnem[script]&&ASSETS.mnem[script][rom];
+ return img?'<img class="mnem-img" src="'+img+'" alt="mnemonic"/>':'';
+}
+// Motion player — one global timer; auto-stops when its svg leaves the DOM (card changed).
+let _mnemTimer=null;
+function stopMnem(){if(_mnemTimer){clearTimeout(_mnemTimer);_mnemTimer=null;}}
+function playMnem(svg){
+ stopMnem();
+ const wrap=svg.closest('.motionwrap');if(!wrap)return;
+ const strokes=[...svg.querySelectorAll('.mstroke')],chips=[...wrap.querySelectorAll('.beat')];
+ let beats;try{beats=JSON.parse(wrap.dataset.beats||'[]');}catch(_){return;}
+ let i=0;
+ const vanish=()=>{strokes.forEach(s=>{s.style.transition='none';s.style.strokeDashoffset='1';s.classList.remove('active');});chips.forEach(c=>c.classList.remove('on'));};
+ function step(){
+  if(!document.contains(svg)){stopMnem();return;}
+  const be=beats[i];strokes.forEach(s=>s.classList.remove('active'));
+  const st=strokes[be.stroke-1];if(st){st.style.strokeDashoffset=String(be.to);st.classList.add('active');}
+  chips.forEach((c,k)=>c.classList.toggle('on',k===i));i++;
+  if(i>=beats.length){i=0;_mnemTimer=setTimeout(()=>{vanish();_mnemTimer=setTimeout(draw,500);},2600);}
+  else _mnemTimer=setTimeout(step,820);
+ }
+ function draw(){if(!document.contains(svg)){stopMnem();return;}strokes.forEach(s=>{s.style.transition='';});i=0;step();}
+ wrap.onclick=e=>{e.stopPropagation();stopMnem();vanish();_mnemTimer=setTimeout(draw,200);};
+ vanish();draw();
+}
+// Reveal/hide the mnemonic block and (re)start motion when shown.
+function toggleMnem(blockId,btn){const m=$(blockId);m.classList.toggle('hidden');const shown=!m.classList.contains('hidden');btn.textContent=shown?'🖼 hide':'🖼 mnemonic';const mn=m.querySelector('.mn');if(shown&&mn)playMnem(mn);else stopMnem();}
 
 const RATE_VAL={know:3,kinda:2,dont:1,clue:0};
 let script='hira',cur=null,flipped=false,lastKey=null,seqPtr=0;
@@ -238,12 +294,12 @@ function showCard(){
  if(!cur)cur=pick();
  if(!flipped){$('card').innerHTML='<div class="kana">'+cur.k+'</div><div class="flip-hint">tap to flip</div>';$('rateRow').classList.add('hidden');}
  else{
-  const img=ASSETS&&ASSETS.mnem&&ASSETS.mnem[script]&&ASSETS.mnem[script][cur.r];
+  stopMnem();
   $('card').innerHTML='<div class="romaji">'+cur.r+'</div>'+
    '<div class="card-btns"><button class="speak" id="soundBtn">'+(soundOn?'🔊 Sound on':'🔇 Muted')+'</button><button class="speak" id="picBtn">🖼 mnemonic</button></div>'+
-   '<div id="mnemBlock" class="hidden">'+(img?'<img class="mnem-img" src="'+img+'" alt="mnemonic"/>':'')+'<div class="mnem">'+cur.m+'</div></div>';
+   '<div id="mnemBlock" class="hidden">'+mnemBody(cur.r)+'<div class="mnem">'+cur.m+'</div></div>';
   $('soundBtn').onclick=e=>{e.stopPropagation();setSound(!soundOn);e.currentTarget.textContent=soundOn?'🔊 Sound on':'🔇 Muted';if(soundOn)speak(cur.k);};
-  $('picBtn').onclick=e=>{e.stopPropagation();const m=$('mnemBlock');m.classList.toggle('hidden');e.currentTarget.textContent=m.classList.contains('hidden')?'🖼 mnemonic':'🖼 hide';};
+  $('picBtn').onclick=e=>{e.stopPropagation();toggleMnem('mnemBlock',e.currentTarget);};
   if(soundOn)speak(cur.k);
   $('rateRow').classList.remove('hidden');
  }
@@ -420,12 +476,12 @@ function deckShow(){
  if(!deckCur)deckCur=deckQ[deckP];$('deckProg').textContent=(deckP+1)+' / '+deckQ.length;
  if(!deckFlip){$('deckCard').innerHTML='<div class="kana">'+deckCur.k+'</div><div class="flip-hint">tap to flip</div>';$('deckRate').classList.add('hidden');}
  else{
-  const img=ASSETS&&ASSETS.mnem&&ASSETS.mnem[script]&&ASSETS.mnem[script][deckCur.r];
+  stopMnem();
   $('deckCard').innerHTML='<div class="romaji">'+deckCur.r+'</div>'+
    '<div class="card-btns"><button class="speak" id="dsound">'+(soundOn?'🔊 Sound on':'🔇 Muted')+'</button><button class="speak" id="dpic">🖼 mnemonic</button></div>'+
-   '<div id="dmnem" class="hidden">'+(img?'<img class="mnem-img" src="'+img+'" alt="mnemonic"/>':'')+'<div class="mnem">'+deckCur.m+'</div></div>';
+   '<div id="dmnem" class="hidden">'+mnemBody(deckCur.r)+'<div class="mnem">'+deckCur.m+'</div></div>';
   $('dsound').onclick=e=>{e.stopPropagation();setSound(!soundOn);e.currentTarget.textContent=soundOn?'🔊 Sound on':'🔇 Muted';if(soundOn)speak(deckCur.k);};
-  $('dpic').onclick=e=>{e.stopPropagation();const m=$('dmnem');m.classList.toggle('hidden');e.currentTarget.textContent=m.classList.contains('hidden')?'🖼 mnemonic':'🖼 hide';};
+  $('dpic').onclick=e=>{e.stopPropagation();toggleMnem('dmnem',e.currentTarget);};
   if(soundOn)speak(deckCur.k);
   $('deckRate').classList.remove('hidden');
  }
