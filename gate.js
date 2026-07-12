@@ -88,4 +88,12 @@
   }
   if (document.body) injectSwitcher();
   else document.addEventListener('DOMContentLoaded', injectSwitcher);
+
+  // Offline support: register the service worker (shell, data, KanjiVG, stroke-recognition shards,
+  // and the on-device OCR model all become available offline). Safe to call on every page.
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js').catch(function () {});
+    });
+  }
 })();
