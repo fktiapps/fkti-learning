@@ -177,8 +177,15 @@
   </div>
   <div id="idPhotoPane" style="display:none">
    <input type="file" accept="image/*" capture="environment" id="idFile" style="display:none"/>
-   <button class="deckbtn" id="idPick" style="border-color:var(--ver)">📷 Take or choose a photo <span>identify kanji in the image</span></button>
-   <img id="idPreview" alt="" style="display:none;max-width:100%;border-radius:12px;margin-top:12px"/>
+   <button class="deckbtn" id="idPick" style="border-color:var(--ver)">📷 Take or choose a photo <span>then box the kanji you want</span></button>
+   <div id="idCropWrap" style="position:relative;display:none;margin-top:12px;touch-action:none;user-select:none;-webkit-user-select:none">
+    <img id="idPreview" alt="" style="display:block;max-width:100%;border-radius:12px"/>
+    <div id="idSelBox" style="position:absolute;display:none;border:2px solid #E2553B;background:rgba(226,85,59,.18);border-radius:4px;pointer-events:none"></div>
+   </div>
+   <div id="idPhotoBtns" style="display:none;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+    <button class="r-kinda" id="idReadSel" style="color:#fff">Identify selection ✓</button>
+    <button class="ghost" id="idReadAll">Whole image</button>
+   </div>
    <div id="idPhotoStatus" style="font-size:12px;color:var(--muted2);text-align:center;margin-top:10px"></div>
   </div>
   <div id="idResults" style="margin-top:14px"></div>
@@ -530,20 +537,34 @@ $('idGo').onclick=async()=>{if(!idStrokes.length||idStrokes.every(s=>s.length<2)
 function idTab(which){const d=which==='draw';$('idDrawPane').style.display=d?'':'none';$('idPhotoPane').style.display=d?'none':'';$('idTabDraw').style.background=d?'var(--ver)':'';$('idTabDraw').style.color=d?'#fff':'';$('idTabPhoto').style.background=d?'':'var(--ver)';$('idTabPhoto').style.color=d?'':'#fff';$('idResults').innerHTML='';if(d)setTimeout(idSetup,30);}
 $('idTabDraw').onclick=()=>idTab('draw');$('idTabPhoto').onclick=()=>idTab('photo');
 $('idPick').onclick=()=>$('idFile').click();
-$('idFile').onchange=e=>{const f=e.target.files&&e.target.files[0];if(f)runOCR(f);e.target.value='';};
+$('idFile').onchange=e=>{const f=e.target.files&&e.target.files[0];if(f)loadPhoto(f);e.target.value='';};
 function loadTesseract(){return window.Tesseract?Promise.resolve():new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';s.onload=res;s.onerror=()=>rej(new Error('load'));document.head.appendChild(s);});}
-async function runOCR(file){const prev=$('idPreview');try{prev.src=URL.createObjectURL(file);prev.style.display='';}catch(_){}$('idResults').innerHTML='';
- $('idPhotoStatus').textContent='Loading recognizer (first use downloads a Japanese model)…';
- try{await loadTesseract();}catch(_){$('idPhotoStatus').textContent='Couldn’t load the OCR engine — it needs a connection the first time.';return;}
+let idSel=null,idSelDrag=false,idSelStart=null;
+function loadPhoto(file){const img=$('idPreview');const url=URL.createObjectURL(file);img.onload=()=>{$('idCropWrap').style.display='';$('idPhotoBtns').style.display='grid';idSel=null;$('idSelBox').style.display='none';$('idResults').innerHTML='';$('idPhotoStatus').textContent='Drag a box around the kanji you want, then “Identify selection” — or use “Whole image”.';};img.src=url;}
+// drag a selection rectangle over the photo (so a single kanji can be isolated from a busy scene)
+(function(){const wrap=$('idCropWrap');if(!wrap)return;
+ function pos(e){const r=wrap.getBoundingClientRect();return{x:Math.max(0,Math.min(r.width,e.clientX-r.left)),y:Math.max(0,Math.min(r.height,e.clientY-r.top))};}
+ wrap.addEventListener('pointerdown',e=>{e.preventDefault();idSelDrag=true;idSelStart=pos(e);idSel=null;const b=$('idSelBox');b.style.display='';b.style.left=idSelStart.x+'px';b.style.top=idSelStart.y+'px';b.style.width='0px';b.style.height='0px';try{wrap.setPointerCapture(e.pointerId);}catch(_){}});
+ wrap.addEventListener('pointermove',e=>{if(!idSelDrag)return;e.preventDefault();const p=pos(e);const x=Math.min(p.x,idSelStart.x),y=Math.min(p.y,idSelStart.y),w=Math.abs(p.x-idSelStart.x),h=Math.abs(p.y-idSelStart.y);const b=$('idSelBox');b.style.left=x+'px';b.style.top=y+'px';b.style.width=w+'px';b.style.height=h+'px';idSel={x,y,w,h};});
+ wrap.addEventListener('pointerup',()=>{idSelDrag=false;if(!idSel||idSel.w<8||idSel.h<8){idSel=null;$('idSelBox').style.display='none';}});
+ wrap.addEventListener('pointercancel',()=>{idSelDrag=false;});
+})();
+async function ocrSource(source){$('idResults').innerHTML='';$('idPhotoStatus').textContent='Loading recognizer (first use downloads a Japanese model)…';
+ try{await loadTesseract();}catch(_){$('idPhotoStatus').textContent='Couldn’t load the OCR engine — it needs a connection the first time.';return null;}
  $('idPhotoStatus').textContent='Reading…';
- try{const {data}=await Tesseract.recognize(file,'jpn',{logger:m=>{if(m.status==='recognizing text')$('idPhotoStatus').textContent='Reading… '+Math.round((m.progress||0)*100)+'%';}});
-  const chars=[...new Set([...(data.text||'')].filter(ch=>/[一-龯㐀-䶿]/.test(ch)))];
-  if(!chars.length){$('idPhotoStatus').textContent='No kanji detected — try a closer, sharper shot with good contrast.';return;}
-  const known=chars.filter(cellOf),unknown=chars.filter(k=>!cellOf(k));
-  $('idPhotoStatus').textContent='Found '+chars.length+' kanji'+(unknown.length?' · '+unknown.length+' outside your deck':'');
-  renderCandidates(known.concat(unknown).slice(0,16));
- }catch(_){$('idPhotoStatus').textContent='Couldn’t read that image — try again.';}}
-function initIdentify(){idStrokes=[];$('idResults').innerHTML='';$('idPhotoStatus').textContent='';$('idPreview').style.display='none';idTab('draw');setTimeout(idSetup,30);}
+ try{const {data}=await Tesseract.recognize(source,'jpn',{logger:m=>{if(m.status==='recognizing text')$('idPhotoStatus').textContent='Reading… '+Math.round((m.progress||0)*100)+'%';}});
+  return [...new Set([...(data.text||'')].filter(ch=>/[一-龯㐀-䶿]/.test(ch)))];
+ }catch(_){$('idPhotoStatus').textContent='Couldn’t read that image — try again.';return null;}}
+function showKanji(chars){if(chars==null)return;if(!chars.length){$('idPhotoStatus').textContent='No kanji found there — try a tighter box, or a sharper, higher-contrast shot.';$('idResults').innerHTML='';return;}const known=chars.filter(cellOf),unknown=chars.filter(k=>!cellOf(k));$('idPhotoStatus').textContent='Found '+chars.length+' kanji'+(unknown.length?' · '+unknown.length+' outside your deck':'')+' — tap to open.';renderCandidates(known.concat(unknown).slice(0,16));}
+$('idReadSel').onclick=async()=>{const img=$('idPreview');if(!img.naturalWidth)return;if(!idSel){$('idPhotoStatus').textContent='Draw a box around the kanji first, or tap “Whole image”.';return;}
+ const sx=img.naturalWidth/img.clientWidth,sy=img.naturalHeight/img.clientHeight;
+ const nb={x:idSel.x*sx,y:idSel.y*sy,w:idSel.w*sx,h:idSel.h*sy};
+ const s=Math.max(1,Math.min(4,560/Math.max(nb.w,nb.h))); // upscale small crops so OCR sees big glyphs
+ const cv=document.createElement('canvas');cv.width=Math.max(1,Math.round(nb.w*s));cv.height=Math.max(1,Math.round(nb.h*s));
+ const cx=cv.getContext('2d');cx.imageSmoothingEnabled=true;cx.imageSmoothingQuality='high';cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);cx.drawImage(img,nb.x,nb.y,nb.w,nb.h,0,0,cv.width,cv.height);
+ showKanji(await ocrSource(cv));};
+$('idReadAll').onclick=async()=>{const img=$('idPreview');if(!img.naturalWidth)return;showKanji(await ocrSource(img));};
+function initIdentify(){idStrokes=[];idSel=null;$('idResults').innerHTML='';$('idPhotoStatus').textContent='';$('idCropWrap').style.display='none';$('idPhotoBtns').style.display='none';$('idSelBox').style.display='none';idTab('draw');setTimeout(idSetup,30);}
 $('idExit').onclick=()=>go('home');
 window.addEventListener('resize',()=>{if($('identify').classList.contains('on'))idSetup();});
 document.querySelectorAll('[data-deck]').forEach(b=>b.onclick=()=>startDeck(b.dataset.deck));
