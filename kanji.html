@@ -129,6 +129,7 @@
   <button class="deckbtn" data-deck="little">🙂 Give me a little challenge <span>+ “Kinda”</span></button>
   <button class="deckbtn" data-deck="challenge">😤 Challenge me <span>+ “Don’t really”</span></button>
   <button class="deckbtn" data-deck="hurt">🔥 Make it hurt <span>everything, incl. “No clue”</span></button>
+  <button class="deckbtn" id="testMe" style="border-color:var(--ver);margin-top:14px">🧪 Test me on the ones I don’t know <span>correct answers level up</span></button>
  </section>
 
  <section class="scr" id="stroke">
@@ -151,6 +152,12 @@
   <div id="deckRate" class="rate hidden"><button class="r-know" data-drate="know">Know it</button><button class="r-kinda" data-drate="kinda">Kinda know it</button><button class="r-dont" data-drate="dont">Don't really</button><button class="r-clue" data-drate="clue">No clue</button></div>
   <div id="deckDone" class="prompt hidden"></div>
   <div class="foot"><button class="ghost" id="deckExit">← Back to chart</button></div>
+ </section>
+
+ <section class="scr" id="test">
+  <div class="meta"><span id="testName" style="font-weight:700;color:var(--ver)">🧪 Test</span><span id="testProg"></span></div>
+  <div id="testBody" class="prompt"></div>
+  <div class="foot"><button class="ghost" id="testExit">← Back to chart</button></div>
  </section>
 </main>
 <script>
@@ -387,7 +394,7 @@ function renderChart(){
   const row=document.createElement('div');row.className='chrow';
   t.cells.forEach(c=>{
    const d=document.createElement('button');d.className='chcell'+(unlocked?'':' locked');
-   if(unlocked){const inf=lvlInfo(c.k);d.style.background=inf.bg;d.style.color=inf.t;d.onclick=()=>{const rs=readingsList(c);if(!rs.length){speak(c.k);return;}d._ri=d._ri||0;speak(rs[d._ri%rs.length]);d._ri++;};}
+   if(unlocked){const inf=lvlInfo(c.k);d.style.background=inf.bg;d.style.color=inf.t;d.onclick=()=>openCardFor(c);}
    else{d.style.background='#2A3358';d.style.color='#8A90AC';}
    d.innerHTML='<span class="chk">'+c.k+'</span>';
    row.appendChild(d);
@@ -396,9 +403,11 @@ function renderChart(){
  });
  const cells=activeCells(),cnt={3:0,2:0,1:0,0:0,u:0};
  cells.forEach(c=>{const s=cardState(c.k);if(!s.seen)cnt.u++;else cnt[s.lvl]++;});
- $('chStats').textContent=cnt[3]+' known · '+cnt[2]+' kinda · '+cnt[1]+' shaky · '+(cnt[0]+cnt.u)+' to learn · '+activeCells().length+' unlocked · tap to hear';
+ $('chStats').textContent=cnt[3]+' known · '+cnt[2]+' kinda · '+cnt[1]+' shaky · '+(cnt[0]+cnt.u)+' to learn · '+activeCells().length+' unlocked · tap a kanji to open its card';
 }
-let deckKey=null,deckQ=[],deckP=0,deckCur=null,deckFlip=false;
+let deckKey=null,deckQ=[],deckP=0,deckCur=null,deckFlip=false,deckPeek=false;
+// open a single kanji's card from the progress grid (view + optionally re-rate)
+function openCardFor(cell){deckPeek=true;deckKey=null;deckQ=[cell];deckP=0;deckCur=null;deckFlip=false;$('deckName').textContent='Review';$('deckProg').textContent='';$('deckDone').classList.add('hidden');go('deck');deckShow();}
 const DECKNAME={boost:'💪 Confidence boost',little:'🙂 Little challenge',challenge:'😤 Challenge me',hurt:'🔥 Make it hurt'};
 function bandPool(key){
  const cells=activeCells(),L=k=>{const c=cardState(k);return c.seen?c.lvl:-1;};
@@ -419,16 +428,48 @@ function deckShow(){
  if(!deckFlip){$('deckCard').innerHTML='<div class="kanji">'+deckCur.k+'</div><div class="flip-hint">tap to flip</div>';$('deckRate').classList.add('hidden');}
  else{
   $('deckCard').innerHTML='<div class="meaning">'+deckCur.m+'</div><div class="readings">'+readingsHTML(deckCur)+'</div>'+
+   contextHTML(deckCur)+
    '<div class="card-btns"><button class="speak" id="dsound">'+(soundOn?'🔊 Sound on':'🔇 Muted')+'</button></div>';
   $('dsound').onclick=e=>{e.stopPropagation();setSound(!soundOn);e.currentTarget.textContent=soundOn?'🔊 Sound on':'🔇 Muted';if(soundOn)speak(deckCur.k);};
   if(soundOn)speak(deckCur.k);
   $('deckRate').classList.remove('hidden');
  }
 }
-function deckRate(b){const p=prog(),c=p.cards[deckCur.k]||{lvl:0,streak:0,seen:0};c.lvl=RATE_VAL[b];c.streak=(b==='know')?c.streak+1:0;c.seen++;p.cards[deckCur.k]=c;setProg(p);deckP++;deckCur=null;deckFlip=false;deckShow();}
+function deckRate(b){const p=prog(),c=p.cards[deckCur.k]||{lvl:0,streak:0,seen:0,box:0,due:0};c.lvl=RATE_VAL[b];c.streak=(b==='know')?c.streak+1:0;c.seen++;const box=c.box||0;c.box=b==='know'?Math.min(5,box+1):b==='kinda'?box:b==='dont'?Math.max(0,box-1):0;c.due=dayNum()+SRS_IVL[c.box];p.cards[deckCur.k]=c;setProg(p);if(deckPeek){deckPeek=false;go('chart');return;}deckP++;deckCur=null;deckFlip=false;deckShow();}
 $('deckCard').onclick=()=>{if(deckP<deckQ.length){deckFlip=!deckFlip;deckShow();}};
 document.querySelectorAll('[data-drate]').forEach(b=>b.onclick=()=>deckRate(b.dataset.drate));
-$('deckExit').onclick=()=>go('chart');
+$('deckExit').onclick=()=>{deckPeek=false;go('chart');};
+
+// ===== 🧪 Test me on the ones I don't know (correct answer promotes one level) =====
+let test=null;
+// a correct answer bumps the card up one confidence level (unseen/clue→…→know it) and schedules it out
+function promote(k){const p=prog();const c=p.cards[k]||{lvl:0,streak:0,seen:0,box:0,due:0};const prevEff=c.seen?c.lvl:-1;const base=c.seen?c.lvl:0;c.lvl=Math.min(3,base+1);c.seen=(c.seen||0)+1;c.streak=(c.lvl===3)?(c.streak||0)+1:0;c.box=Math.min(5,(c.box||0)+1);c.due=dayNum()+SRS_IVL[c.box];p.cards[k]=c;setProg(p);return c.lvl>prevEff;}
+function startTest(){
+ const pool=activeCells().filter(c=>{const s=cardState(c.k);return !s.seen||s.lvl<3;}); // everything not yet "Know it"
+ if(!pool.length){$('chStats').textContent='Nothing to test — you know them all! 🎉';return;}
+ const sel=shuf(pool.slice()).slice(0,20);
+ const mPool=[...new Set(ALL.map(c=>ml(c.m)))],rPool=[...new Set(ALL.map(readingPrimary).filter(Boolean))];
+ const qs=sel.map((c,idx)=>{
+  let type=(idx%2===0)?'meaning':'pron';if(type==='pron'&&!readingPrimary(c))type='meaning';
+  if(type==='meaning'){const a=ml(c.m);const opts=[a];let g=0;while(opts.length<4&&g++<60){const r=mPool[Math.floor(Math.random()*mPool.length)];if(!opts.includes(r))opts.push(r);}return{type,k:c.k,a,opts:shuf(opts)};}
+  const a=readingPrimary(c);const opts=[a];let g=0;while(opts.length<4&&g++<60){const r=rPool[Math.floor(Math.random()*rPool.length)];if(!opts.includes(r))opts.push(r);}return{type,k:c.k,a,opts:shuf(opts)};
+ });
+ test={qs,i:0,right:0,wrong:0,promoted:0};go('test');renderTest();
+}
+function renderTest(){
+ const t=test;if(!t)return;
+ if(t.i>=t.qs.length){
+  $('testProg').textContent='';
+  $('testBody').innerHTML='🎯 <b>Test complete.</b><br><span style="font-size:14px">'+t.right+' / '+t.qs.length+' correct · <b>'+t.promoted+'</b> leveled up.</span><br><button id="testAgain">Test more</button> <button class="ghost" id="testBack" style="margin-top:8px">Back to chart</button>';
+  $('testAgain').onclick=startTest;$('testBack').onclick=()=>go('chart');return;
+ }
+ const q=t.qs[t.i];$('testProg').textContent=(t.i+1)+' / '+t.qs.length;
+ const sub=q.type==='pron'?'Which reading?':'Which meaning?';
+ $('testBody').innerHTML='<div style="font-size:12px;color:var(--muted);margin-top:3px">'+sub+'</div><div style="font-size:72px;font-weight:600;margin:6px 0;color:var(--text);font-family:var(--display)">'+q.k+'</div>'+q.opts.map(o=>'<button class="opt" data-r="'+esc(o)+'">'+esc(o)+'</button>').join('');
+ $('testBody').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(b.dataset.done)return;const ok=b.dataset.r===q.a;$('testBody').querySelectorAll('.opt').forEach(x=>{x.dataset.done=1;if(x.dataset.r===q.a)x.classList.add('ok');});if(ok){t.right++;if(promote(q.k))t.promoted++;}else{b.classList.add('no');t.wrong++;downgrade(q.k);}setTimeout(()=>{t.i++;renderTest();},600);});
+}
+$('testMe').onclick=startTest;
+$('testExit').onclick=()=>go('chart');
 document.querySelectorAll('[data-deck]').forEach(b=>b.onclick=()=>startDeck(b.dataset.deck));
 
 // ===== ✏️ stroke order (KanjiVG: watch + order/direction detection) =====
