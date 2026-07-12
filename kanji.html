@@ -407,10 +407,17 @@ let stkIdx=0,stkStrokes=null,stkUser=[],stkDraw=false,sctx=null,stkCell=null;con
 function cpHex(c){return c.codePointAt(0).toString(16).padStart(5,'0');}
 async function loadStrokes(ch){
  if(strokeCache[ch])return strokeCache[ch];
- const t=await (await fetch('kanjivg/'+cpHex(ch)+'.svg')).text();
- const doc=new DOMParser().parseFromString(t,'image/svg+xml');
- const paths=[...doc.querySelectorAll('path')].filter(p=>p.getAttribute('d'));
- const out=paths.map(p=>{const d=p.getAttribute('d');measPath.setAttribute('d',d);let L=1;try{L=measPath.getTotalLength()||1;}catch(_){}const N=Math.max(6,Math.min(160,Math.round(L/4)||6)),pts=[];for(let i=0;i<=N;i++){let q;try{q=measPath.getPointAtLength(L*i/N);}catch(_){q={x:0,y:0};}pts.push({x:q.x/109,y:q.y/109});}return{d,pts,L};});
+ const res=await fetch('kanjivg/'+cpHex(ch)+'.svg',{cache:'force-cache'});
+ if(!res.ok)throw new Error('svg http '+res.status); // don't parse a 404/challenge page into an empty result
+ const t=await res.text();
+ // Primary: XML parse. Fallback: regex the d="…" straight out of the text, so a strict-XML
+ // namespace/DOCTYPE quirk (KanjiVG declares kvg: via the DTD) can't silently yield zero paths.
+ let ds=[];
+ try{const doc=new DOMParser().parseFromString(t,'image/svg+xml');
+   if(!doc.querySelector('parsererror'))ds=[...doc.querySelectorAll('path')].map(p=>p.getAttribute('d')).filter(Boolean);}catch(_){}
+ if(!ds.length){const re=/<path\b[^>]*\bd\s*=\s*"([^"]+)"/g;let m;while((m=re.exec(t)))ds.push(m[1]);}
+ if(!ds.length)throw new Error('no paths in svg');
+ const out=ds.map(d=>{measPath.setAttribute('d',d);let L=1;try{L=measPath.getTotalLength()||1;}catch(_){}const N=Math.max(6,Math.min(160,Math.round(L/4)||6)),pts=[];for(let i=0;i<=N;i++){let q;try{q=measPath.getPointAtLength(L*i/N);}catch(_){q={x:0,y:0};}pts.push({x:q.x/109,y:q.y/109});}return{d,pts,L};});
  strokeCache[ch]=out;return out;
 }
 function setupStk(){const cv=$('stkCanvas'),r=cv.getBoundingClientRect();if(!r.width)return;cv.width=r.width;cv.height=r.height;sctx=cv.getContext('2d');sctx.lineWidth=10;sctx.lineCap='round';sctx.lineJoin='round';sctx.strokeStyle='#E2553B';}
