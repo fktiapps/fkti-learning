@@ -89,6 +89,7 @@
   <div class="tile" data-go="study"><div class="ic">🎴</div><div><h2>Learn &amp; Write</h2><p>Flashcards (grade yourself) + finger-tracing practice.</p></div></div>
   <div class="tile" data-go="stroke"><div class="ic">✏️</div><div><h2>Stroke order</h2><p>Watch each kanji drawn, then practice — we check order &amp; direction.</p></div></div>
   <div class="tile" data-go="chart"><div class="ic">📊</div><div><h2>Progress &amp; decks</h2><p>Your kanji grid, color-coded — plus custom decks by confidence.</p></div></div>
+  <div class="tile" data-go="identify"><div class="ic">🔎</div><div><h2>Identify a kanji</h2><p>Draw it or snap a photo — we’ll find the closest matches.</p></div></div>
  </section>
 
  <section class="scr" id="intro">
@@ -159,10 +160,34 @@
   <div id="testBody" class="prompt"></div>
   <div class="foot"><button class="ghost" id="testExit">← Back to chart</button></div>
  </section>
+
+ <section class="scr" id="identify">
+  <div style="display:flex;gap:8px;margin-bottom:12px">
+   <button id="idTabDraw" class="ghost idtab" style="flex:1;background:var(--ver);color:#fff">✏️ Draw</button>
+   <button id="idTabPhoto" class="ghost idtab" style="flex:1">📷 Photo</button>
+  </div>
+  <div id="idDrawPane">
+   <div class="trace-wrap"><canvas id="idCanvas" style="position:absolute;inset:0;width:100%;height:100%;touch-action:none"></canvas></div>
+   <div class="rate" style="grid-template-columns:1fr 1fr 1fr;margin-top:12px">
+    <button class="ghost" id="idUndo">↶ Undo</button>
+    <button class="ghost" id="idClear">Clear</button>
+    <button class="r-kinda" id="idGo" style="color:#fff">Identify ✓</button>
+   </div>
+   <p style="font-size:12px;color:var(--muted2);text-align:center;margin-top:8px">Draw the kanji, then <b>Identify</b>. Stroke order and count don’t have to be exact.</p>
+  </div>
+  <div id="idPhotoPane" style="display:none">
+   <input type="file" accept="image/*" capture="environment" id="idFile" style="display:none"/>
+   <button class="deckbtn" id="idPick" style="border-color:var(--ver)">📷 Take or choose a photo <span>identify kanji in the image</span></button>
+   <img id="idPreview" alt="" style="display:none;max-width:100%;border-radius:12px;margin-top:12px"/>
+   <div id="idPhotoStatus" style="font-size:12px;color:var(--muted2);text-align:center;margin-top:10px"></div>
+  </div>
+  <div id="idResults" style="margin-top:14px"></div>
+  <div class="foot"><button class="ghost" id="idExit">← Back</button></div>
+ </section>
 </main>
 <script>
 const $=id=>document.getElementById(id);
-function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='study'){cur=null;flipped=false;unlockSnoozed=false;render();}if(id==='stroke')renderStroke();if(id==='chart')renderChart();}
+function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));$('back').style.visibility=id==='home'?'hidden':'visible';window.scrollTo(0,0);if(id==='study'){cur=null;flipped=false;unlockSnoozed=false;render();}if(id==='stroke')renderStroke();if(id==='chart')renderChart();if(id==='identify')initIdentify();}
 $('back').onclick=()=>go('home');
 document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(b.dataset.go));
 
@@ -405,9 +430,9 @@ function renderChart(){
  cells.forEach(c=>{const s=cardState(c.k);if(!s.seen)cnt.u++;else cnt[s.lvl]++;});
  $('chStats').textContent=cnt[3]+' known · '+cnt[2]+' kinda · '+cnt[1]+' shaky · '+(cnt[0]+cnt.u)+' to learn · '+activeCells().length+' unlocked · tap a kanji to open its card';
 }
-let deckKey=null,deckQ=[],deckP=0,deckCur=null,deckFlip=false,deckPeek=false;
-// open a single kanji's card from the progress grid (view + optionally re-rate)
-function openCardFor(cell){deckPeek=true;deckKey=null;deckQ=[cell];deckP=0;deckCur=null;deckFlip=false;$('deckName').textContent='Review';$('deckProg').textContent='';$('deckDone').classList.add('hidden');go('deck');deckShow();}
+let deckKey=null,deckQ=[],deckP=0,deckCur=null,deckFlip=false,deckPeek=false,deckBackTo='chart';
+// open a single kanji's card (view + optionally re-rate); backTo = screen to return to
+function openCardFor(cell,backTo){deckPeek=true;deckBackTo=backTo||'chart';deckKey=null;deckQ=[cell];deckP=0;deckCur=null;deckFlip=false;$('deckName').textContent='Review';$('deckProg').textContent='';$('deckDone').classList.add('hidden');go('deck');deckShow();}
 const DECKNAME={boost:'💪 Confidence boost',little:'🙂 Little challenge',challenge:'😤 Challenge me',hurt:'🔥 Make it hurt'};
 function bandPool(key){
  const cells=activeCells(),L=k=>{const c=cardState(k);return c.seen?c.lvl:-1;};
@@ -435,10 +460,10 @@ function deckShow(){
   $('deckRate').classList.remove('hidden');
  }
 }
-function deckRate(b){const p=prog(),c=p.cards[deckCur.k]||{lvl:0,streak:0,seen:0,box:0,due:0};c.lvl=RATE_VAL[b];c.streak=(b==='know')?c.streak+1:0;c.seen++;const box=c.box||0;c.box=b==='know'?Math.min(5,box+1):b==='kinda'?box:b==='dont'?Math.max(0,box-1):0;c.due=dayNum()+SRS_IVL[c.box];p.cards[deckCur.k]=c;setProg(p);if(deckPeek){deckPeek=false;go('chart');return;}deckP++;deckCur=null;deckFlip=false;deckShow();}
+function deckRate(b){const p=prog(),c=p.cards[deckCur.k]||{lvl:0,streak:0,seen:0,box:0,due:0};c.lvl=RATE_VAL[b];c.streak=(b==='know')?c.streak+1:0;c.seen++;const box=c.box||0;c.box=b==='know'?Math.min(5,box+1):b==='kinda'?box:b==='dont'?Math.max(0,box-1):0;c.due=dayNum()+SRS_IVL[c.box];p.cards[deckCur.k]=c;setProg(p);if(deckPeek){deckPeek=false;go(deckBackTo);return;}deckP++;deckCur=null;deckFlip=false;deckShow();}
 $('deckCard').onclick=()=>{if(deckP<deckQ.length){deckFlip=!deckFlip;deckShow();}};
 document.querySelectorAll('[data-drate]').forEach(b=>b.onclick=()=>deckRate(b.dataset.drate));
-$('deckExit').onclick=()=>{deckPeek=false;go('chart');};
+$('deckExit').onclick=()=>{const bt=deckBackTo;deckPeek=false;go(bt);};
 
 // ===== 🧪 Test me on the ones I don't know (correct answer promotes one level) =====
 let test=null;
@@ -470,6 +495,57 @@ function renderTest(){
 }
 $('testMe').onclick=startTest;
 $('testExit').onclick=()=>go('chart');
+
+// ===== 🔎 Identify a kanji: finger-drawn (offline KanjiVG match) + camera (on-device OCR) =====
+const RK=12; // resample points per stroke — MUST match the template DB (recog/*.json)
+function cellOf(k){return ALL.find(c=>c.k===k);}
+function idHint(t){return '<div style="font-size:12px;color:var(--muted2);text-align:center;margin-top:6px">'+t+'</div>';}
+// --- geometry (mirrors scripts/build-recog: resample → bbox-normalize → DTW stroke alignment) ---
+function idResample(pts,K){if(!pts.length)return Array.from({length:K},()=>({x:0,y:0}));if(pts.length===1)return Array.from({length:K},()=>({x:pts[0].x,y:pts[0].y}));let L=0;const d=[0];for(let i=1;i<pts.length;i++){L+=Math.hypot(pts[i].x-pts[i-1].x,pts[i].y-pts[i-1].y);d.push(L);}if(L===0)return Array.from({length:K},()=>({x:pts[0].x,y:pts[0].y}));const out=[];for(let j=0;j<K;j++){const t=L*j/(K-1);let i=1;while(i<d.length&&d[i]<t)i++;if(i>=pts.length)i=pts.length-1;const t0=d[i-1],t1=d[i],f=t1>t0?(t-t0)/(t1-t0):0;out.push({x:pts[i-1].x+(pts[i].x-pts[i-1].x)*f,y:pts[i-1].y+(pts[i].y-pts[i-1].y)*f});}return out;}
+function idNorm(strokes){let rs=strokes.filter(s=>s.length>=1).map(s=>idResample(s,RK));let mnx=1e9,mny=1e9,mxx=-1e9,mxy=-1e9;rs.forEach(s=>s.forEach(q=>{if(q.x<mnx)mnx=q.x;if(q.x>mxx)mxx=q.x;if(q.y<mny)mny=q.y;if(q.y>mxy)mxy=q.y;}));const w=Math.max(1e-6,mxx-mnx),h=Math.max(1e-6,mxy-mny);return rs.map(s=>s.map(q=>({x:(q.x-mnx)/w,y:(q.y-mny)/h})));}
+function idSd(a,b){let f=0,r=0;const K=a.length;for(let j=0;j<K;j++){f+=Math.hypot(a[j].x-b[j].x,a[j].y-b[j].y);r+=Math.hypot(a[j].x-b[K-1-j].x,a[j].y-b[K-1-j].y);}return Math.min(f,r)/K;}
+function idDtw(d,t){const nd=d.length,nt=t.length,SK=0.5;let prev=new Array(nt+1).fill(1e9);prev[0]=0;for(let j=1;j<=nt;j++)prev[j]=prev[j-1]+SK;for(let i=1;i<=nd;i++){const cur=new Array(nt+1).fill(1e9);cur[0]=prev[0]+SK;for(let j=1;j<=nt;j++){const c=idSd(d[i-1],t[j-1]);cur[j]=Math.min(prev[j-1]+c,prev[j]+SK,cur[j-1]+SK);}prev=cur;}return prev[nt]/Math.max(nd,nt);}
+const idDeq=s=>s.map(a=>{const p=[];for(let i=0;i<a.length;i+=2)p.push({x:a[i]/100,y:a[i+1]/100});return p;});
+const shardCache={};
+async function loadShard(n){if(n in shardCache)return shardCache[n];try{const r=await fetch('recog/'+n+'.json',{cache:'force-cache'});shardCache[n]=r.ok?((await r.json()).list||null):null;}catch(_){shardCache[n]=null;}return shardCache[n];}
+async function recognizeDrawn(strokes){const d=idNorm(strokes);const nd=d.length;const cands=[];for(const n of [nd-1,nd,nd+1]){const list=await loadShard(n);if(!list)continue;for(const t of list)cands.push({k:t.k,c:idDtw(d,idDeq(t.s))});}cands.sort((a,b)=>a.c-b.c);const seen=new Set(),out=[];for(const x of cands){if(seen.has(x.k))continue;seen.add(x.k);out.push(x.k);if(out.length>=8)break;}return out;}
+function renderCandidates(list){const box=$('idResults');if(!list||!list.length){box.innerHTML=idHint('No match — try redrawing, or a clearer photo.');return;}
+ box.innerHTML='<div style="font-size:12px;color:var(--muted);text-align:center;margin:6px 0 8px">Tap the one you meant:</div><div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">'+
+  list.map(k=>{const c=cellOf(k);const m=c?esc(ml(c.m)):'';return '<button class="idcand" data-k="'+esc(k)+'" style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:62px;padding:8px 10px;background:var(--paper);border:1px solid #e3d9c6;border-radius:12px;cursor:pointer;'+(c?'':'opacity:.5')+'"><span style="font-size:30px;font-family:var(--display);color:var(--text)">'+esc(k)+'</span><span style="font-size:11px;color:var(--muted);max-width:80px;line-height:1.2">'+m+'</span></button>';}).join('')+'</div>';
+ box.querySelectorAll('.idcand').forEach(b=>b.onclick=()=>{const c=cellOf(b.dataset.k);if(c)openCardFor(c,'identify');else speak(b.dataset.k);});}
+// --- finger drawing ---
+let idStrokes=[],idDrawing=false,idctx=null;
+function idSetup(){const cv=$('idCanvas');if(!cv)return;const r=cv.getBoundingClientRect();if(!r.width)return;cv.width=r.width;cv.height=r.height;idctx=cv.getContext('2d');idctx.lineWidth=10;idctx.lineCap='round';idctx.lineJoin='round';idctx.strokeStyle='#E2553B';idRedraw();}
+function idRedraw(){const cv=$('idCanvas');if(!idctx)return;idctx.clearRect(0,0,cv.width,cv.height);idctx.beginPath();for(const st of idStrokes){if(st.length<1)continue;idctx.moveTo(st[0].x,st[0].y);for(let i=1;i<st.length;i++)idctx.lineTo(st[i].x,st[i].y);if(st.length===1)idctx.lineTo(st[0].x+0.1,st[0].y);}idctx.stroke();}
+function idPos(e){const cv=$('idCanvas'),r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
+(function(){const cv=$('idCanvas');if(!cv)return;
+ cv.addEventListener('pointerdown',e=>{e.preventDefault();if(!idctx)idSetup();idDrawing=true;idStrokes.push([idPos(e)]);try{cv.setPointerCapture(e.pointerId);}catch(_){}});
+ cv.addEventListener('pointermove',e=>{if(!idDrawing)return;e.preventDefault();idStrokes[idStrokes.length-1].push(idPos(e));idRedraw();});
+ cv.addEventListener('pointerup',()=>idDrawing=false);cv.addEventListener('pointercancel',()=>idDrawing=false);
+})();
+$('idUndo').onclick=()=>{idStrokes.pop();idRedraw();$('idResults').innerHTML='';};
+$('idClear').onclick=()=>{idStrokes=[];idRedraw();$('idResults').innerHTML='';};
+$('idGo').onclick=async()=>{if(!idStrokes.length||idStrokes.every(s=>s.length<2)){$('idResults').innerHTML=idHint('Draw a kanji first.');return;}$('idResults').innerHTML=idHint('Matching…');try{renderCandidates(await recognizeDrawn(idStrokes));}catch(_){$('idResults').innerHTML=idHint('Couldn’t match — the stroke data may still be loading.');}};
+// --- tabs + camera OCR ---
+function idTab(which){const d=which==='draw';$('idDrawPane').style.display=d?'':'none';$('idPhotoPane').style.display=d?'none':'';$('idTabDraw').style.background=d?'var(--ver)':'';$('idTabDraw').style.color=d?'#fff':'';$('idTabPhoto').style.background=d?'':'var(--ver)';$('idTabPhoto').style.color=d?'':'#fff';$('idResults').innerHTML='';if(d)setTimeout(idSetup,30);}
+$('idTabDraw').onclick=()=>idTab('draw');$('idTabPhoto').onclick=()=>idTab('photo');
+$('idPick').onclick=()=>$('idFile').click();
+$('idFile').onchange=e=>{const f=e.target.files&&e.target.files[0];if(f)runOCR(f);e.target.value='';};
+function loadTesseract(){return window.Tesseract?Promise.resolve():new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';s.onload=res;s.onerror=()=>rej(new Error('load'));document.head.appendChild(s);});}
+async function runOCR(file){const prev=$('idPreview');try{prev.src=URL.createObjectURL(file);prev.style.display='';}catch(_){}$('idResults').innerHTML='';
+ $('idPhotoStatus').textContent='Loading recognizer (first use downloads a Japanese model)…';
+ try{await loadTesseract();}catch(_){$('idPhotoStatus').textContent='Couldn’t load the OCR engine — it needs a connection the first time.';return;}
+ $('idPhotoStatus').textContent='Reading…';
+ try{const {data}=await Tesseract.recognize(file,'jpn',{logger:m=>{if(m.status==='recognizing text')$('idPhotoStatus').textContent='Reading… '+Math.round((m.progress||0)*100)+'%';}});
+  const chars=[...new Set([...(data.text||'')].filter(ch=>/[一-龯㐀-䶿]/.test(ch)))];
+  if(!chars.length){$('idPhotoStatus').textContent='No kanji detected — try a closer, sharper shot with good contrast.';return;}
+  const known=chars.filter(cellOf),unknown=chars.filter(k=>!cellOf(k));
+  $('idPhotoStatus').textContent='Found '+chars.length+' kanji'+(unknown.length?' · '+unknown.length+' outside your deck':'');
+  renderCandidates(known.concat(unknown).slice(0,16));
+ }catch(_){$('idPhotoStatus').textContent='Couldn’t read that image — try again.';}}
+function initIdentify(){idStrokes=[];$('idResults').innerHTML='';$('idPhotoStatus').textContent='';$('idPreview').style.display='none';idTab('draw');setTimeout(idSetup,30);}
+$('idExit').onclick=()=>go('home');
+window.addEventListener('resize',()=>{if($('identify').classList.contains('on'))idSetup();});
 document.querySelectorAll('[data-deck]').forEach(b=>b.onclick=()=>startDeck(b.dataset.deck));
 
 // ===== ✏️ stroke order (KanjiVG: watch + order/direction detection) =====
