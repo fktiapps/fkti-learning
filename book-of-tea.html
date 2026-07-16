@@ -307,12 +307,23 @@ const $=s=>document.querySelector(s), el=(t,c,h)=>{const e=document.createElemen
 let curCh=1, studyMode=false;
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function annotate(text, terms){
- let html=esc(text);
- (terms||[]).forEach(tm=>{
-  const safe=tm.t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-  html=html.replace(new RegExp('('+safe+')'),'<span class="anno" data-g="'+encodeURIComponent(tm.g)+'" data-t="'+encodeURIComponent(tm.t)+'">$1</span>');
- });
- return html;
+ if(!terms||!terms.length) return esc(text);
+ // Find each term's first occurrence on the RAW text, then splice the spans in a single pass.
+ // (The old per-term String.replace re-scanned the growing HTML, so a term whose word also
+ //  appeared inside an earlier term's encoded data-g attribute — e.g. "Teaism" inside the
+ //  "aestheticism" gloss — got wrapped INSIDE that attribute, shattering the tag and dumping
+ //  the %-encoded gloss onto the page.)
+ const ranges=[];
+ for(const tm of (terms||[])){ const i=text.indexOf(tm.t); if(i>=0) ranges.push({s:i,e:i+tm.t.length,tm}); }
+ ranges.sort((a,b)=>a.s-b.s||b.e-a.e); // earliest first; on a tie, the longer term wins
+ let out='',pos=0;
+ for(const r of ranges){
+  if(r.s<pos) continue; // overlaps a term already wrapped — skip
+  out+=esc(text.slice(pos,r.s))
+     +'<span class="anno" data-g="'+encodeURIComponent(r.tm.g)+'" data-t="'+encodeURIComponent(r.tm.t)+'">'+esc(text.slice(r.s,r.e))+'</span>';
+  pos=r.e;
+ }
+ return out+esc(text.slice(pos));
 }
 function firstSentence(s){const m=s.split(/(?<=[.!?])\s/)[0];return m.length>92?m.slice(0,90)+'…':m;}
 function buildHome(){
