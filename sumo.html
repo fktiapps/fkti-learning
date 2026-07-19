@@ -320,7 +320,11 @@
 /* ============================================================
    CONFIG
    ============================================================ */
-const API = 'https://www.sumo-api.com/api';
+// The API is canonically served from the apex host; the old www. host can redirect in a way that
+// breaks browser CORS, which silently killed the live banzuke/matchups. Try both, keep what works.
+const API_HOSTS = ['https://sumo-api.com/api', 'https://www.sumo-api.com/api'];
+let API_BASE = API_HOSTS[0];
+let API_REACHED = false;   // did any live API call succeed this session? (drives error messaging)
 const DIVISIONS = ['Makuuchi','Juryo'];
 /* Reusable across trips: the app auto-detects the current (or next) basho from
    today's date — nothing here is pinned to a specific tournament or day. */
@@ -386,17 +390,22 @@ window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&d
    ============================================================ */
 async function getJSON(path){
   const key = 'fkti_sumo:'+path;
-  try{
-    const r = await fetch(API+path, {cache:'no-store'});
-    if(!r.ok) throw new Error(r.status);
-    const j = await r.json();
-    try{ localStorage.setItem(key, JSON.stringify({t:Date.now(), j})); }catch(e){}
-    return {j, cached:false, t:Date.now()};
-  }catch(err){
-    const raw = localStorage.getItem(key);
-    if(raw){ const o=JSON.parse(raw); return {j:o.j, cached:true, t:o.t, err}; }
-    return {j:null, cached:false, err};
+  // Try the known-good host first, then the alternate — covers a www/apex redirect that breaks CORS.
+  const bases = [API_BASE, ...API_HOSTS.filter(b=>b!==API_BASE)];
+  let lastErr = null;
+  for(const base of bases){
+    try{
+      const r = await fetch(base+path, {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j = await r.json();                 // rejects a host that returns non-JSON (e.g. a redirect page)
+      API_BASE = base; API_REACHED = true;      // stick with the host that worked
+      try{ localStorage.setItem(key, JSON.stringify({t:Date.now(), j})); }catch(e){}
+      return {j, cached:false, t:Date.now()};
+    }catch(err){ lastErr = err; }
   }
+  const raw = localStorage.getItem(key);
+  if(raw){ const o=JSON.parse(raw); return {j:o.j, cached:true, t:o.t, err:lastErr}; }
+  return {j:null, cached:false, err:lastErr};
 }
 function ago(t){
   if(!t) return '';
@@ -486,6 +495,13 @@ async function loadToday(){
     if(ts) ts.textContent = '';
     seg.innerHTML=''; document.getElementById('todayBar').innerHTML='';
     const M=BASHO_META;
+    if(!API_REACHED){
+      // We never got a live response — this is a connectivity/API problem, not "between tournaments".
+      document.getElementById('todayList').innerHTML = '<div class="empty"><span class="big">📡</span>'+
+        'Couldn’t reach the live sumo data right now.<br>Check your connection, then tap Refresh.'+
+        '<br><button class="reload" style="margin-top:10px" onclick="loadToday()">Refresh</button></div>';
+      return;
+    }
     document.getElementById('todayList').innerHTML = '<div class="empty"><span class="big">🗓️</span>'+
       'No tournament is running right now.<br>The next basho — <b>'+esc(M.name)+'</b>'+(M.city?' in '+esc(M.city):'')+' — '+
       (BASHO_STATUS==='upcoming'?'begins <b>'+fmtDate(M.start)+'</b>':'will appear here when it is scheduled')+
