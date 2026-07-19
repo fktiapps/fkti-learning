@@ -320,10 +320,15 @@
 /* ============================================================
    CONFIG
    ============================================================ */
-// The API is canonically served from the apex host; the old www. host can redirect in a way that
-// breaks browser CORS, which silently killed the live banzuke/matchups. Try both, keep what works.
-const API_HOSTS = ['https://sumo-api.com/api', 'https://www.sumo-api.com/api'];
-let API_BASE = API_HOSTS[0];
+// Live-data endpoints, tried in order. We PREFER a same-origin Cloudflare Pages proxy (/api/sumo/…)
+// because some venue/mobile networks block sumo-api.com directly — the browser only talks to this
+// site's own origin, and Cloudflare's edge fetches the API for us. Direct hosts are fallbacks.
+const API_ENDPOINTS = [
+  p => '/api/sumo' + p,                     // same-origin proxy (functions/api/sumo/[[path]].js)
+  p => 'https://sumo-api.com/api' + p,      // direct apex
+  p => 'https://www.sumo-api.com/api' + p,  // direct www (legacy)
+];
+let apiPref = 0;           // index of the endpoint that last worked
 let API_REACHED = false;   // did any live API call succeed this session? (drives error messaging)
 const DIVISIONS = ['Makuuchi','Juryo'];
 /* Reusable across trips: the app auto-detects the current (or next) basho from
@@ -398,22 +403,22 @@ function fetchTimeout(url, ms){
   const t = setTimeout(() => c.abort(), ms);
   return fetch(url, { cache:'no-store', signal:c.signal }).finally(() => clearTimeout(t));
 }
-const deadHosts = new Set();   // hosts that timed out this session — skipped until a manual Refresh
+const deadHosts = new Set();   // endpoint indices that timed out this session — skipped until a Refresh
 async function getJSON(path){
   const key = 'fkti_sumo:'+path;
-  // Known-good host first, then the alternate (covers a www/apex redirect that breaks CORS); skip any
-  // host that already timed out this session so a black-holed API can't cost the full timeout twice.
-  const bases = [API_BASE, ...API_HOSTS.filter(b=>b!==API_BASE)].filter(b=>!deadHosts.has(b));
+  // Preferred endpoint first, then the rest; skip any that already timed out so a black-holed direct
+  // host can't cost the full timeout on every call once we've learned the proxy works (or vice-versa).
+  const order = [apiPref, ...API_ENDPOINTS.map((_,i)=>i).filter(i=>i!==apiPref)].filter(i=>!deadHosts.has(i));
   let lastErr = null;
-  for(const base of bases){
+  for(const i of order){
     try{
-      const r = await fetchTimeout(base+path, 6000);
+      const r = await fetchTimeout(API_ENDPOINTS[i](path), 6000);
       if(!r.ok) throw new Error('HTTP '+r.status);
-      const j = await r.json();                 // rejects a host that returns non-JSON (e.g. a redirect page)
-      API_BASE = base; API_REACHED = true; deadHosts.delete(base);
+      const j = await r.json();                 // rejects an endpoint that returns non-JSON
+      apiPref = i; API_REACHED = true; deadHosts.delete(i);
       try{ localStorage.setItem(key, JSON.stringify({t:Date.now(), j})); }catch(e){}
       return {j, cached:false, t:Date.now()};
-    }catch(err){ lastErr = err; if(err && err.name==='AbortError') deadHosts.add(base); }
+    }catch(err){ lastErr = err; if(err && err.name==='AbortError') deadHosts.add(i); }
   }
   const raw = localStorage.getItem(key);
   if(raw){ const o=JSON.parse(raw); return {j:o.j, cached:true, t:o.t, err:lastErr||new Error('offline')}; }
