@@ -345,8 +345,11 @@ async function resolveBasho(){
   const now=Date.now(), y=new Date().getFullYear();
   let cand=[]; [y-1,y,y+1].forEach(yy=>BASHO_MONTHS.forEach(m=>cand.push(bashoId(yy,m))));
   cand=cand.filter(id=>{ const mid=Date.UTC(+id.slice(0,4),+id.slice(4)-1,14); return Math.abs(mid-now)<80*864e5; });
-  const infos=[];
-  for(const id of cand){ try{ const res=await getJSON('/basho/'+id); const j=res.j; if(j&&j.startDate){ infos.push({id,start:Date.parse(j.startDate),end:Date.parse(j.endDate)+864e5-1}); } }catch(e){} }
+  // Probe candidates in parallel (each with its own timeout) so one stalled host can't block the rest.
+  const infos = (await Promise.all(cand.map(async id => {
+    try{ const res=await getJSON('/basho/'+id); const j=res.j; if(j&&j.startDate) return {id,start:Date.parse(j.startDate),end:Date.parse(j.endDate)+864e5-1}; }catch(e){}
+    return null;
+  }))).filter(Boolean);
   infos.sort((a,b)=>a.start-b.start);
   const live=infos.find(i=>now>=i.start&&now<=i.end);
   let t=live||infos.find(i=>i.start>now)||infos[infos.length-1];
@@ -388,24 +391,33 @@ window.addEventListener('hashchange',()=>{const h=location.hash.slice(1);if(h&&d
 /* ============================================================
    FETCH + CACHE  (offline-friendly: last good response kept)
    ============================================================ */
+// Fetch with a hard timeout so a black-holed/stalled request rejects instead of hanging forever
+// (a hang left the whole app blank because resolveBasho's await never settled).
+function fetchTimeout(url, ms){
+  const c = new AbortController();
+  const t = setTimeout(() => c.abort(), ms);
+  return fetch(url, { cache:'no-store', signal:c.signal }).finally(() => clearTimeout(t));
+}
+const deadHosts = new Set();   // hosts that timed out this session — skipped until a manual Refresh
 async function getJSON(path){
   const key = 'fkti_sumo:'+path;
-  // Try the known-good host first, then the alternate — covers a www/apex redirect that breaks CORS.
-  const bases = [API_BASE, ...API_HOSTS.filter(b=>b!==API_BASE)];
+  // Known-good host first, then the alternate (covers a www/apex redirect that breaks CORS); skip any
+  // host that already timed out this session so a black-holed API can't cost the full timeout twice.
+  const bases = [API_BASE, ...API_HOSTS.filter(b=>b!==API_BASE)].filter(b=>!deadHosts.has(b));
   let lastErr = null;
   for(const base of bases){
     try{
-      const r = await fetch(base+path, {cache:'no-store'});
+      const r = await fetchTimeout(base+path, 6000);
       if(!r.ok) throw new Error('HTTP '+r.status);
       const j = await r.json();                 // rejects a host that returns non-JSON (e.g. a redirect page)
-      API_BASE = base; API_REACHED = true;      // stick with the host that worked
+      API_BASE = base; API_REACHED = true; deadHosts.delete(base);
       try{ localStorage.setItem(key, JSON.stringify({t:Date.now(), j})); }catch(e){}
       return {j, cached:false, t:Date.now()};
-    }catch(err){ lastErr = err; }
+    }catch(err){ lastErr = err; if(err && err.name==='AbortError') deadHosts.add(base); }
   }
   const raw = localStorage.getItem(key);
-  if(raw){ const o=JSON.parse(raw); return {j:o.j, cached:true, t:o.t, err:lastErr}; }
-  return {j:null, cached:false, err:lastErr};
+  if(raw){ const o=JSON.parse(raw); return {j:o.j, cached:true, t:o.t, err:lastErr||new Error('offline')}; }
+  return {j:null, cached:false, err:lastErr||new Error('offline')};
 }
 function ago(t){
   if(!t) return '';
@@ -422,7 +434,7 @@ function bar(el, res, reloadFn){
   else if(res.cached){ cls='dot stale'; txt='Cached ('+ago(res.t)+')'; }
   el.innerHTML = '<span class="'+cls+'"></span><span>'+txt+'</span>'+
     '<button class="reload">Refresh</button>';
-  el.querySelector('.reload').onclick = reloadFn;
+  el.querySelector('.reload').onclick = ()=>{ deadHosts.clear(); reloadFn(); };
 }
 
 /* ============================================================
@@ -482,6 +494,7 @@ function shortRank(r){
    ============================================================ */
 let todayDivSel = 'Makuuchi';
 async function loadToday(){
+  const _l = document.getElementById('todayList'); if(_l) _l.innerHTML = '<div class="empty">Loading the card…</div>';
   await bashoReady;
   const seg = document.getElementById('todayDiv');
   const tt=document.getElementById('todayTitle'), ts=document.getElementById('todaySub');
@@ -499,7 +512,7 @@ async function loadToday(){
       // We never got a live response — this is a connectivity/API problem, not "between tournaments".
       document.getElementById('todayList').innerHTML = '<div class="empty"><span class="big">📡</span>'+
         'Couldn’t reach the live sumo data right now.<br>Check your connection, then tap Refresh.'+
-        '<br><button class="reload" style="margin-top:10px" onclick="loadToday()">Refresh</button></div>';
+        '<br><button class="reload" style="margin-top:10px" onclick="deadHosts.clear();loadToday()">Refresh</button></div>';
       return;
     }
     document.getElementById('todayList').innerHTML = '<div class="empty"><span class="big">🗓️</span>'+
@@ -596,6 +609,7 @@ async function openPreview(aId,bId){
    ============================================================ */
 let banzukeDivSel = 'Makuuchi';
 async function loadBanzuke(){
+  const _l = document.getElementById('banzukeList'); if(_l) _l.innerHTML = '<div class="empty">Loading the banzuke…</div>';
   await bashoReady;
   const seg = document.getElementById('banzukeDiv');
   seg.innerHTML = DIVISIONS.map(d=>'<button class="'+(d===banzukeDivSel?'sel':'')+'" onclick="banzukeDivSel=\''+d+'\';loadBanzuke()">'+d+'</button>').join('');
@@ -607,6 +621,12 @@ async function renderBanzuke(){
   const res = await getJSON('/basho/'+BASHO+'/banzuke/'+banzukeDivSel);
   bar(document.getElementById('banzukeBar'), res, loadBanzuke);
   const j = res.j;
+  if(!j && res.err){
+    list.innerHTML = '<div class="empty"><span class="big">📡</span>'+
+      'Couldn’t reach the live sumo data right now.<br>Check your connection, then tap Refresh.'+
+      '<br><button class="reload" style="margin-top:10px" onclick="deadHosts.clear();loadBanzuke()">Refresh</button></div>';
+    return;
+  }
   if(!j || (!j.east && !j.west)){
     list.innerHTML = '<div class="empty"><span class="big">📜</span>'+
       'The '+esc(BASHO_META?BASHO_META.name:'')+' banzuke hasn’t been published yet.<br>It’s released about <b>two weeks before</b> the tournament. Check back — it’ll appear here automatically.</div>';
