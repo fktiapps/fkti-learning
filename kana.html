@@ -75,8 +75,8 @@
  .hidden{display:none!important}
  .trace-wrap{position:relative;width:300px;max-width:86vw;aspect-ratio:1/1;margin:6px auto;background:var(--paper2);border:1px solid #e3d9c6;border-radius:16px;overflow:hidden;touch-action:none;box-shadow:0 8px 22px rgba(0,0,0,.28)}
  .guide-char{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:210px;color:rgba(27,34,51,.13);user-select:none;pointer-events:none}
- #traceCanvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
- #stkSvg{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+ #traceCanvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;z-index:2}
+ #stkSvg,#wrSvg{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
  #stkCanvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;z-index:2}
  .prose{background:var(--paper);color:var(--text);border:1px solid #e3d9c6;border-radius:14px;padding:16px;margin:10px 0}
  .prose h3{margin:0 0 6px;color:var(--ver)}.prose p{margin:6px 0;font-size:14px}
@@ -109,7 +109,7 @@
  <section class="scr on" id="home">
   <p class="lead">Learn to read &amp; write Japanese kana — five minutes at a time.</p>
   <div class="tile" data-go="intro"><div class="ic">📖</div><div><h2>Intro</h2><p>What hiragana &amp; katakana are, and how the system works.</p></div></div>
-  <div class="tile" data-go="study"><div class="ic">🎴</div><div><h2>Learn &amp; Write</h2><p>Flashcards (grade yourself) + finger-tracing practice.</p></div></div>
+  <div class="tile" data-go="study"><div class="ic">🎴</div><div><h2>Learn &amp; Write</h2><p>Flashcards (grade yourself) + tracing that checks stroke order &amp; direction.</p></div></div>
   <div class="tile" data-go="sounds"><div class="ic">🔊</div><div><h2>Sounds &amp; Extras</h2><p>Voiced marks, combos, long vowels, small っ — with practice.</p></div></div>
   <div class="tile" data-go="chart"><div class="ic">📊</div><div><h2>Progress &amp; decks</h2><p>Your gojūon chart, color-coded — plus custom decks by confidence.</p></div></div>
   <div class="tile" data-go="stroke"><div class="ic">✏️</div><div><h2>Stroke order</h2><p>Watch each character drawn, then practice — we check order &amp; direction.</p></div></div>
@@ -119,7 +119,7 @@
   <div class="prose"><h3>What is kana?</h3><p>Japanese has two phonetic alphabets — <b>hiragana</b> and <b>katakana</b> — plus kanji. Each kana is <b>one syllable</b> (a “mora”). Each set has <b>46 basic kana</b>: 5 vowels (あ a, い i, う u, え e, お o) and consonant rows (k, s, t, n, h, m, y, r, w) ending with ん (n).</p></div>
   <div class="prose"><h3>ひらがな Hiragana</h3><p>Rounded, flowing shapes. Used for native Japanese words, grammar, and anything not written in kanji. <b>Start here</b> — it’s the foundation.</p><div class="big-ex">あ い う え お</div></div>
   <div class="prose"><h3>カタカナ Katakana</h3><p>Sharper, angular shapes for the <b>same 46 sounds</b>. Used for foreign/loan words, names, onomatopoeia, emphasis. You’ll see it on menus: コーラ (cola), メニュー (menu), アレルギー (allergy).</p><div class="big-ex">ア イ ウ エ オ</div></div>
-  <div class="prose"><h3>How to use this</h3><p><b>Learn</b> shows 5 at a time — first in order (A→O), then reversed (O→A), then shuffled — and grades you; a row unlocks the next once you know it. <b>Write</b> lets you trace. <b>Sounds &amp; Extras</b> covers the marks that change kana.</p>
+  <div class="prose"><h3>How to use this</h3><p><b>Learn</b> shows 5 at a time — first in order (A→O), then reversed (O→A), then shuffled — and grades you; a row unlocks the next once you know it. <b>Write</b> lets you trace, and grades your stroke order &amp; direction. <b>Sounds &amp; Extras</b> covers the marks that change kana.</p>
    <button class="prompt" style="border:none;background:var(--ver);color:#fff;width:100%;margin-top:6px" data-go="study">Start learning →</button></div>
  </section>
 
@@ -136,11 +136,16 @@
   <div id="prompt" class="prompt hidden"></div>
   <div id="writeView" class="hidden">
    <div style="text-align:center;font-size:15px;font-weight:700;margin-bottom:6px" id="writePrompt"></div>
-   <div class="trace-wrap" id="traceWrap"><div class="guide-char" id="guideChar"></div><canvas id="traceCanvas"></canvas></div>
-   <div class="rate" style="grid-template-columns:1fr 1fr 1fr;margin-top:12px">
-    <button class="ghost" id="traceClear">Clear</button><button class="ghost" id="traceGuide">Hide guide</button><button class="r-kinda" id="traceNext" style="color:#fff">Next →</button>
+   <div class="trace-wrap" id="traceWrap"><div class="guide-char" id="guideChar"></div><svg id="wrSvg" viewBox="0 0 109 109" preserveAspectRatio="xMidYMid meet"></svg><canvas id="traceCanvas"></canvas></div>
+   <div class="meta" style="justify-content:center;gap:10px"><span id="wrCount"></span></div>
+   <div class="rate" style="grid-template-columns:1fr 1fr 1fr;margin-top:8px">
+    <button class="ghost" id="traceWatch">▶ Watch</button><button class="ghost" id="traceClear">Clear</button><button class="ghost" id="traceGuide">Hide guide</button>
    </div>
-   <p style="font-size:12px;color:var(--muted2);text-align:center;margin-top:8px">Trace the faint character with your finger. (Stroke-order &amp; direction detection coming soon.)</p>
+   <div class="rate" style="grid-template-columns:1fr 1fr;margin-top:8px">
+    <button class="r-know" id="traceCheck" style="color:#fff">Check ✓</button><button class="r-kinda" id="traceNext" style="color:#fff">Next →</button>
+   </div>
+   <div id="wrFeedback" style="margin-top:10px"></div>
+   <p style="font-size:12px;color:var(--muted2);text-align:center;margin-top:8px">Trace the faint character with your finger — one stroke at a time, lifting between strokes. Tap <b>▶ Watch</b> to see the order first, then <b>Check ✓</b> and we grade order &amp; direction (the difference between シ and ツ!).</p>
   </div>
   <div class="foot"><span style="font-size:11px;color:var(--muted2)" id="doneTag"></span><button class="ghost" id="resetBtn">↺ Start over</button></div>
  </section>
@@ -335,25 +340,43 @@ document.querySelectorAll('#scriptSeg button').forEach(b=>b.onclick=()=>{script=
 $('resetBtn').onclick=()=>{const nm=script==='hira'?'Hiragana':'Katakana';if(confirm('Start '+nm+' over?\n\nThis erases all your '+nm+' ratings and re-locks the rows back to the first one. Your other script is untouched.')){const s=store();delete s[script];save(s);cur=null;flipped=false;seqPtr=0;render();}};
 
 let mode='recognize',wIdx=0,guideOn=true,tctx=null,drawing=false;
+// Write-it now records the strokes you draw (not just ink on a canvas) so the
+// same grader the Stroke-order screen uses can mark order and direction here.
+let wUser=[],wStrokes=null;
 function renderWrite(){
  $('card').classList.add('hidden');$('rateRow').classList.add('hidden');$('prompt').classList.add('hidden');$('writeView').classList.remove('hidden');
  const pool=activeCells();if(!pool.length)return;wIdx=((wIdx%pool.length)+pool.length)%pool.length;const c=pool[wIdx];
  $('writePrompt').textContent='Write:  “'+c.r+'”';$('guideChar').textContent=c.k;$('guideChar').style.display=guideOn?'flex':'none';
  $('rowLabel').textContent='Writing · '+frontier().name;$('poolLabel').textContent=pool.length+' to practice';$('doneTag').textContent=(wIdx+1)+' / '+pool.length;setupCanvas();
+ // Reset the drawing surface and pull this character's model strokes.
+ $('wrSvg').innerHTML='';$('wrFeedback').innerHTML='';wUser=[];wStrokes=null;$('wrCount').textContent='loading strokes…';
+ loadStrokes(c.k).then(st=>{
+  if($('guideChar').textContent!==c.k)return;      // moved on while fetching
+  wStrokes=st;$('wrCount').textContent=st.length+' stroke'+(st.length>1?'s':'');
+ }).catch(()=>{$('wrCount').textContent='';});
 }
 function setupCanvas(){const cv=$('traceCanvas');const r=cv.getBoundingClientRect();if(!r.width)return;cv.width=r.width;cv.height=r.height;tctx=cv.getContext('2d');tctx.lineWidth=11;tctx.lineCap='round';tctx.lineJoin='round';tctx.strokeStyle='#E2553B';}
-function clearTrace(){const cv=$('traceCanvas');if(tctx)tctx.clearRect(0,0,cv.width,cv.height);}
+function clearTrace(){const cv=$('traceCanvas');if(tctx)tctx.clearRect(0,0,cv.width,cv.height);wUser=[];$('wrFeedback').innerHTML='';}
 function tpos(e){const cv=$('traceCanvas');const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
 (function(){const cv=$('traceCanvas');
- cv.addEventListener('pointerdown',e=>{e.preventDefault();if(!tctx)setupCanvas();drawing=true;const p=tpos(e);tctx.beginPath();tctx.moveTo(p.x,p.y);try{cv.setPointerCapture(e.pointerId);}catch(_){}});
- cv.addEventListener('pointermove',e=>{if(!drawing)return;e.preventDefault();const p=tpos(e);tctx.lineTo(p.x,p.y);tctx.stroke();});
+ cv.addEventListener('pointerdown',e=>{e.preventDefault();if(!tctx)setupCanvas();drawing=true;const p=tpos(e);wUser.push([p]);tctx.beginPath();tctx.moveTo(p.x,p.y);try{cv.setPointerCapture(e.pointerId);}catch(_){}});
+ cv.addEventListener('pointermove',e=>{if(!drawing)return;e.preventDefault();const p=tpos(e);wUser[wUser.length-1].push(p);tctx.lineTo(p.x,p.y);tctx.stroke();});
  cv.addEventListener('pointerup',()=>drawing=false);cv.addEventListener('pointercancel',()=>drawing=false);
 })();
 document.querySelectorAll('#modeSeg button').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;document.querySelectorAll('#modeSeg button').forEach(x=>x.classList.toggle('on',x===b));wIdx=0;cur=null;flipped=false;render();});
 $('traceClear').onclick=clearTrace;
+$('traceWatch').onclick=()=>animateStrokes($('wrSvg'),wStrokes);
+$('traceCheck').onclick=()=>{
+ const fb=$('wrFeedback');
+ if(!wStrokes){fb.innerHTML='<div style="font-size:13px;color:var(--muted2)">Stroke data still loading — try again in a moment.</div>';return;}
+ if(!wUser.length){fb.innerHTML='<div style="font-size:13px;color:var(--muted2)">Draw the character first, lifting your finger between strokes.</div>';return;}
+ paintGrade(fb,gradeStrokes(wStrokes,wUser,$('traceCanvas').width||300));
+};
 $('traceGuide').onclick=()=>{guideOn=!guideOn;$('guideChar').style.display=guideOn?'flex':'none';$('traceGuide').textContent=guideOn?'Hide guide':'Show guide';};
 $('traceNext').onclick=()=>{wIdx++;renderWrite();};
-window.addEventListener('resize',()=>{if(mode==='write')setupCanvas();});
+// A resize reallocates the canvas (which wipes the ink), so drop the strokes
+// recorded against the old pixel size rather than grading them at the new one.
+window.addEventListener('resize',()=>{if(mode==='write'){setupCanvas();wUser=[];$('wrFeedback').innerHTML='';}});
 
 const SOUNDS=[
  {t:'Voiced sounds — dakuten ゛ & handakuten ゜',b:'Two strokes ゛ make a sound <b>voiced</b>: か ka→が ga, さ sa→ざ za, た ta→だ da, は ha→ば ba. The h-row also takes ゜ to become <b>p</b> (a <i>bilabial</i> pop with both lips): は ha→ぱ pa.',ex:'か→が　さ→ざ　は→ば→ぱ',
@@ -417,14 +440,16 @@ function renderStroke(){
  setupStk();clearStk();stkStrokes=null;
  loadStrokes(c.k).then(s=>{stkStrokes=s;$('stkCount').textContent=s.length+' stroke'+(s.length>1?'s':'');}).catch(()=>{$('stkCount').textContent='';});
 }
-function watchStrokes(){
- if(!stkStrokes)return;const svg=$('stkSvg');svg.innerHTML='';
+function animateStrokes(svg,strokes){
+ if(!strokes||!svg)return;svg.innerHTML='';
+ const stkStrokes=strokes;
  const ps=stkStrokes.map(s=>{const p=document.createElementNS(SVGNS,'path');p.setAttribute('d',s.d);p.setAttribute('fill','none');p.setAttribute('stroke','#E2553B');p.setAttribute('stroke-width','6');p.setAttribute('stroke-linecap','round');p.setAttribute('stroke-linejoin','round');svg.appendChild(p);return p;});
  let t=250;ps.forEach(p=>{let L=8;try{L=p.getTotalLength();}catch(_){}p.style.strokeDasharray=L;p.style.strokeDashoffset=L;setTimeout(()=>{p.style.transition='stroke-dashoffset 2.2s linear';p.style.strokeDashoffset=0;},t);t+=2450;});
 }
-function checkStrokes(){
- if(!stkStrokes)return;
- const cv=$('stkCanvas'),sz=cv.width||300,fb=[];let allOk=true;
+// Pure grader: model strokes + the user's raw canvas points -> per-stroke verdict.
+// Returns {allOk, lines[]} so any screen can render the feedback its own way.
+function gradeStrokes(stkStrokes,stkUser,sz){
+ const fb=[];let allOk=true;
  for(let i=0;i<stkStrokes.length;i++){
   const c=stkStrokes[i],u=stkUser[i];
   if(!u||u.length<1){fb.push('Stroke '+(i+1)+': ✗ missing');allOk=false;continue;}
@@ -436,7 +461,16 @@ function checkStrokes(){
   else{allOk=false;fb.push('Stroke '+(i+1)+': ✗ '+(!startOk?'wrong starting point':'wrong direction'));}
  }
  if(stkUser.length!==stkStrokes.length){allOk=false;fb.push('You drew '+stkUser.length+'; expected '+stkStrokes.length+' stroke(s).');}
- $('stkFeedback').innerHTML='<div style="font-weight:800;color:'+(allOk?'#2E7D32':'#C4452E')+';margin-bottom:4px">'+(allOk?'✓ Correct order & direction!':'Not quite — tap ▶ Watch, then retry.')+'</div>'+fb.map(x=>'<div style="font-size:13px;color:var(--text)">'+x+'</div>').join('');
+ return{allOk:allOk,lines:fb};
+}
+// Shared feedback renderer.
+function paintGrade(el,res){
+ el.innerHTML='<div style="font-weight:800;color:'+(res.allOk?'#2E7D32':'#C4452E')+';margin-bottom:4px">'+(res.allOk?'✓ Correct order & direction!':'Not quite — tap ▶ Watch, then retry.')+'</div>'+res.lines.map(x=>'<div style="font-size:13px;color:var(--text)">'+x+'</div>').join('');
+}
+function checkStrokes(){
+ if(!stkStrokes)return;
+ const cv=$('stkCanvas');
+ paintGrade($('stkFeedback'),gradeStrokes(stkStrokes,stkUser,cv.width||300));
 }
 function spos(e){const cv=$('stkCanvas'),r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
 (function(){const cv=$('stkCanvas');
@@ -446,7 +480,7 @@ function spos(e){const cv=$('stkCanvas'),r=cv.getBoundingClientRect();return{x:e
 })();
 $('stkPrev').onclick=()=>{stkIdx--;renderStroke();};
 $('stkNext').onclick=()=>{stkIdx++;renderStroke();};
-$('stkWatch').onclick=watchStrokes;
+$('stkWatch').onclick=()=>animateStrokes($('stkSvg'),stkStrokes);
 $('stkClear').onclick=()=>{clearStk();$('stkSvg').innerHTML='';$('stkFeedback').innerHTML='';};
 $('stkCheck').onclick=checkStrokes;
 document.querySelectorAll('#stkScriptSeg button').forEach(b=>b.onclick=()=>{stkScript=b.dataset.script;document.querySelectorAll('#stkScriptSeg button').forEach(x=>x.classList.toggle('on',x===b));stkIdx=0;renderStroke();});
