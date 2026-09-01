@@ -2,7 +2,7 @@
 // Precaches the app shell + all stroke-recognition shards; runtime-caches KanjiVG SVGs, city/kanji
 // data, and the cross-origin Tesseract.js OCR assets (library + WASM core + Japanese model) so the
 // camera identifier works offline after one online use. Bump VERSION to force an update.
-const VERSION = 'fkti-learn-v2';
+const VERSION = 'fkti-learn-v3';
 const SHELL = `shell-${VERSION}`;
 const RUNTIME = `runtime-${VERSION}`;
 const OCR = `ocr-${VERSION}`;
