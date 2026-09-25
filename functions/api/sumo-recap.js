@@ -110,10 +110,13 @@ consider the biggest of the tournament, or what a wrestler said in a post-bout i
 / dohyō-giwa comments) if you find one reported.
 
 Attribute anything you found via search to its outlet by name when you use it (e.g. "日刊スポーツ
-reports that...", "NHK's coverage noted..."). Do NOT fabricate a source or attribute a view to
-Japanese press that your search didn't actually turn up — if search finds nothing useful for a
-given storyline, just cover that part using the facts alone rather than inventing outside
-commentary for it. This is read by real fans who may follow up on what you cite.
+reports that...", "NHK's coverage noted..."). Never write vague, unattributed phrases like
+"Japanese press and fan commentary have latched onto..." or "analysts have remarked..." — either
+name the specific outlet/publication your search actually returned, or don't make the claim at
+all. Do NOT fabricate a source or attribute a view to Japanese press that your search didn't
+actually turn up — if search finds nothing useful for a given storyline, just cover that part
+using the facts alone rather than inventing outside commentary for it. This is read by real fans
+who may follow up on what you cite.
 
 Write 3-5 short paragraphs telling the story of the tournament so far, blending the verified
 facts with what you actually found. Plain text or simple markdown, no code fences.
