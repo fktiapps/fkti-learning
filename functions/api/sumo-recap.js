@@ -60,7 +60,11 @@ absences worth flagging. Keep it vivid but grounded — no invented color commen
 atmosphere or crowd reaction that isn't implied by the facts. Plain text or simple markdown, no
 code fences.`;
 
-  const userMsg = `FACTS for ${facts.bashoName || basho}, through Day ${day} of ${facts.totalDays||15}:\n${JSON.stringify(facts)}\n\nWrite the analysis now.`;
+  // Mistral's /v1/conversations endpoint only accepts 'user'/'assistant' roles in `inputs` — no
+  // 'system' (confirmed live: a system-role entry gets a 422 "Input should be 'assistant' or
+  // 'user'"). Same reason the other Mistral calls in this codebase (chef-bio.js, place-summary.js)
+  // fold their instructions into one user message instead of a separate system message.
+  const userMsg = `${sys}\n\nFACTS for ${facts.bashoName || basho}, through Day ${day} of ${facts.totalDays||15}:\n${JSON.stringify(facts)}\n\nWrite the analysis now.`;
 
   let data;
   try {
@@ -70,7 +74,6 @@ code fences.`;
       body: JSON.stringify({
         model: MODEL,
         inputs: [
-          { role: 'system', content: sys },
           { role: 'user', content: userMsg }
         ],
         store: false,
