@@ -529,20 +529,36 @@ async function loadToday(){
 async function renderTorikumi(){
   const list = document.getElementById('todayList');
   list.innerHTML = '<div class="empty">Loading the card…</div>';
-  const res = await getJSON('/basho/'+BASHO+'/torikumi/'+todayDivSel+'/'+BASHO_DAY);
+  // Torikumi bouts carry no in-progress win/loss tally (checked against the live API) — the
+  // banzuke endpoint does, per-rikishi, as .record/.wins/.losses. A bout can cross the
+  // Makuuchi/Juryo boundary, so both divisions' banzuke are fetched and merged into one lookup
+  // rather than just the division currently selected.
+  const [res, ...banRes] = await Promise.all([
+    getJSON('/basho/'+BASHO+'/torikumi/'+todayDivSel+'/'+BASHO_DAY),
+    ...DIVISIONS.map(d=>getJSON('/basho/'+BASHO+'/banzuke/'+d))
+  ]);
   bar(document.getElementById('todayBar'), res, loadToday);
+  const recMap = {};
+  banRes.forEach(br=>{
+    const rows = br.j && (br.j.east||[]).concat(br.j.west||[]);
+    (rows||[]).forEach(r=>{ recMap[r.rikishiID||r.rikishiId] = recOf(r); });
+  });
   const t = res.j && res.j.torikumi;
   if(!t || !t.length){
     list.innerHTML = '<div class="empty"><span class="big">🗓️</span>'+
       'The card for '+dayLabel(BASHO_DAY)+' isn’t posted yet.<br>Each day’s matchups go up the <b>evening before</b>. Check back soon.</div>';
     return;
   }
-  list.innerHTML = t.map(boutCard).join('');
+  list.innerHTML = t.map(m=>boutCard(m,recMap)).join('');
 }
-function boutCard(m){
-  const ew = (id,name,rank,won)=>'<div class="side '+(m.eastId===id?'east':'west')+'" onclick="openBio('+id+')">'+
+function boutCard(m,recMap){
+  recMap = recMap || {};
+  const ew = (id,name,rank,won)=>{
+    const rec = recMap[id];
+    return '<div class="side '+(m.eastId===id?'east':'west')+'" onclick="openBio('+id+')">'+
       avaImg(id,name)+'<div class="nm"><div class="en '+(won?'won':'')+'">'+(won?'<span class="winmark">▶ </span>':'')+esc(name)+'</div>'+
-      '<div class="rk">'+esc(shortRank(rank))+'</div></div></div>';
+      '<div class="rk">'+esc(shortRank(rank))+(rec?' · <span class="rec">'+rec+'</span>':'')+'</div></div></div>';
+  };
   const ews = m.eastShikona, wss = m.westShikona;
   const ewW = m.winnerId && m.winnerId===m.eastId;
   const wsW = m.winnerId && m.winnerId===m.westId;
