@@ -688,14 +688,32 @@ function renderRecapBox(cachedText, facts, cacheKey){
     '<span id="ydStatus" style="font-size:12px;color:var(--muted2);margin-left:8px"></span>';
   document.getElementById('ydBtn').onclick = () => fetchRecap(facts, cacheKey);
 }
-async function fetchRecap(facts, cacheKey){
+function recapCountdown(secs, elId){
+  return new Promise(res=>{
+    let n = secs;
+    const iv = setInterval(()=>{
+      n--; const el = document.getElementById(elId);
+      if(el) el.textContent = 'Researching Japanese press coverage… '+Math.max(0,n)+'s';
+      if(n<=0){ clearInterval(iv); res(); }
+    }, 1000);
+  });
+}
+async function fetchRecap(facts, cacheKey, retries){
+  retries = retries || 0;
   const btn = document.getElementById('ydBtn'), st = document.getElementById('ydStatus');
-  btn.disabled = true; st.textContent = 'Writing…';
+  btn.disabled = true;
+  if(retries===0) st.textContent = 'Researching Japanese press coverage…';
   try{
     const r = await fetch('/api/sumo-recap', {method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({basho:BASHO, day:facts.through, facts})});
     const j = await r.json();
     if(j.wired===false){ st.textContent = 'Not set up yet — needs a MISTRAL_API_KEY on this deployment.'; btn.disabled=false; return; }
-    if(!j.text){ st.textContent = j.error==='rate_limited' ? 'Busy — try again shortly.' : 'Couldn’t generate an analysis right now.'; btn.disabled=false; return; }
+    if(j.status==='pending'){
+      if(retries>=6){ st.textContent = 'Still researching — try again in a bit.'; btn.disabled=false; return; }
+      await recapCountdown(j.retry_after||25, 'ydStatus');
+      return fetchRecap(facts, cacheKey, retries+1);
+    }
+    if(j.error==='rate_limited'){ st.textContent = 'Busy — try again in '+(j.retry_after||45)+'s.'; btn.disabled=false; return; }
+    if(!j.text){ st.textContent = 'Couldn’t generate an analysis right now.'; btn.disabled=false; return; }
     localStorage.setItem(cacheKey, JSON.stringify(j.text));
     renderRecapBox(j.text, facts, cacheKey);
   }catch(e){ st.textContent = 'Network error — try again.'; btn.disabled=false; }

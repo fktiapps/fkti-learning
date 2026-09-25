@@ -3,17 +3,25 @@
  * Body: { basho: "202609", day: 7, facts: {...} }  — day is "through day N"; see sumo.html's
  * computeBashoFacts()
  *
- * Writes a short tournament-to-date ANALYSIS of the basho so far (not just one day). The model
- * is given ONLY pre-computed, AGGREGATED facts (every kinboshi and top upset so far, active
- * streaks, absences, perfect/winless records, yūshō-race context) — it is never asked to read raw
- * win/loss records or individual bout-by-bout results itself, so it can't misread a record or
- * invent a result; its one job is turning clean facts into readable prose.
+ * Two-stage architecture using ctx.waitUntil() (same pattern as the dining app's chef-bio.js):
+ *   1st request  → starts Mistral web-search in background, returns {status:'pending'} instantly
+ *   2nd+ request → returns cached KV result when ready, or still-pending with a countdown
+ * This avoids Cloudflare's 30s wall-clock limit — a web-search-backed Mistral call can take
+ * well past that — and gives the user a countdown instead of a hanging spinner or a timeout error.
+ *
+ * WHY WEB SEARCH: an earlier version only turned our own pre-computed stats into prose, which
+ * added no real value over the stats already on the page. This version additionally asks Mistral
+ * to search for what actual Japanese-language sumo press/commentary is saying about this
+ * tournament's storylines, and write an analysis that combines that outside context with our
+ * facts — but the FACTS remain ground truth throughout: the model is told explicitly never to let
+ * a secondary source override a record/result that's actually in the facts JSON, and never to
+ * attribute a claim to "the Japanese press" that it didn't actually find via search.
  *
  * Requires:
- *   - Secret  MISTRAL_API_KEY   (wrangler pages secret put MISTRAL_API_KEY)
- *   - KV binding  SUMMARIES      (optional — caches each day-through's analysis so a page reload
- *                                 doesn't re-spend; the client also caches in localStorage
- *                                 regardless)
+ *   - Secret  MISTRAL_API_KEY   (wrangler pages secret put MISTRAL_API_KEY, or set via the
+ *                                 Cloudflare Pages dashboard's Environment Variables screen)
+ *   - KV binding  SUMMARIES      (required for the pending/poll flow to work at all now — without
+ *                                 it every request would restart the search from scratch)
  *
  * If the key is missing it returns {wired:false} so the client shows placeholder copy and a
  * "not configured" note instead of erroring — same convention as the dining app's Mistral calls.
@@ -21,89 +29,157 @@
 
 const MODEL = 'mistral-medium-latest';
 const CACHE_TTL = 60 * 60 * 24 * 3; // 3 days — the cache key already changes every day (through-N), this just bounds a bad cached analysis before a prompt fix + redeploy can take effect
+const PENDING_TTL = 90;              // pending marker expires in 90s
 
 export async function onRequestPost(context) {
-  const { request, env } = context;
+  const { request, env, waitUntil } = context;
 
   let body;
   try { body = await request.json(); } catch { return json({ error: 'bad_json' }, 400); }
   const basho = String(body.basho || '');
   const day = Number(body.day || 0);
   const facts = body.facts;
-  if (!basho || !day || !facts) return json({ error: 'missing basho/day/facts' }, 400);
+  if (!basho || !day) return json({ error: 'missing basho/day' }, 400);
 
   if (!env.MISTRAL_API_KEY) {
     return json({ wired: false, message: 'MISTRAL_API_KEY not set on this deployment.' });
   }
 
   const cacheKey = 'recap:' + basho + '-' + day;
+  const pendingKey = 'pending:' + cacheKey;
+
   if (env.SUMMARIES) {
+    // --- Completed already? ---
     const cached = await env.SUMMARIES.get(cacheKey);
     if (cached) return new Response(cached, { headers: cors({ 'content-type': 'application/json' }) });
+
+    // --- Already researching? Don't start a second search for the same day. ---
+    const pending = await env.SUMMARIES.get(pendingKey);
+    if (pending) {
+      let p;
+      try { p = JSON.parse(pending); } catch { await env.SUMMARIES.delete(pendingKey); }
+      if (p) {
+        const elapsed = Math.floor((Date.now() - p.started) / 1000);
+        const remaining = Math.max(5, 28 - elapsed);
+        return json({ status: 'pending', retry_after: remaining, elapsed });
+      }
+    }
   }
 
-  const sys = `You are a sumo commentator writing a short tournament-to-date ANALYSIS for
-English-speaking fans following a basho live — not a single day's recap, the story of the whole
-tournament so far. You are given ONLY pre-computed, verified facts below as JSON, aggregated
-across every completed day: every kinboshi so far (a rank-and-file wrestler beating a Yokozuna),
-the biggest upsets of the tournament, wrestlers on a current win or loss streak of 4+, anyone
-still undefeated or still winless, any absences (kyūjō), and the current yūshō (championship)
-picture (the leader(s) and who's still mathematically alive to catch them). These facts are
-already correct and complete through the stated day; do not add, guess, or infer any bout result,
-record, rank, or kimarite that isn't in the JSON. If a category (e.g. absences) is empty, don't
-mention it just to fill space — only write about what's actually notable.
+  if (!facts) return json({ error: 'missing facts for a new request' }, 400);
 
-Write 3-5 short paragraphs (or a tight structure of a few labeled sections if that reads better)
-telling the story of the tournament arc so far: who's overperforming or underperforming their
-rank, how the yūshō race has taken shape, standout upsets and kinboshi, and any streaks or
-absences worth flagging. Keep it vivid but grounded — no invented color commentary about a bout's
-atmosphere or crowd reaction that isn't implied by the facts. Plain text or simple markdown, no
-code fences.`;
+  // Mark pending immediately so a duplicate click (or an impatient poll) doesn't double-fire.
+  if (env.SUMMARIES)
+    await env.SUMMARIES.put(pendingKey, JSON.stringify({ started: Date.now() }), { expirationTtl: PENDING_TTL });
 
   // Mistral's /v1/conversations endpoint only accepts 'user'/'assistant' roles in `inputs` — no
-  // 'system' (confirmed live: a system-role entry gets a 422 "Input should be 'assistant' or
-  // 'user'"). Same reason the other Mistral calls in this codebase (chef-bio.js, place-summary.js)
-  // fold their instructions into one user message instead of a separate system message.
-  const userMsg = `${sys}\n\nFACTS for ${facts.bashoName || basho}, through Day ${day} of ${facts.totalDays||15}:\n${JSON.stringify(facts)}\n\nWrite the analysis now.`;
+  // 'system' (confirmed live: a system-role entry gets a 422). Same reason the other Mistral
+  // calls in this codebase (chef-bio.js, place-summary.js) fold instructions into one user message.
+  const prompt = `You are a sumo analyst writing a tournament-to-date ANALYSIS for English-speaking
+fans following a basho live — the story of the whole tournament so far, not just a recap of the
+numbers.
 
-  let data;
-  try {
-    const r = await fetch('https://api.mistral.ai/v1/conversations', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json', 'authorization': 'Bearer ' + env.MISTRAL_API_KEY },
-      body: JSON.stringify({
-        model: MODEL,
-        inputs: [
-          { role: 'user', content: userMsg }
-        ],
-        store: false,
-        completion_args: { temperature: 0.4 }
-      })
-    });
-    if (!r.ok) {
-      if (r.status === 429) {
-        const retryAfter = Math.max(45, parseInt(r.headers.get('Retry-After') || '45', 10));
-        return json({ wired: true, error: 'rate_limited', retry_after: retryAfter }, 429);
+You are given FACTS below as JSON, pre-computed and verified, aggregated across every day
+completed so far: every kinboshi (a rank-and-file wrestler beating a Yokozuna), the biggest upsets
+of the tournament, wrestlers on a current win/loss streak of 4+, anyone still undefeated or
+winless, absences (kyūjō), and the current yūshō (championship) picture. THESE FACTS ARE GROUND
+TRUTH — never invent, alter, or contradict a bout result, record, rank, or kimarite that's in this
+JSON, and if a source you find while searching disagrees with the JSON, the JSON wins and you
+should not repeat the contradicting claim.
+
+Your job is to go beyond those facts: use web search to find what actual Japanese-language sumo
+press and commentary — NHK, Nikkan Sports (日刊スポーツ), Sports Hochi (スポーツ報知), Sponichi
+(スポーツニッポン), Daily Sports, established sumo journalists/critics, or the Japan Sumo
+Association's own commentary — are currently saying about THIS tournament's storylines,
+especially the wrestlers and threads named in the facts (the yūshō leader(s) and chasers, anyone
+with a kinboshi or notable upset, anyone on a hot/cold streak, any absence). Bring in real
+context that raw numbers can't: why a wrestler's form is considered significant, injury/health
+context around any absence, tactical or historical reads, which storyline Japanese commentators
+consider the biggest of the tournament, or what a wrestler said in a post-bout interview (囲み取材
+/ dohyō-giwa comments) if you find one reported.
+
+Attribute anything you found via search to its outlet by name when you use it (e.g. "日刊スポーツ
+reports that...", "NHK's coverage noted..."). Do NOT fabricate a source or attribute a view to
+Japanese press that your search didn't actually turn up — if search finds nothing useful for a
+given storyline, just cover that part using the facts alone rather than inventing outside
+commentary for it. This is read by real fans who may follow up on what you cite.
+
+Write 3-5 short paragraphs telling the story of the tournament so far, blending the verified
+facts with what you actually found. Plain text or simple markdown, no code fences.
+
+Then add a final section headed exactly "What to watch for next" — 3-5 bullet points on what a
+fan should pay attention to in the remaining days: e.g. an upcoming matchup between wrestlers in
+the yūshō race (only if you can identify one from the facts or your search — do not invent a
+specific future pairing that isn't confirmed), whether an in-form or struggling wrestler can
+sustain their run, what Japanese commentators are watching for or predicting (attributed, per the
+rule above), or a record/streak that's about to be tested. Ground this in the facts and what you
+actually found — no generic filler like "stay tuned for more exciting bouts."
+
+FACTS for ${facts.bashoName || basho}, through Day ${day} of ${facts.totalDays || 15}:
+${JSON.stringify(facts)}
+
+Write the analysis now.`;
+
+  const backgroundFetch = async () => {
+    try {
+      const r = await fetch('https://api.mistral.ai/v1/conversations', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', 'authorization': 'Bearer ' + env.MISTRAL_API_KEY },
+        body: JSON.stringify({
+          model: MODEL,
+          inputs: [{ role: 'user', content: prompt }],
+          tools: [{ type: 'web_search' }],
+          store: false,
+          completion_args: { temperature: 0.4 }
+        })
+      });
+
+      if (!r.ok) {
+        if (r.status === 429) {
+          const headerSecs = parseInt(r.headers.get('Retry-After') || '45', 10);
+          const retryAfter = Math.max(45, headerSecs);
+          if (env.SUMMARIES) {
+            await env.SUMMARIES.delete(pendingKey);
+            await env.SUMMARIES.put(cacheKey, JSON.stringify({ wired: true, status: 'rate_limited', retry_after: retryAfter }),
+              { expirationTtl: retryAfter + 15 });
+          }
+        } else if (env.SUMMARIES) {
+          await env.SUMMARIES.delete(pendingKey);
+          await env.SUMMARIES.put(cacheKey, JSON.stringify({ wired: true, error: 'upstream', status: r.status, detail: (await r.text()).slice(0, 200) }),
+            { expirationTtl: 60 });
+        }
+        return;
       }
-      return json({ wired: true, error: 'upstream', status: r.status, detail: (await r.text()).slice(0, 300) }, 502);
+
+      const data = await r.json();
+      let text = '';
+      for (const o of (data.outputs || data.messages || data.entries || [])) {
+        const isMsg = o.type === 'message.output' || o.role === 'assistant';
+        if (!isMsg || o.content == null) continue;
+        if (typeof o.content === 'string') text += o.content;
+        else if (Array.isArray(o.content)) for (const ch of o.content) if (ch && ch.type === 'text' && ch.text) text += ch.text;
+      }
+
+      if (!text.trim()) {
+        if (env.SUMMARIES) {
+          await env.SUMMARIES.delete(pendingKey);
+          await env.SUMMARIES.put(cacheKey, JSON.stringify({ wired: true, error: 'empty' }), { expirationTtl: 60 });
+        }
+        return;
+      }
+
+      const out = JSON.stringify({ wired: true, text: text.trim(), day, basho });
+      if (env.SUMMARIES) {
+        await env.SUMMARIES.put(cacheKey, out, { expirationTtl: CACHE_TTL });
+        await env.SUMMARIES.delete(pendingKey);
+      }
+    } catch (_) {
+      if (env.SUMMARIES) await env.SUMMARIES.delete(pendingKey);
     }
-    data = await r.json();
-  } catch (e) {
-    return json({ wired: true, error: 'network', detail: String(e) }, 502);
-  }
+  };
 
-  let text = '';
-  for (const o of (data.outputs || data.messages || data.entries || [])) {
-    const isMsg = o.type === 'message.output' || o.role === 'assistant';
-    if (!isMsg || o.content == null) continue;
-    if (typeof o.content === 'string') text += o.content;
-    else if (Array.isArray(o.content)) for (const ch of o.content) if (ch && ch.type === 'text' && ch.text) text += ch.text;
-  }
-  if (!text.trim()) return json({ wired: true, error: 'empty' }, 502);
-
-  const out = JSON.stringify({ wired: true, text: text.trim(), day, basho });
-  if (env.SUMMARIES) await env.SUMMARIES.put(cacheKey, out, { expirationTtl: CACHE_TTL });
-  return new Response(out, { headers: cors({ 'content-type': 'application/json' }) });
+  if (waitUntil) waitUntil(backgroundFetch());
+  return json({ status: 'pending', retry_after: 25, elapsed: 0 });
 }
 
 export async function onRequestOptions() {
