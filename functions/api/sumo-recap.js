@@ -48,7 +48,18 @@ export async function onRequestPost(context) {
   const cacheKey = 'recap:' + basho + '-' + day;
   const pendingKey = 'pending:' + cacheKey;
 
-  if (env.SUMMARIES) {
+  // Without a KV binding there is nowhere to remember "already searching" or "already done"
+  // between requests — every request is a clean slate. Falling through to the fully-synchronous
+  // path below (no waitUntil, no pending) is deliberate: the two-stage pending/poll pattern is
+  // WORSE than useless without KV, because each poll would look like a brand-new request and
+  // restart the search from scratch instead of checking on the first one — silently multiplying
+  // paid Mistral calls forever instead of ever converging on an answer. (Caught this exact bug
+  // live: two polls 25s apart both returned elapsed:0, i.e. two independent searches, not one
+  // being checked on twice.) Synchronous-only means occasionally eating Cloudflare's execution
+  // limit on a slow search instead, which fails cleanly — the client already handles that.
+  const hasKV = !!env.SUMMARIES;
+
+  if (hasKV) {
     // --- Completed already? ---
     const cached = await env.SUMMARIES.get(cacheKey);
     if (cached) return new Response(cached, { headers: cors({ 'content-type': 'application/json' }) });
@@ -69,7 +80,7 @@ export async function onRequestPost(context) {
   if (!facts) return json({ error: 'missing facts for a new request' }, 400);
 
   // Mark pending immediately so a duplicate click (or an impatient poll) doesn't double-fire.
-  if (env.SUMMARIES)
+  if (hasKV)
     await env.SUMMARIES.put(pendingKey, JSON.stringify({ started: Date.now() }), { expirationTtl: PENDING_TTL });
 
   // Mistral's /v1/conversations endpoint only accepts 'user'/'assistant' roles in `inputs` — no
@@ -120,7 +131,10 @@ ${JSON.stringify(facts)}
 
 Write the analysis now.`;
 
-  const backgroundFetch = async () => {
+  // Runs the actual Mistral call and returns the RESULT OBJECT (never writes a response itself) —
+  // shared by both the KV path (run in the background, cache the result) and the no-KV path
+  // (run synchronously, return the result directly, nothing to cache between requests anyway).
+  const runSearch = async () => {
     try {
       const r = await fetch('https://api.mistral.ai/v1/conversations', {
         method: 'POST',
@@ -137,18 +151,9 @@ Write the analysis now.`;
       if (!r.ok) {
         if (r.status === 429) {
           const headerSecs = parseInt(r.headers.get('Retry-After') || '45', 10);
-          const retryAfter = Math.max(45, headerSecs);
-          if (env.SUMMARIES) {
-            await env.SUMMARIES.delete(pendingKey);
-            await env.SUMMARIES.put(cacheKey, JSON.stringify({ wired: true, status: 'rate_limited', retry_after: retryAfter }),
-              { expirationTtl: retryAfter + 15 });
-          }
-        } else if (env.SUMMARIES) {
-          await env.SUMMARIES.delete(pendingKey);
-          await env.SUMMARIES.put(cacheKey, JSON.stringify({ wired: true, error: 'upstream', status: r.status, detail: (await r.text()).slice(0, 200) }),
-            { expirationTtl: 60 });
+          return { wired: true, error: 'rate_limited', retry_after: Math.max(45, headerSecs) };
         }
-        return;
+        return { wired: true, error: 'upstream', status: r.status, detail: (await r.text()).slice(0, 200) };
       }
 
       const data = await r.json();
@@ -159,27 +164,28 @@ Write the analysis now.`;
         if (typeof o.content === 'string') text += o.content;
         else if (Array.isArray(o.content)) for (const ch of o.content) if (ch && ch.type === 'text' && ch.text) text += ch.text;
       }
+      if (!text.trim()) return { wired: true, error: 'empty' };
 
-      if (!text.trim()) {
-        if (env.SUMMARIES) {
-          await env.SUMMARIES.delete(pendingKey);
-          await env.SUMMARIES.put(cacheKey, JSON.stringify({ wired: true, error: 'empty' }), { expirationTtl: 60 });
-        }
-        return;
-      }
-
-      const out = JSON.stringify({ wired: true, text: text.trim(), day, basho });
-      if (env.SUMMARIES) {
-        await env.SUMMARIES.put(cacheKey, out, { expirationTtl: CACHE_TTL });
-        await env.SUMMARIES.delete(pendingKey);
-      }
-    } catch (_) {
-      if (env.SUMMARIES) await env.SUMMARIES.delete(pendingKey);
+      return { wired: true, text: text.trim(), day, basho };
+    } catch (e) {
+      return { wired: true, error: 'network', detail: String(e) };
     }
   };
 
-  if (waitUntil) waitUntil(backgroundFetch());
-  return json({ status: 'pending', retry_after: 25, elapsed: 0 });
+  if (hasKV) {
+    const backgroundFetch = async () => {
+      const result = await runSearch();
+      await env.SUMMARIES.delete(pendingKey);
+      const ttl = result.error === 'rate_limited' ? (result.retry_after + 15) : (result.text ? CACHE_TTL : 60);
+      await env.SUMMARIES.put(cacheKey, JSON.stringify(result), { expirationTtl: ttl });
+    };
+    if (waitUntil) waitUntil(backgroundFetch());
+    return json({ status: 'pending', retry_after: 25, elapsed: 0 });
+  }
+
+  // No KV: just wait for the real answer in this same request/response.
+  const result = await runSearch();
+  return json(result);
 }
 
 export async function onRequestOptions() {
