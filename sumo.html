@@ -616,8 +616,22 @@ function boutCard(m,recMap){
    key changes each new day so the analysis is never silently stale.
    Needs the MISTRAL_API_KEY secret set on this Pages project — if absent, the
    endpoint returns {wired:false} and the button explains that instead of erroring. */
+function trueThroughDay(allRows){
+  // BASHO_DAY (resolveBasho()'s UTC-vs-JST date-diff guess) can lag real Japan time by up to a
+  // full day — caught live: a wrestler's Day 13 loss was already in the API data while
+  // BASHO_DAY-1 still excluded it, understating his losses and overstating days remaining.
+  // Ground truth is whatever the data has actually recorded, not a wall-clock guess — scan every
+  // wrestler's record array for the highest day index with a real (non-empty) result.
+  let max = 0;
+  allRows.forEach(row=>{
+    (row.record||[]).forEach((rec,i)=>{
+      if(rec && (rec.result==='win' || rec.result==='loss')) max = Math.max(max, i+1);
+    });
+  });
+  return max;
+}
 function computeBashoFacts(allRows, rankById, rankValueById){
-  const through = BASHO_DAY-1; // last completed day
+  const through = trueThroughDay(allRows); // last completed day, from the data itself — not BASHO_DAY-1
   if(through<1) return null;
   const boutsWithIds = [], seen=new Set();
   for(let d=1; d<=through; d++){
@@ -658,7 +672,7 @@ function computeBashoFacts(allRows, rankById, rankValueById){
   });
   streaks.sort((a,b)=>b.len-a.len);
   // yūshō picture: same "alive" logic as the leaderboard, condensed to the leaders' names+records
-  const remaining = 15-BASHO_DAY;
+  const remaining = 15-through;
   const sorted = [...mak].sort((a,b)=>b.wins-a.wins||a.losses-b.losses);
   const leadWins = sorted[0].wins;
   const yushoTop = sorted.filter(r=>r.wins===leadWins).map(r=>({name:r.name, rank:r.rank, wins:r.wins, losses:r.losses}));
@@ -741,11 +755,12 @@ function renderLeaderboard(allRows){
   const mak = allRows.filter(r=>r.division==='Makuuchi' && (r.wins+r.losses+r.absences)>0);
   if(BASHO_STATUS!=='live' || !mak.length){ wrap.style.display='none'; return; }
   wrap.style.display='';
-  document.getElementById('lbSub').innerHTML = 'Through '+dayLabel(BASHO_DAY)+' of 15 &mdash; the '+esc(BASHO_META.name)+' yūshō race and special-prize watch.';
+  const through = trueThroughDay(allRows); // data-derived, not BASHO_DAY-1 — see trueThroughDay()
+  document.getElementById('lbSub').innerHTML = 'Through '+dayLabel(through)+' of 15 &mdash; the '+esc(BASHO_META.name)+' yūshō race and special-prize watch.';
 
   // ---- yūshō race: sort by wins desc / losses asc; "alive" = could still tie-or-pass the
   // current leader even by winning out every remaining bout ----
-  const remaining = 15-BASHO_DAY;
+  const remaining = 15-through;
   const sorted = [...mak].sort((a,b)=> b.wins-a.wins || a.losses-b.losses);
   const leadWins = sorted[0].wins;
   const alive = sorted.filter(r=> r.wins+remaining>=leadWins);
