@@ -73,6 +73,14 @@
  .rowtap .east,.rowtap .west{flex:1;display:flex;align-items:center;gap:8px;min-width:0}
  .rowtap .west{flex-direction:row-reverse;text-align:right}
  .seg{display:flex;gap:6px;margin:6px 0 14px;flex-wrap:wrap}
+ /* tournament leaderboard */
+ .lbgrp{font:800 11.5px var(--sans);letter-spacing:.07em;text-transform:uppercase;color:#b3402a;margin:16px 0 6px}
+ .lbnote{font-size:12px;color:var(--muted2);margin:0 0 8px;line-height:1.5}
+ .lbrow{display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--cardline);border-radius:12px;padding:8px 10px;margin:6px 0;cursor:pointer}
+ .lbrow .lbpos{font-family:var(--display);font-size:14px;color:var(--gold);font-weight:700;width:18px;flex:0 0 auto;text-align:center}
+ .lbrow .lbwhy{font-size:11px;color:var(--muted2);white-space:normal}
+ .lbrow .rec{font-size:12px;color:#9fb89f;font-weight:700;margin-left:auto;padding-left:8px;flex:0 0 auto}
+ .lbtag{display:inline-block;font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;background:var(--ver);color:#fff;margin-left:6px}
  .seg button{background:var(--ink2);border:1px solid var(--line);color:#cfd6f0;border-radius:999px;padding:6px 13px;font:600 12.5px var(--sans);cursor:pointer}
  .seg button.sel{background:var(--ver);border-color:var(--ver);color:#fff}
  /* rikishi bio overlay */
@@ -189,6 +197,12 @@
  <div class="seg" id="todayDiv"></div>
  <div class="databar" id="todayBar"></div>
  <div id="todayList"></div>
+ <div id="lbWrap" style="display:none">
+  <h3 style="margin-top:26px">Tournament Leaderboard</h3>
+  <p class="lead" style="margin-top:0" id="lbSub"></p>
+  <div id="lbYusho"></div>
+  <div id="lbPrizes"></div>
+ </div>
 </section>
 
 <!-- ===================== BANZUKE ===================== -->
@@ -524,6 +538,7 @@ async function loadToday(){
       'No tournament is running right now.<br>The next basho — <b>'+esc(M.name)+'</b>'+(M.city?' in '+esc(M.city):'')+' — '+
       (BASHO_STATUS==='upcoming'?'begins <b>'+fmtDate(M.start)+'</b>':'will appear here when it is scheduled')+
       '.<br>Each day’s matchups post the evening before. Meanwhile, explore the banzuke and techniques.</div>';
+    document.getElementById('lbWrap').style.display='none';
   }
 }
 async function renderTorikumi(){
@@ -532,17 +547,26 @@ async function renderTorikumi(){
   // Torikumi bouts carry no in-progress win/loss tally (checked against the live API) — the
   // banzuke endpoint does, per-rikishi, as .record/.wins/.losses. A bout can cross the
   // Makuuchi/Juryo boundary, so both divisions' banzuke are fetched and merged into one lookup
-  // rather than just the division currently selected.
+  // rather than just the division currently selected. The same banzuke fetch also feeds the
+  // yusho/sanshō leaderboard below, so it's done once here rather than twice.
   const [res, ...banRes] = await Promise.all([
     getJSON('/basho/'+BASHO+'/torikumi/'+todayDivSel+'/'+BASHO_DAY),
     ...DIVISIONS.map(d=>getJSON('/basho/'+BASHO+'/banzuke/'+d))
   ]);
   bar(document.getElementById('todayBar'), res, loadToday);
   const recMap = {};
-  banRes.forEach(br=>{
+  const allRows = [];
+  banRes.forEach((br,i)=>{
+    const div = DIVISIONS[i];
     const rows = br.j && (br.j.east||[]).concat(br.j.west||[]);
-    (rows||[]).forEach(r=>{ recMap[r.rikishiID||r.rikishiId] = recOf(r); });
+    (rows||[]).forEach(r=>{
+      const id = r.rikishiID||r.rikishiId;
+      recMap[id] = recOf(r);
+      allRows.push({id, name:r.shikonaEn, rank:r.rank, rankValue:r.rankValue, division:div,
+        wins:r.wins||0, losses:r.losses||0, absences:r.absences||0, record:r.record||[]});
+    });
   });
+  renderLeaderboard(allRows);
   const t = res.j && res.j.torikumi;
   if(!t || !t.length){
     list.innerHTML = '<div class="empty"><span class="big">🗓️</span>'+
@@ -568,6 +592,65 @@ function boutCard(m,recMap){
     '<div class="vs" onclick="openPreview('+m.eastId+','+m.westId+')" style="cursor:pointer" title="Tale of the tape">'+esc(mid)+'<span class="vptip">⚔</span></div>'+
     ew(m.westId, wss, m.westRank, wsW)+
    '</div>';
+}
+
+/* ============================================================
+   TOURNAMENT LEADERBOARD — yūshō race + the three special prizes
+   ============================================================
+   Sanshō (殊勲賞 Shukun-shō / 敢闘賞 Kantō-shō / 技能賞 Ginō-shō) are decided by a
+   committee after Day 15 on criteria beyond the raw record — this is NOT a
+   prediction, just an objective candidate list computed from this basho's
+   wins/losses and who-beat-whom, built from the same banzuke fetch that
+   powers the current-record line on each bout card above. */
+function lbRow(pos,r,why,tag){
+  return '<div class="lbrow" onclick="openBio('+r.id+')">'+
+    (pos?'<div class="lbpos">'+pos+'</div>':'')+
+    avaImg(r.id,r.name,'sm')+
+    '<div class="nm"><div class="en">'+esc(r.name)+(tag?'<span class="lbtag">'+esc(tag)+'</span>':'')+'</div>'+
+    '<div class="rk">'+esc(shortRank(r.rank))+(why?' · <span class="lbwhy">'+esc(why)+'</span>':'')+'</div></div>'+
+    '<div class="rec">'+r.wins+'&ndash;'+r.losses+(r.absences?'&ndash;'+r.absences:'')+'</div>'+
+  '</div>';
+}
+function renderLeaderboard(allRows){
+  const wrap = document.getElementById('lbWrap');
+  const mak = allRows.filter(r=>r.division==='Makuuchi' && (r.wins+r.losses+r.absences)>0);
+  if(BASHO_STATUS!=='live' || !mak.length){ wrap.style.display='none'; return; }
+  wrap.style.display='';
+  document.getElementById('lbSub').innerHTML = 'Through '+dayLabel(BASHO_DAY)+' of 15 &mdash; the '+esc(BASHO_META.name)+' yūshō race and special-prize watch.';
+
+  // ---- yūshō race: sort by wins desc / losses asc; "alive" = could still tie-or-pass the
+  // current leader even by winning out every remaining bout ----
+  const remaining = 15-BASHO_DAY;
+  const sorted = [...mak].sort((a,b)=> b.wins-a.wins || a.losses-b.losses);
+  const leadWins = sorted[0].wins;
+  const alive = sorted.filter(r=> r.wins+remaining>=leadWins);
+  const shown = alive.slice(0,10);
+  let yh = '<div class="lbgrp">Yūshō race</div>';
+  yh += '<p class="lbnote">Ranked by wins, ties broken by fewer losses. Shown: still mathematically able to catch the leader'+(alive.length>shown.length?' ('+shown.length+' of '+alive.length+' shown)':'')+'.</p>';
+  yh += shown.map((r,i)=>lbRow(i+1,r,null,r.wins===leadWins?'Leader':null)).join('');
+  document.getElementById('lbYusho').innerHTML = yh;
+
+  // ---- special prizes: rank-and-file only (Sekiwake and below — Yokozuna/Ozeki aren't eligible) ----
+  const rankById = {}; allRows.forEach(r=>{ rankById[r.id]=r.rank; });
+  const isTitled = rk => /Yokozuna|Ozeki/.test(rk||'');
+  const rankFile = mak.filter(r=>!isTitled(r.rank));
+
+  const shukun = rankFile.map(r=>{
+    const beats = r.record.filter(x=>/^win/.test(x.result) && isTitled(rankById[x.opponentID])).map(x=>x.opponentShikonaEn);
+    return {r, beats};
+  }).filter(x=>x.beats.length).sort((a,b)=> b.beats.length-a.beats.length || b.r.wins-a.r.wins);
+
+  const kanto = rankFile.filter(r=>r.wins>r.losses).sort((a,b)=> b.wins-a.wins || a.losses-b.losses).slice(0,5);
+
+  let ph = '<div class="lbgrp">Special-prize watch</div>';
+  ph += '<p class="lbnote">The three sanshō are decided by committee after Day 15 on criteria beyond the record &mdash; these are objective candidates, not a prediction.</p>';
+  ph += '<div style="font:700 12px var(--sans);color:#cfd6f0;margin:10px 0 4px">殊勲賞 Shukun-shō &mdash; beat a Yokozuna/Ōzeki</div>';
+  ph += shukun.length ? shukun.slice(0,5).map(x=>lbRow(null,x.r,'beat '+x.beats.join(', '))).join('') : '<p class="lbnote">No rank-and-file wins over a Yokozuna/Ōzeki yet.</p>';
+  ph += '<div style="font:700 12px var(--sans);color:#cfd6f0;margin:12px 0 4px">敢闘賞 Kantō-shō &mdash; fighting spirit, best rank-and-file record</div>';
+  ph += kanto.length ? kanto.map(r=>lbRow(null,r)).join('') : '<p class="lbnote">No rank-and-file wrestler has a winning record yet.</p>';
+  ph += '<div style="font:700 12px var(--sans);color:#cfd6f0;margin:12px 0 4px">技能賞 Ginō-shō &mdash; technique</div>';
+  ph += '<p class="lbnote">Judged on skill and technical variety, not something derivable from win/loss data &mdash; traditionally drawn from the same rank-and-file pool above.</p>';
+  document.getElementById('lbPrizes').innerHTML = ph;
 }
 /* ---- bout preview: tale of the tape ---- */
 const OSHI_K=new Set(['oshidashi','oshitaoshi','tsukidashi','tsukitaoshi','hatakikomi','tsukiotoshi','hikiotoshi','sokubiotoshi','tsukaminage']);
