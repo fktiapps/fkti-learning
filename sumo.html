@@ -194,6 +194,10 @@
 <section id="today">
  <h3 id="todayTitle">Today&rsquo;s Matchups</h3>
  <p class="lead" id="todaySub" style="margin-top:0">Top-division bouts run late afternoon into the evening.</p>
+ <div id="ydWrap" style="display:none">
+  <h3 style="margin-top:0" id="ydTitle">Yesterday</h3>
+  <div id="ydList"></div>
+ </div>
  <div class="seg" id="todayDiv"></div>
  <div class="databar" id="todayBar"></div>
  <div id="todayList"></div>
@@ -539,6 +543,7 @@ async function loadToday(){
       (BASHO_STATUS==='upcoming'?'begins <b>'+fmtDate(M.start)+'</b>':'will appear here when it is scheduled')+
       '.<br>Each day’s matchups post the evening before. Meanwhile, explore the banzuke and techniques.</div>';
     document.getElementById('lbWrap').style.display='none';
+    document.getElementById('ydWrap').style.display='none';
   }
 }
 async function renderTorikumi(){
@@ -567,6 +572,7 @@ async function renderTorikumi(){
     });
   });
   renderLeaderboard(allRows);
+  renderYesterday(allRows);
   const t = res.j && res.j.torikumi;
   if(!t || !t.length){
     list.innerHTML = '<div class="empty"><span class="big">🗓️</span>'+
@@ -592,6 +598,83 @@ function boutCard(m,recMap){
     '<div class="vs" onclick="openPreview('+m.eastId+','+m.westId+')" style="cursor:pointer" title="Tale of the tape">'+esc(mid)+'<span class="vptip">⚔</span></div>'+
     ew(m.westId, wss, m.westRank, wsW)+
    '</div>';
+}
+
+/* ============================================================
+   YESTERDAY — AI-written "themes of the day" recap
+   ============================================================
+   The model is never shown raw records — computeYesterdayFacts() derives everything
+   (bout results, kinboshi, upsets, perfect records) from the SAME banzuke data already
+   fetched above, and only that clean, pre-verified JSON is sent to Mistral to be turned
+   into prose. Cached in localStorage per basho+day so reopening the page never re-spends;
+   an explicit Refresh click is required to regenerate.
+   Needs the MISTRAL_API_KEY secret set on this Pages project — if absent, the endpoint
+   returns {wired:false} and the button explains that instead of erroring. */
+function computeYesterdayFacts(allRows, rankById, rankValueById){
+  const day = BASHO_DAY-1;
+  if(day<1) return null;
+  const idx = day-1, seen=new Set(), bouts=[];
+  allRows.forEach(row=>{
+    const rec = row.record[idx];
+    if(!rec || rec.result!=='win') return; // one entry per bout, from the winner's side only
+    const key = [row.id, rec.opponentID].sort().join('-');
+    if(seen.has(key)) return; seen.add(key);
+    bouts.push({winner:row.name, winnerRank:row.rank, loser:rec.opponentShikonaEn,
+      loserRank:rankById[rec.opponentID]||null, kimarite:rec.kimarite||null});
+  });
+  const kinboshi = bouts.filter(b=>/^Maegashira/.test(b.winnerRank||'') && /^Yokozuna/.test(b.loserRank||''));
+  // upsets need rankValue gaps, which need ids — bouts[] above only kept names, so rebuild with ids
+  const boutsWithIds = [];
+  allRows.forEach(row=>{
+    const rec = row.record[idx];
+    if(!rec || rec.result!=='win') return;
+    const key = [row.id, rec.opponentID].sort().join('-');
+    if(boutsWithIds.some(b=>b.key===key)) return;
+    boutsWithIds.push({key, winnerId:row.id, winner:row.name, winnerRank:row.rank,
+      winnerRankValue:row.rankValue, loserId:rec.opponentID, loser:rec.opponentShikonaEn,
+      loserRank:rankById[rec.opponentID]||null, loserRankValue:rankValueById[rec.opponentID],
+      kimarite:rec.kimarite||null});
+  });
+  // an upset is the WINNER ranked worse (higher rankValue) than the loser — not the reverse
+  const upsets = boutsWithIds.filter(b=>b.loserRankValue!=null && b.winnerRankValue!=null && b.winnerRankValue-b.loserRankValue>0)
+    .sort((a,b)=>(b.winnerRankValue-b.loserRankValue)-(a.winnerRankValue-a.loserRankValue))
+    .slice(0,5).map(b=>({winner:b.winner,winnerRank:b.winnerRank,loser:b.loser,loserRank:b.loserRank,kimarite:b.kimarite}));
+  const perfect = allRows.filter(r=>r.division==='Makuuchi' && r.wins===day && r.losses===0 && r.wins>0)
+    .map(r=>({name:r.name, rank:r.rank, wins:r.wins}));
+  return { bashoName:(BASHO_META&&BASHO_META.name)||BASHO, day, bouts:boutsWithIds.map(b=>({winner:b.winner,winnerRank:b.winnerRank,loser:b.loser,loserRank:b.loserRank,kimarite:b.kimarite})), kinboshi, upsets, perfect };
+}
+async function renderYesterday(allRows){
+  const wrap = document.getElementById('ydWrap');
+  const rankById={}, rankValueById={};
+  allRows.forEach(r=>{ rankById[r.id]=r.rank; rankValueById[r.id]=r.rankValue; });
+  const facts = computeYesterdayFacts(allRows, rankById, rankValueById);
+  if(BASHO_STATUS!=='live' || !facts || !facts.bouts.length){ wrap.style.display='none'; return; }
+  wrap.style.display='';
+  document.getElementById('ydTitle').textContent = dayLabel(facts.day)+' recap';
+  const cacheKey = 'fkti_sumo_recap:'+BASHO+'-'+facts.day;
+  const cached = localStorage.getItem(cacheKey);
+  renderRecapBox(cached ? JSON.parse(cached) : null, facts, cacheKey);
+}
+function renderRecapBox(cachedText, facts, cacheKey){
+  const list = document.getElementById('ydList');
+  const btnLabel = cachedText ? 'Refresh recap' : 'Get yesterday’s themes';
+  list.innerHTML =
+    (cachedText ? '<p class="body" style="white-space:pre-wrap">'+esc(cachedText)+'</p>' : '<p class="lbnote">An AI-written recap of yesterday’s storylines — generated on request, not automatically, so it only runs when you ask.</p>')+
+    '<button class="seg-btn" id="ydBtn" style="background:var(--ink2);border:1px solid var(--line);color:#cfd6f0;border-radius:999px;padding:7px 14px;font:600 12.5px var(--sans);cursor:pointer">'+btnLabel+'</button>'+
+    '<span id="ydStatus" style="font-size:12px;color:var(--muted2);margin-left:8px"></span>';
+  document.getElementById('ydBtn').onclick = () => fetchRecap(facts, cacheKey);
+}
+async function fetchRecap(facts, cacheKey){
+  const btn = document.getElementById('ydBtn'), st = document.getElementById('ydStatus');
+  btn.disabled = true; st.textContent = 'Writing…';
+  try{
+    const r = await fetch('/api/sumo-recap', {method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify({basho:BASHO, day:facts.day, facts})});
+    const j = await r.json();
+    if(j.wired===false){ st.textContent = 'Not set up yet — needs a MISTRAL_API_KEY on this deployment.'; btn.disabled=false; return; }
+    if(!j.text){ st.textContent = j.error==='rate_limited' ? 'Busy — try again shortly.' : 'Couldn’t generate a recap right now.'; btn.disabled=false; return; }
+    localStorage.setItem(cacheKey, JSON.stringify(j.text));
+    renderRecapBox(j.text, facts, cacheKey);
+  }catch(e){ st.textContent = 'Network error — try again.'; btn.disabled=false; }
 }
 
 /* ============================================================
