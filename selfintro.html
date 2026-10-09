@@ -197,12 +197,18 @@ function kanaRomaji(s){
  return o;
 }
 function hasKanji(s){return /[㐀-鿿豈-﫿々]/.test(s||'');}
+// kuromoji splits the greeting 今日は into 今日(きょう)+は, giving "kyou wa". When 今日は / 今晩は
+// stands alone as a greeting (line start, then punctuation or end), merge it into one token
+// read こんにちは / こんばんは. Mid-sentence 今日は ("today, …") is left alone.
+const GREET_TOK={'今日':['コンニチハ','コンニチワ'],'今晩':['コンバンハ','コンバンワ']};
+function tokJa(tk,s){const ts=tk.tokenize(s),o=[];for(let i=0;i<ts.length;i++){const t=ts[i],n=ts[i+1],nn=ts[i+2],g=GREET_TOK[t.surface_form];
+ if(g&&n&&n.surface_form==='は'&&(i===0||/^[。、！？!?\s　]+$/.test(ts[i-1].surface_form))&&(!nn||/^[。、！？!?\s　]/.test(nn.surface_form))){o.push(Object.assign({},t,{surface_form:t.surface_form+'は',basic_form:t.surface_form+'は',reading:g[0],pronunciation:g[1],pos:'感動詞'}));i++;}else o.push(t);}return o;}
 // Build a pure-kana reading. Crucial: when a token has NO reading, do NOT fall back to its
 // surface_form if that surface is kanji — that would leak kanji onto the ひらがな/Rōmaji tabs.
-function readingOf(ja){if(!tokenizer)return '';try{return tokenizer.tokenize(ja).map(t=>{if(t.reading&&t.reading!=='*')return kata2hira(t.reading);const sf=t.surface_form||'';return hasKanji(sf)?'':sf;}).join('');}catch(_){return '';}}
+function readingOf(ja){if(!tokenizer)return '';try{return tokJa(tokenizer,ja).map(t=>{if(t.reading&&t.reading!=='*')return kata2hira(t.reading);const sf=t.surface_form||'';return hasKanji(sf)?'':sf;}).join('');}catch(_){return '';}}
 // Romaji with a SPACE between each word (readable + lets long lines wrap). The tokenizer
 // gives correct particle readings too (は→wa, を→o). Punctuation is de-spaced + ascii-ised.
-function toRomaSpaced(ja){if(!tokenizer)return '';try{const parts=tokenizer.tokenize(ja).map(t=>{
+function toRomaSpaced(ja){if(!tokenizer)return '';try{const parts=tokJa(tokenizer,ja).map(t=>{
   // Use the PRONUNCIATION field, not reading — it renders particles as spoken
   // (topic は→ワ→"wa", へ→"e", を→"o") and long vowels naturally. Fall back to reading.
   const p=(t.pronunciation&&t.pronunciation!=='*')?t.pronunciation:((t.reading&&t.reading!=='*')?t.reading:'');
@@ -313,7 +319,7 @@ function stopPlayback(){hlActive=false;hlTimers.forEach(clearTimeout);hlTimers=[
 // Split a line into aligned word pieces {k(anji), h(iragana), r(omaji)} using the tokenizer.
 function lineTokens(l){
  const src=l.k||l.h||'';
- if(tokenizer){try{return tokenizer.tokenize(src).map(t=>{
+ if(tokenizer){try{return tokJa(tokenizer,src).map(t=>{
    const sf=t.surface_form||'';
    const rd=(t.reading&&t.reading!=='*')?kata2hira(t.reading):'';
    const pr=(t.pronunciation&&t.pronunciation!=='*')?kata2hira(t.pronunciation):rd;
@@ -469,7 +475,7 @@ async function doTranslate(){
 function renderJa(ja,tk){
  const play='<button class="spk" id="sayPlay" style="margin:0 0 6px">🔊 Play whole sentence</button>';
  if(!tk){$('sayOut').innerHTML=play+'<div class="ja-out">'+ja+'</div>';$('sayPlay').onclick=()=>speak(ja);$('sayVocab').innerHTML='<p style="font-size:12px;color:var(--muted2)">Furigana &amp; word list couldn’t load (dictionary offline) — full-sentence audio still works.</p>';return;}
- const toks=tk.tokenize(ja);let html=play+'<div class="ja-out">';
+ const toks=tokJa(tk,ja);let html=play+'<div class="ja-out">';
  toks.forEach((t,i)=>{const sf=t.surface_form,rd=rdOf(t),hasKanji=/[一-龯]/.test(sf);const inner=(hasKanji&&rd&&rd!==sf)?'<ruby>'+sf+'<rt>'+rd+'</rt></ruby>':sf;if(/^(記号|補助記号)/.test(t.pos)||!sf.trim())html+=sf;else html+='<span class="tok" data-i="'+i+'">'+inner+'</span>';});
  html+='</div>';$('sayOut').innerHTML=html;$('sayPlay').onclick=()=>speak(ja);
  $('sayOut').querySelectorAll('.tok').forEach(sp=>{const t=toks[+sp.dataset.i];sp.onclick=async()=>{$('sayOut').querySelectorAll('.tok').forEach(x=>x.classList.remove('sel'));sp.classList.add('sel');speak(t.surface_form);const ib=$('sayInfo');ib.classList.add('show');ib.innerHTML='<b style="font-size:18px;font-family:var(--display)">'+t.surface_form+'</b> <span style="color:var(--muted2)">'+rdOf(t)+'</span> — <span id="ibE">…</span>';const g=await gloss(baseOf(t));const e=document.getElementById('ibE');if(e)e.textContent=g||'(no translation)';};});
