@@ -362,7 +362,9 @@ const BASHO_INFO = {                    // name/venue by month (the API has no v
 };
 let BASHO='', BASHO_STATUS='', BASHO_DAY=0, BASHO_META=null, bashoReady=null;
 function bashoId(y,m){ return String(y)+String(m).padStart(2,'0'); }
-function fmtDate(ms){ if(!ms) return ''; return new Date(ms).toLocaleDateString('en-US',{weekday:'short',day:'numeric',month:'short',year:'numeric'}); }
+// Basho days are Japan days: show dates in Japan time, whatever the viewer's own time zone.
+function fmtDate(ms){ if(!ms) return ''; return new Date(ms).toLocaleDateString('en-US',{weekday:'short',day:'numeric',month:'short',year:'numeric',timeZone:'Asia/Tokyo'}); }
+const JST_MS = 9*3600e3;   // the API's startDate/endDate are the Japan calendar dates, written as UTC midnight
 function dayLabel(d){ return d===1?'Day 1 · shonichi':d===8?'Day 8 · nakabi (midpoint)':d===15?'Day 15 · senshūraku (finale)':'Day '+d; }
 async function resolveBasho(){
   const now=Date.now(), y=new Date().getFullYear();
@@ -370,7 +372,7 @@ async function resolveBasho(){
   cand=cand.filter(id=>{ const mid=Date.UTC(+id.slice(0,4),+id.slice(4)-1,14); return Math.abs(mid-now)<80*864e5; });
   // Probe candidates in parallel (each with its own timeout) so one stalled host can't block the rest.
   const infos = (await Promise.all(cand.map(async id => {
-    try{ const res=await getJSON('/basho/'+id); const j=res.j; if(j&&j.startDate) return {id,start:Date.parse(j.startDate),end:Date.parse(j.endDate)+864e5-1}; }catch(e){}
+    try{ const res=await getJSON('/basho/'+id); const j=res.j; if(j&&j.startDate) return {id,start:Date.parse(j.startDate)-JST_MS,end:Date.parse(j.endDate)-JST_MS+864e5-1}; }catch(e){}  // 00:00–23:59 Japan time
     return null;
   }))).filter(Boolean);
   infos.sort((a,b)=>a.start-b.start);
@@ -516,14 +518,27 @@ function shortRank(r){
    TODAY — Day 8 torikumi
    ============================================================ */
 let todayDivSel = 'Makuuchi';
+// The JSA posts Day 1's card two days before the basho opens (and each later day's the evening before).
+// So in the last few days before a basho, show the Day 1 card as a preview instead of "no tournament".
+async function dayOnePreview(){
+  if(BASHO_STATUS!=='upcoming' || !BASHO_META || !BASHO_META.start) return false;
+  if(BASHO_META.start - Date.now() > 3*864e5) return false;
+  try{
+    const r = await getJSON('/basho/'+BASHO+'/torikumi/Makuuchi/1');
+    const t = r && r.j && r.j.torikumi;
+    if(t && t.length){ BASHO_DAY = 1; return true; }
+  }catch(e){}
+  return false;
+}
 async function loadToday(){
   const _l = document.getElementById('todayList'); if(_l) _l.innerHTML = '<div class="empty">Loading the card…</div>';
   await bashoReady;
   const seg = document.getElementById('todayDiv');
   const tt=document.getElementById('todayTitle'), ts=document.getElementById('todaySub');
-  if(BASHO_STATUS==='live'){
-    if(tt) tt.textContent = dayLabel(BASHO_DAY);
-    if(ts) ts.innerHTML = fmtDate(BASHO_META.start+(BASHO_DAY-1)*864e5)+' · '+esc(BASHO_META.name)+' · top-division bouts run late afternoon into the evening.';
+  const preview = await dayOnePreview();
+  if(BASHO_STATUS==='live' || preview){
+    if(tt) tt.textContent = dayLabel(BASHO_DAY)+(preview?' — coming up':'');
+    if(ts) ts.innerHTML = (preview?'Opening day: ':'')+fmtDate(BASHO_META.start+(BASHO_DAY-1)*864e5)+' · '+esc(BASHO_META.name)+' · top-division bouts run late afternoon into the evening.';
     seg.innerHTML = DIVISIONS.map(d=>'<button class="'+(d===todayDivSel?'sel':'')+'" onclick="todayDivSel=\''+d+'\';loadToday()">'+d+'</button>').join('');
     renderTorikumi();
   } else {
